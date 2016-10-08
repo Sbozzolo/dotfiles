@@ -1,0 +1,31 @@
+
+;; ----- smex-history -----
+(
+ magit-push
+ magit-status
+ flyspell-mode
+ ispell-change-dictionary
+ ispell-word
+ shell
+ lcm-shell
+)
+
+;; ----- smex-data -----
+(
+ (shell . 5)
+ (eshell . 1)
+ (async-shell-command . 1)
+ (eval-defun . 2)
+ (lcm-shell . 13)
+ (image-mode . 1)
+ (indent-to . 1)
+ (magit-push . 5)
+ (magit-status . 2)
+ (package-list-packages . 3)
+ (revert-buffer . 3)
+ (TeX-mode . 5)
+ (package-refresh-contents . 1)
+ (flyspell-mode . 3)
+ (ispell-change-dictionary . 2)
+ (ispell-word . 3)
+)

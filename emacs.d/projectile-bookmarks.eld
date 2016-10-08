@@ -1,0 +1,1 @@
+("~/MEGA/LaTeX/Topologia-Algebrica/" "/ssh:sbozzolo@lcm.mi.infn.it:/home/sbozzolo/ising/")
