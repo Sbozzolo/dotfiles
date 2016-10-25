@@ -1,3 +1,4 @@
+;;; My config
 (add-to-list 'load-path "~/.emacs.d/els/")
 (require 'cuda-mode)
 (autoload 'wolfram-mode "wolfram-mode" nil t)
@@ -9,14 +10,13 @@
 (custom-set-variables
  '(python-guess-indent nil)
  '(python-indent 4))
-(provide 'init-local)
 
 ;; To manage key bindings
 (require 'bind-key)
 
 ;;To encrypt
 (require 'epa-file)
-(epa-file-enable)
+;;; (epa-file-enable)
 
 ;;To have YASnippet working in LaTeX
 (defun disable-final-newline ()
@@ -24,8 +24,10 @@
   (set (make-local-variable 'require-final-newline) nil))
 
 ;; AucTeX defaults
-(setq TeX-auto-save t)
+(setq LaTeX-math-list '(
+                        (?, "partial" nil)))
 (setq TeX-parse-self t)
+(setq TeX-auto-save t)
 (setq-default TeX-master nil)
 (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
 (add-hook `Plain-TeX-mode-hook
@@ -34,21 +36,20 @@
 (add-hook `LaTeX-mode-hook
           (lambda () (set (make-variable-buffer-local ’TeX-electric-math)
                      (cons "\\(" "\\)"))))
+
 ;; Spelling checker
-;; (require 'flyspell-babel)
-;; (require 'ispell-multi)
-;; (add-hook 'LaTeX-mode-hook '(flyspell-mode t))
-;; (add-hook 'LaTeX-mode-hook 'flyspell-babel-setup)
-;; (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+(add-hook 'LaTeX-mode-hook '(flyspell-mode t))
+;;; (require 'flyspell-babel)
+;;; (require 'ispell-multi)
+;;; (add-hook 'LaTeX-mode-hook 'flyspell-babel-setup)
+(setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
 
 ;; Theme changer
-
-(setq calendar-location-name "Milan, IT")
-(setq calendar-latitude 45.63)
-(setq calendar-longitude 9.04)
-(require 'theme-changer)
-(change-theme 'sanityinc-solarized-light 'sanityinc-solarized-dark)
-
+;; (setq calendar-location-name "Milan, IT")
+;; (setq calendar-latitude 45.63)
+;; (setq calendar-longitude 9.04)
+;; (require 'theme-changer)
+;; (change-theme 'sanityinc-solarized-light 'sanityinc-solarized-dark)
 
 ;; Copy whole line
 (defun copy-line (arg)
@@ -73,7 +74,7 @@
   (if (and arg (not (= 1 arg))) (message "%d lines copied" arg)))
 
 
-(bind-key "C-c k" 'copy-line)
+(bind-key "C-c c" 'copy-line)
 
 ;;; Open LCM shell
 (defun lcm-shell ()
@@ -82,3 +83,20 @@
     (shell))
   (setq default-directory "~/")
   )
+
+;;; To kill line backwards
+(defun backward-kill-line (arg)
+  "Kill ARG lines backward."
+  (interactive "p")
+  (kill-line (- 1 arg)))
+
+(bind-key "C-c k" 'backward-kill-line)
+
+;;; Guru mode, to become an Emacs guru!
+(guru-global-mode +1)
+
+;;; Rebind C-x k to kill this buffer
+(bind-key "C-x k" 'kill-this-buffer)
+
+(provide 'init-local)
+;;; init-local ends here

@@ -68,7 +68,8 @@ source $ZSH/oh-my-zsh.sh
 #   export EDITOR='mvim'
 # fi
 
-export EDITOR="emacsclient -t -nw"
+export VISUAL="emacsclient -nw"
+export EDITOR="emacsclient -nw"
 export ALTERNATE_EDITOR=""
 
 # Compilation flags
@@ -88,3 +89,5 @@ export ALTERNATE_EDITOR=""
 source /home/sbozzolo/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 alias lcm="ssh lcm"
+alias dnfu="sudo dnf update"
+alias e='emacsclient -nw'

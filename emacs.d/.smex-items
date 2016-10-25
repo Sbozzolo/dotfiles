@@ -1,31 +1,56 @@
 
 ;; ----- smex-history -----
 (
+ package-list-packages
+ fundamental-mode
  magit-push
+ dired
+ list-packages
  magit-status
- flyspell-mode
- ispell-change-dictionary
- ispell-word
- shell
- lcm-shell
+ revert-buffer
 )
 
 ;; ----- smex-data -----
 (
- (shell . 5)
+ (shell . 11)
  (eshell . 1)
  (async-shell-command . 1)
  (eval-defun . 2)
- (lcm-shell . 13)
+ (lcm-shell . 16)
  (image-mode . 1)
  (indent-to . 1)
- (magit-push . 5)
- (magit-status . 2)
- (package-list-packages . 3)
- (revert-buffer . 3)
+ (magit-push . 21)
+ (magit-status . 7)
+ (package-list-packages . 7)
+ (revert-buffer . 17)
  (TeX-mode . 5)
  (package-refresh-contents . 1)
- (flyspell-mode . 3)
- (ispell-change-dictionary . 2)
- (ispell-word . 3)
+ (flyspell-mode . 18)
+ (ispell-change-dictionary . 13)
+ (ispell-word . 5)
+ (server-start . 1)
+ (lunar-phases . 1)
+ (doctor . 1)
+ (customize-themes . 2)
+ (align-current . 3)
+ (ispell . 5)
+ (ispell-buffer . 2)
+ (customize . 1)
+ (set-variable . 1)
+ (describe-variable . 8)
+ (eval-buffer . 7)
+ (clear-rectangle . 2)
+ (fundamental-mode . 2)
+ (magit-pull . 3)
+ (allout-mode . 1)
+ (flyspell-word . 3)
+ (cua-mode . 2)
+ (dired . 2)
+ (indent-region . 5)
+ (battery . 1)
+ (flyspell-babel-mode . 1)
+ (describe-key . 5)
+ (profiler-start . 1)
+ (profiler-report . 1)
+ (list-packages . 2)
 )
