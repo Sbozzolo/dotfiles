@@ -1,13 +1,13 @@
 
 ;; ----- smex-history -----
 (
- package-list-packages
- fundamental-mode
- magit-push
- dired
- list-packages
- magit-status
- revert-buffer
+ battery
+ describe-function
+ describe-variable
+ profiler-report
+ profiler-start
+ ispell-change-dictionary
+ align-current
 )
 
 ;; ----- smex-data -----
@@ -19,25 +19,25 @@
  (lcm-shell . 16)
  (image-mode . 1)
  (indent-to . 1)
- (magit-push . 21)
+ (magit-push . 27)
  (magit-status . 7)
- (package-list-packages . 7)
- (revert-buffer . 17)
+ (package-list-packages . 9)
+ (revert-buffer . 28)
  (TeX-mode . 5)
  (package-refresh-contents . 1)
- (flyspell-mode . 18)
- (ispell-change-dictionary . 13)
+ (flyspell-mode . 23)
+ (ispell-change-dictionary . 22)
  (ispell-word . 5)
- (server-start . 1)
+ (server-start . 2)
  (lunar-phases . 1)
  (doctor . 1)
  (customize-themes . 2)
- (align-current . 3)
+ (align-current . 4)
  (ispell . 5)
  (ispell-buffer . 2)
  (customize . 1)
  (set-variable . 1)
- (describe-variable . 8)
+ (describe-variable . 17)
  (eval-buffer . 7)
  (clear-rectangle . 2)
  (fundamental-mode . 2)
@@ -47,10 +47,28 @@
  (cua-mode . 2)
  (dired . 2)
  (indent-region . 5)
- (battery . 1)
+ (battery . 10)
  (flyspell-babel-mode . 1)
  (describe-key . 5)
- (profiler-start . 1)
- (profiler-report . 1)
+ (profiler-start . 4)
+ (profiler-report . 5)
  (list-packages . 2)
+ (man . 1)
+ (time-stamp . 1)
+ (electric-pair-mode . 4)
+ (prettify-symbols-mode . 36)
+ (bubbles . 1)
+ (projectile-ag . 1)
+ (guru-mode . 3)
+ (ledger-add-transaction . 1)
+ (euro . 1)
+ (guru-global-mode . 1)
+ (mail . 1)
+ (profiler-stop . 1)
+ (profiler-report-menu . 1)
+ (dunnet . 6)
+ (dungeon-nil . 1)
+ (dun-mode . 1)
+ (describe-mode . 2)
+ (describe-function . 1)
 )

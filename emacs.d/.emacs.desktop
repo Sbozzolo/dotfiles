@@ -2,88 +2,160 @@
 ;; --------------------------------------------------------------------------
 ;; Desktop File for Emacs
 ;; --------------------------------------------------------------------------
-;; Created Tue Oct 25 18:37:42 2016
+;; Created Mon Nov  7 17:44:21 2016
 ;; Desktop file format version 208
 ;; Emacs version 25.1.1
 
 ;; Global section:
-(setq desktop-saved-frameset [frameset 1 (22543 35414 52103 835000) (desktop . "208") "sbozzolo@home.it" nil nil ((((font-backend xft x) (font . "-PfEd-DejaVu Sans Mono-normal-normal-normal-*-15-*-*-*-m-0-iso10646-1") (font-parameter . "Monospace 11") (border-width . 0) (internal-border-width . 0) (right-divider-width . 0) (bottom-divider-width . 0) (vertical-scroll-bars) (horizontal-scroll-bars) (foreground-color . "#657b83") (background-color . "#fdf6e3") (mouse-color . "black") (border-color . "#eee8d5") (screen-gamma) (line-spacing) (left-fringe . 8) (right-fringe . 8) (scroll-bar-foreground) (scroll-bar-background) (menu-bar-lines . 1) (tool-bar-lines . 0) (title) (wait-for-wm . t) (tool-bar-position . top) (icon-type . t) (auto-raise) (auto-lower) (cursor-type . box) (scroll-bar-width . 0) (scroll-bar-height . 0) (alpha) (fullscreen . maximized) (display-type . color) (background-mode . light) (cursor-color . "#586e75") (sticky) (environment) (frameset--id . "346C-EF24-8804-B1F5") (frameset--mini t . t) (modeline . t) (minibuffer . t) (unsplittable) (icon-name) (display . ":0") (explicit-name) (visibility . t) (fullscreen-restore . maximized) (height . 45) (width . 176) (left + -11) (top . 17)) ((min-height . 4) (min-width . 10) (min-height-ignore . 3) (min-width-ignore . 4) (min-height-safe . 1) (min-width-safe . 2) (min-pixel-height . 72) (min-pixel-width . 90) (min-pixel-height-ignore . 54) (min-pixel-width-ignore . 36) (min-pixel-height-safe . 18) (min-pixel-width-safe . 18)) leaf (pixel-width . 1600) (pixel-height . 793) (total-width . 178) (total-height . 44) (normal-height . 1.0) (normal-width . 1.0) (buffer "*magit: Topologia-Algebrica" (selected . t) (hscroll . 0) (fringes 8 8 nil) (margins nil) (scroll-bars nil 0 t nil 0 t) (vscroll . 0) (dedicated) (point . 1) (start . 1))))])
+(setq desktop-saved-frameset [frameset 1 (22560 44901 812453 138000) (desktop . "208") "sbozzolo@home.it" nil nil ((((font-backend xft x) (font . "-PfEd-DejaVu Sans Mono-normal-normal-normal-*-15-*-*-*-m-0-iso10646-1") (font-parameter . "Monospace 11") (border-width . 0) (internal-border-width . 0) (right-divider-width . 0) (bottom-divider-width . 0) (vertical-scroll-bars) (horizontal-scroll-bars) (foreground-color . "#657b83") (background-color . "#fdf6e3") (mouse-color . "black") (border-color . "#eee8d5") (screen-gamma) (line-spacing) (left-fringe . 8) (right-fringe . 8) (scroll-bar-foreground) (scroll-bar-background) (menu-bar-lines . 1) (tool-bar-lines . 0) (title) (wait-for-wm . t) (tool-bar-position . top) (icon-type . t) (auto-raise) (auto-lower) (cursor-type . box) (scroll-bar-width . 0) (scroll-bar-height . 0) (alpha) (fullscreen . maximized) (display-type . color) (background-mode . light) (cursor-color . "#586e75") (sticky) (environment) (frameset--id . "346C-EF24-8804-B1F5") (frameset--mini t . t) (modeline . t) (minibuffer . t) (unsplittable) (icon-name) (display . ":0") (explicit-name) (fullscreen-restore . maximized) (visibility . t) (height . 45) (width . 176) (left + -11) (top . 17)) ((min-height . 4) (min-width . 10) (min-height-ignore . 3) (min-width-ignore . 4) (min-height-safe . 1) (min-width-safe . 2) (min-pixel-height . 72) (min-pixel-width . 90) (min-pixel-height-ignore . 54) (min-pixel-width-ignore . 36) (min-pixel-height-safe . 18) (min-pixel-width-safe . 18)) leaf (pixel-width . 1600) (pixel-height . 793) (total-width . 178) (total-height . 44) (normal-height . 1.0) (normal-width . 1.0) (buffer "exercises.tex" (selected . t) (hscroll . 0) (fringes 8 8 nil) (margins nil) (scroll-bars nil 0 t nil 0 t) (vscroll . 0) (dedicated) (point . 12263) (start . 11496))))])
 (setq comint-input-ring nil)
 (setq compile-history nil)
 (setq desktop-missing-file-warning nil)
 (setq dired-regexp-history nil)
-(setq extended-command-history '("^magit" "^time" "^batt" "^is" "^fl" "^man" "^serve" "^pack" "^fund" "^ma" "^dired" "^li" "^list-p" "^re" "^shell" "^profiler-re" "^profi" "^" "^inde" "^ali" "^magit-" "^ispe" "^de" "^descr" "^eva" "^eval" "^des" "^indent-re" "^isp" "^ispell"))
+(setq extended-command-history '("^pre" "^magit" "^eshell" "^shell" "^euro" "^isp" "^fly" "^magit-pull" "^re" "^" "^magi" "^fl" "^pa" "^ispe" "^de" "^flyc" "^ali" "^emacs-" "^eval-re" "^describe-fu" "^ba" "^is" "^batte" "^describe-f" "^descr" "^pro" "^profi" "^b" "^align-" "^describe-m"))
 (setq face-name-history nil)
-(setq file-name-history '("~/MEGA/LaTeX/Topologia-Algebrica/notes.log" "~/MEGA/Scripts/dotfiles/zsh/zshrc" "/home/sbozzolo/.zshrc" "~/MEGA/books.org" "~/MEGA/todo.org" "~/MEGA/Scripts/ising/sphere.py" "~/MEGA/LaTeX/Topologia-Algebrica/notes.log" "~/MEGA/films.org" "~/Documents/errori_slide.org" "~/MEGA/LaTeX/Topologia-Algebrica/notes.tex" "~/MEGA/Scripts/dotfiles/emacs.d/org-clock-save.el" "~/.emacs.d/org-clock-save.el" "~/.emacs.d/elpa/aggressive-indent-20161016.1016/aggressive-indent-autoloads.el" "~/.emacs.d/elpa/anaconda-mode-20161009.1046/anaconda-mode-autoloads.el" "~/.emacs.d/elpa/anzu-20161017.907/anzu-autoloads.el" "~/.emacs.d/elpa/async-20161010.2322/async-autoloads.el" "~/.emacs.d/elpa/auctex-11.89.6/auctex-autoloads.el" "~/.emacs.d/elpa/browse-at-remote-20161018.858/browse-at-remote-autoloads.el" "~/.emacs.d/elpa/cider-20161016.424/cider-autoloads.el" "~/.emacs.d/elpa/clojure-mode-20161017.1134/clojure-mode-autoloads.el" "~/.emacs.d/elpa/counsel-20161020.2248/counsel-autoloads.el" "~/.emacs.d/elpa/dash-20161018.136/dash-autoloads.el" "~/.emacs.d/elpa/diff-hl-20161023.1607/diff-hl-autoloads.el" "~/.emacs.d/elpa/dired+-20161022.916/dired+-autoloads.el" "~/.emacs.d/elpa/elm-mode-20161006.11/elm-mode-autoloads.el" "~/.emacs.d/elpa/erlang-20161019.117/erlang-autoloads.el" "~/.emacs.d/elpa/expand-region-20161020.1412/expand-region-autoloads.el" "~/.emacs.d/elpa/flycheck-20161023.738/flycheck-autoloads.el" "~/.emacs.d/elpa/flycheck-package-20161015.1803/flycheck-package-autoloads.el" "~/.emacs.d/elpa/package-lint-20161024.443/package-lint-autoloads.el" "~/.emacs.d/elpa/git-commit-20161011.1738/git-commit-autoloads.el" "~/.emacs.d/elpa/haskell-mode-20161020.2211/haskell-mode-autoloads.el" "~/.emacs.d/elpa/ht-20161015.1945/ht-autoloads.el" "~/.emacs.d/elpa/inf-ruby-20161019.1425/inf-ruby-autoloads.el" "~/.emacs.d/elpa/inflections-20161017.157/inflections-autoloads.el" "~/.emacs.d/elpa/intero-20161020.340/intero-autoloads.el" "~/.emacs.d/elpa/ivy-20161021.2214/ivy-autoloads.el" "~/.emacs.d/elpa/js2-mode-20161016.156/js2-mode-autoloads.el" "~/.emacs.d/elpa/jump-20161016.2313/jump-autoloads.el" "~/.emacs.d/elpa/magit-20161024.155/magit-autoloads.el" "~/.emacs.d/elpa/magit-gh-pulls-20161020.249/magit-gh-pulls-autoloads.el" "~/.emacs.d/elpa/magit-popup-20161009.1506/magit-popup-autoloads.el" "~/.emacs.d/elpa/multiple-cursors-20161021.1431/multiple-cursors-autoloads.el" "~/.emacs.d/elpa/page-break-lines-20161015.1709/page-break-lines-autoloads.el" "~/.emacs.d/elpa/projectile-20161008.47/projectile-autoloads.el" "~/.emacs.d/elpa/projectile-rails-20161024.1043/projectile-rails-autoloads.el" "~/.emacs.d/elpa/sass-mode-20161006.2326/sass-mode-autoloads.el" "~/.emacs.d/elpa/slime-20161012.1531/slime-autoloads.el" "~/.emacs.d/elpa/swiper-20161011.747/swiper-autoloads.el" "~/.emacs.d/elpa/undo-tree-20161012.701/undo-tree-autoloads.el" "~/.emacs.d/elpa/with-editor-20161009.917/with-editor-autoloads.el" "~/MEGA/LaTeX/Topologia-Algebrica/notes.log" "~/MEGA/LaTeX/Topologia-Algebrica/images/torus_generators.pdf_tex" "~/MEGA/LaTeX/Topologia-Algebrica/notes.log" "~/MEGA/LaTeX/Topologia-Algebrica/images/torus_generators.pdf_tex" "~/MEGA/LaTeX/Topologia-Algebrica/images/Klein_bottle.pdf_tex" "~/MEGA/LaTeX/Topologia-Algebrica/Klein_bottle.svg" "/home/sbozzolo/MEGA/LaTeX/Topologia-Algebrica/" "~/.emacs.d/elpa/guru-mode-20160415.1921/guru-mode-autoloads.el" "~/MEGA/Scripts/dotfiles/emacs.d/custom.el" "~/MEGA/LaTeX/Topologia-Algebrica/notes.tex" "/home/sbozzolo/MEGA/LaTeX/Topologia-Algebrica/images/Klein_bottle.pdf_tex" "~/MEGA/LaTeX/Topologia-Algebrica/notes.log" "/home/sbozzolo/MEGA/Scripts/dotfiles/emacs.d/lisp/init-local.el" "~/MEGA/films.org" "~/MEGA/books.org" "~/MEGA/LaTeX/Topologia-Algebrica/listofsymb.tex" "~/MEGA/todo.org" "~/MEGA/Scripts/ising/sphere.py" "~/Documents/errori_slide.org" "~/MEGA/LaTeX/Topologia-Algebrica/notes.tex" "~/MEGA/LaTeX/Topologia-Algebrica/notes.log" "~/MEGA/Scripts/dotfiles/emacs.d/lisp/init-local.el" "~/MEGA/Scripts/dotfiles/emacs.d/org-clock-save.el" "~/.emacs.d/org-clock-save.el" "~/MEGA/films.org" "~/MEGA/books.org" "~/MEGA/LaTeX/Topologia-Algebrica/listofsymb.tex" "~/MEGA/todo.org" "~/MEGA/Scripts/ising/sphere.py" "~/Documents/errori_slide.org" "~/MEGA/LaTeX/Topologia-Algebrica/notes.tex" "~/MEGA/LaTeX/Topologia-Algebrica/notes.log" "~/MEGA/Scripts/dotfiles/emacs.d/lisp/init-local.el" "~/MEGA/Scripts/dotfiles/emacs.d/org-clock-save.el" "~/.emacs.d/org-clock-save.el" "~/MEGA/films.org" "~/MEGA/books.org" "~/MEGA/LaTeX/Topologia-Algebrica/listofsymb.tex" "~/MEGA/todo.org" "~/MEGA/Scripts/ising/sphere.py" "~/Documents/errori_slide.org" "~/MEGA/LaTeX/Topologia-Algebrica/notes.tex" "~/MEGA/LaTeX/Topologia-Algebrica/notes.log" "~/MEGA/Scripts/dotfiles/emacs.d/lisp/init-local.el" "~/MEGA/Scripts/dotfiles/emacs.d/org-clock-save.el" "~/.emacs.d/org-clock-save.el" "~/MEGA/films.org" "~/MEGA/books.org" "~/MEGA/LaTeX/Topologia-Algebrica/listofsymb.tex"))
+(setq file-name-history '("~/MEGA/LaTeX/Topologia-Algebrica/notes.log" "/home/sbozzolo/MEGA/LaTeX/Topologia-Algebrica/notes.tex" "~/MEGA/LaTeX/Topologia-Algebrica/notes.tex" "~/.emacs.d/elpa/anaconda-mode-20161028.29/anaconda-mode-autoloads.el" "~/.emacs.d/elpa/async-20161103.1036/async-autoloads.el" "~/.emacs.d/elpa/counsel-20161104.17/counsel-autoloads.el" "~/.emacs.d/elpa/dash-20161102.334/dash-autoloads.el" "~/.emacs.d/elpa/diff-hl-20161102.1726/diff-hl-autoloads.el" "~/.emacs.d/elpa/elm-mode-20161031.51/elm-mode-autoloads.el" "~/.emacs.d/elpa/erlang-20161024.359/erlang-autoloads.el" "~/.emacs.d/elpa/flycheck-20161104.454/flycheck-autoloads.el" "~/.emacs.d/elpa/gh-20161102.2016/gh-autoloads.el" "~/.emacs.d/elpa/haskell-mode-20161101.751/haskell-mode-autoloads.el" "~/.emacs.d/elpa/highlight-escape-sequences-20161028.1617/highlight-escape-sequences-autoloads.el" "~/.emacs.d/elpa/ibuffer-vc-20161103.2358/ibuffer-vc-autoloads.el" "~/.emacs.d/elpa/intero-20161027.207/intero-autoloads.el" "~/.emacs.d/elpa/ivy-20161030.27/ivy-autoloads.el" "~/.emacs.d/elpa/js2-mode-20161025.1012/js2-mode-autoloads.el" "~/.emacs.d/elpa/ledger-mode-20161030.1103/ledger-mode-autoloads.el" "~/.emacs.d/elpa/lua-mode-20161101.1340/lua-mode-autoloads.el" "~/.emacs.d/elpa/magit-20161104.529/magit-autoloads.el" "~/.emacs.d/elpa/move-dup-20161026.742/move-dup-autoloads.el" "~/.emacs.d/elpa/package-lint-20161104.2345/package-lint-autoloads.el" "~/.emacs.d/elpa/projectile-20161105.110/projectile-autoloads.el" "~/.emacs.d/elpa/seq-2.19/seq-autoloads.el" "~/.emacs.d/elpa/slime-20161102.711/slime-autoloads.el" "~/.emacs.d/elpa/yaml-mode-20161104.1425/yaml-mode-autoloads.el" "~/MEGA/LaTeX/Topologia-Algebrica/notes.tex" "~/MEGA/LaTeX/Topologia-Algebrica/notes.log" "~/MEGA/LaTeX/Topologia-Algebrica/exercises.log" "~/MEGA/LaTeX/Topologia-Algebrica/notes.log" "~/MEGA/Scripts/dotfiles/emacs.d/custom.el" "~/MEGA/books.org" "~/MEGA/films.org" "~/MEGA/Scripts/dotfiles/emacs.d/lisp/init-local.el" "~/MEGA/money.dat" "~/MEGA/LaTeX/Topologia-Algebrica/exercises.tex" "~/MEGA/todo.org" "~/MEGA/Scripts/dotfiles/emacs.d/settings.org" "~/MEGA/LaTeX/Topologia-Algebrica/notes.tex" "/home/sbozzolo/MEGA/LaTeX/Topologia-Algebrica/auto/notes.el" "~/MEGA/LaTeX/Topologia-Algebrica/notes.tex" "~/MEGA/LaTeX/Topologia-Algebrica/notes.log" "~/MEGA/LaTeX/Topologia-Algebrica/exercises.log" "~/MEGA/LaTeX/Topologia-Algebrica/notes.log" "~/MEGA/Scripts/dotfiles/emacs.d/custom.el" "~/MEGA/todo.org" "~/MEGA/books.org" "~/MEGA/films.org" "~/MEGA/money.dat" "~/MEGA/LaTeX/Topologia-Algebrica/exercises.tex" "~/MEGA/Scripts/dotfiles/emacs.d/lisp/init-local.el" "~/MEGA/Scripts/dotfiles/emacs.d/settings.org" "~/MEGA/LaTeX/Topologia-Algebrica/notes.tex" "~/MEGA/Scripts/dotfiles/emacs.d/org-clock-save.el" "~/.emacs.d/org-clock-save.el" "~/MEGA/LaTeX/Topologia-Algebrica/notes.tex" "~/MEGA/LaTeX/Topologia-Algebrica/notes.log" "~/MEGA/Scripts/dotfiles/emacs.d/lisp/init-local.el" "~/MEGA/Scripts/dotfiles/emacs.d/custom.el" "~/MEGA/Scripts/dotfiles/emacs.d/settings.org" "~/MEGA/todo.org" "~/MEGA/books.org" "~/MEGA/films.org" "~/MEGA/money.dat" "~/MEGA/LaTeX/Topologia-Algebrica/exercises.tex" "~/MEGA/LaTeX/Topologia-Algebrica/notes.tex" "~/MEGA/Scripts/dotfiles/emacs.d/org-clock-save.el" "~/.emacs.d/org-clock-save.el" "~/MEGA/LaTeX/Topologia-Algebrica/notes.log" "~/MEGA/Scripts/dotfiles/emacs.d/lisp/init-local.el" "~/MEGA/Scripts/dotfiles/emacs.d/custom.el" "~/MEGA/Scripts/dotfiles/emacs.d/settings.org" "~/MEGA/todo.org" "~/MEGA/books.org" "~/MEGA/films.org" "~/MEGA/LaTeX/Topologia-Algebrica/exercises.tex" "~/MEGA/money.dat" "~/MEGA/LaTeX/Topologia-Algebrica/notes.tex" "~/MEGA/Scripts/dotfiles/emacs.d/org-clock-save.el" "~/.emacs.d/org-clock-save.el" "~/MEGA/LaTeX/Topologia-Algebrica/notes.log" "~/MEGA/Scripts/dotfiles/emacs.d/lisp/init-local.el" "~/MEGA/Scripts/dotfiles/emacs.d/custom.el" "~/MEGA/Scripts/dotfiles/emacs.d/settings.org" "~/MEGA/money.dat" "~/MEGA/todo.org" "~/MEGA/books.org" "~/MEGA/films.org" "~/MEGA/LaTeX/Topologia-Algebrica/exercises.tex" "~/MEGA/LaTeX/Topologia-Algebrica/notes.tex" "~/MEGA/Scripts/dotfiles/emacs.d/org-clock-save.el" "~/.emacs.d/org-clock-save.el" "~/MEGA/LaTeX/Topologia-Algebrica/notes.log" "~/MEGA/Scripts/dotfiles/emacs.d/lisp/init-local.el" "~/MEGA/Scripts/dotfiles/emacs.d/custom.el" "~/Documents/errori_slide.org" "~/MEGA/Scripts/dotfiles/emacs.d/settings.org" "~/MEGA/money.dat" "~/MEGA/LaTeX/Topologia-Algebrica/exercises.tex"))
 (setq grep-find-history nil)
 (setq grep-history nil)
 (setq ido-buffer-history '("init-local.el" "*scratch*" "*tramp/ssh sbozzolo@lcm.mi.infn.it*" "*Messages*" "*scratch*" "ising_class.py" "init-local.el" "paper.tex" "init-local.el" "paper.tex" "init-local.el" "paper.tex" "init-local.el" "paper.tex" "ising_class.py —£À sbozzolo" "*Packages*" "session.10246f026e812b8c4f147522278080787200000013830056" "*tramp/ssh sbozzolo@lcm.mi.infn.it*" "ising_class.py —£À sbozzolo" "*shell*" "clean.sh" "*unsent mail to sbozzolator@gmail.com*" "*shell*" "ising_class.py" "init-local.el" "*Warnings*" "*shell*" "init-local.el" "*tramp/ssh sbozzolo@lcm.mi.infn.it*" "*shell*" "ising_class.py" "*Ibuffer*" "*shell*" "ising_class.py" "*shell*" "*tramp/ssh sbozzolo@lcm.mi.infn.it*" "*shell*" "*tramp/ssh sbozzolo@lcm.mi.infn.it*" "ising_class.py" "*shell*" ".zshrc —£À /ssh:sbozzolo@lcm.mi.infn.it:" "*shell*" ".zshrc —£À /ssh:sbozzolo@lcm.mi.infn.it:" "*shell*" "*eshell*" "*shell*" "script.sh" "*Warnings*" "esercizi.log" "todo.org_archive" "MEGA" "LaTeX" "LaTeX-works" "Esercizi-di-Cosmologia-e-Buchi-Neri" "esercizi.tex" "*magit: LaTeX-works" "*Warnings*" "todo.org_archive" "esercizi.tex" "*Help*" "*magit-process: Esercizi-di-Cosmologia-e-Buchi-Neri" "*magit: Esercizi-di-Cosmologia-e-Buchi-Neri" "*Warnings*" "*Messages*" "*magit: Esercizi-di-Cosmologia-e-Buchi-Neri" "*~/MEGA/LaTeX/Esercizi-di-Cosmologia-e-Buchi-Neri/esercizi output*" "esercizi.log" "*TeX Help*" "*magit: Esercizi-di-Cosmologia-e-Buchi-Neri" "*Compile-Log*" "*Warnings*" "init-local.el" "books.org" "*Calendar*" "arrow.py" "*Help*" "esercizi.log" "THE-GNU-PROJECT" "sensible-defaults.el" "*Help*" "esercizi.tex —£À Esercizi-di-Supersimmetria" "*magit-diff: Esercizi-di-Cosmologia-e-Buchi-Neri" "*magit-process: Esercizi-di-Cosmologia-e-Buchi-Neri" "*magit-revision: Esercizi-di-Cosmologia-e-Buchi-Neri" "*magit: Esercizi-di-Cosmologia-e-Buchi-Neri" "*Holidays*" "*TeX Help*" "*Compile-Log*" "*scratch*" "*Warnings*" "esercizi.log" "money.dat" "*magit: Esercizi-di-Cosmologia-e-Buchi-Neri" "*Compile-Log*" "*Ibuffer*" "*TeX Help*" "*Messages*" "*~/MEGA/LaTeX/Esercizi-di-Cosmologia-e-Buchi-Neri/esercizi output*" "esercizi.log" "*Help*"))
 (setq ido-last-directory-list '(("/home/sbozzolo/MEGA/LaTeX/" . "Topologia-Algebrica/") ("/home/sbozzolo/MEGA/Scripts/dotfiles/emacs.d/" . "lisp/") ("/home/sbozzolo/MEGA/Scripts/dotfiles/" . "emacs.d/") ("/home/sbozzolo/MEGA/Scripts/" . "dotfiles/") ("/home/sbozzolo/MEGA/" . "Scripts/") ("/home/sbozzolo/" . "MEGA/") ("/home/gabriele/MEGA/Scripts/dotfiles/emacs.d/elpa/yasnippet-20160705.2039/snippets/" . "latex-mode/") ("/home/gabriele/MEGA/Scripts/dotfiles/emacs.d/elpa/yasnippet-20160705.2039/" . "snippets/") ("/home/gabriele/MEGA/Scripts/dotfiles/emacs.d/elpa/" . "yasnippet-20160705.2039/") ("/home/gabriele/MEGA/Scripts/dotfiles/emacs.d/" . "lisp/") ("/home/gabriele/MEGA/Scripts/dotfiles/" . "emacs.d/") ("/home/gabriele/MEGA/Materiale Didattico/" . "Eq. diff Klemm/") ("/home/" . "gabriele/") ("/home/gabriele/MEGA/Scripts/" . "Ising/") ("/home/gabriele/.emacs.d/" . "sensible-defaults.el/") ("/home/gabriele/MEGA/LaTeX/MagicMathematicaSquare/" . "presentation/") ("/home/gabriele/" . "MEGA/") ("/home/gabriele/MEGA/LaTeX/" . "Esercizi-di-Supersimmetria/") ("/home/gabriele/MEGA/" . "Scripts/")))
 (setq ido-work-directory-list '("/home/sbozzolo/MEGA/Scripts/dotfiles/emacs.d/lisp/" "/home/sbozzolo/MEGA/LaTeX/Topologia-Algebrica/" "/home/sbozzolo/MEGA/Scripts/ising/" "/ssh:sbozzolo@lcm.mi.infn.it:/home/sbozzolo/" "/home/gabriele/MEGA/Scripts/Ising/" "/home/gabriele/MEGA/" "/home/gabriele/MEGA/Scripts/dotfiles/emacs.d/lisp/" "/home/gabriele/MEGA/Scripts/dotfiles/emacs.d/sensible-defaults.el/" "/home/gabriele/MEGA/LaTeX/Esercizi-di-Cosmologia-e-Buchi-Neri/" "/home/gabriele/MEGA/LaTeX/Esercizi-di-Supersimmetria/" "/home/gabriele/MEGA/Scripts/userconf/" "/home/gabriele/MEGA/Scripts/dotfiles/emacs.d/elpa/yasnippet-20160705.2039/snippets/latex-mode/" "/home/gabriele/.emacs.d/sensible-defaults.el/" "/home/gabriele/.emacs.d/lisp/" "/home/gabriele/MEGA/LaTeX/MagicMathematicaSquare/" "/home/gabriele/MEGA/Materiale Didattico/Eq. diff Klemm/" "/home/gabriele/MEGA/LaTeX/MagicMathematicaSquare/presentation/" "/home/gabriele/MEGA/Scripts/dotfiles/" "/ssh:sbozzolo@lcm.mi.infn.it:/home/150/" "/ssh:sbozzolo@lcm.mi.infn.it:" "/home/gabriele/MEGA/LaTeX/MagicMathematicaSquare/report/" "/home/gabriele/MEGA/Scripts/analyzeMMS/" "/home/gabriele/.emacs.d/"))
 (setq ido-work-file-list '("init-local.el" "paper.tex" "clean.sh" "ising_class.py" ".zshrc" "ising.py" "books.org" "sensible-defaults.el" "arrow.py" "esercizi.tex"))
-(setq ivy-history '("italiano" "notes.tex" "*Pp Eval Output*" "ini" "*scratch*" "*~/MEGA/LaTeX/Topologia-Algebrica/notes output*" "*Messages*" "notes.tex" "*CPU-Profiler-Report 2016-10-23 16:28:12*" "*scratch*" "err" "fil" "notes.tex" "cpu+mem" "Grado di una sfera" "sec:" "section" "notes.tex" "notes.tex" "init-local.el" "notes.tex" "init-local.el" "notes.tex" "custom.el" "init-local.el" "cl-lib-highlight" "init-local.el" "notes.tex" "init-local.el" "Teorema del punto fisso" "notes.tex" "init-local.el" "notes.tex" "init-local.el" "where" "Retrazione" "Retratto di deformazione" "sect" "notes.tex" "notes.tex" "init-local.el" "notes.tex" "init" "note" "er" "Rango di gruppo abeliano" "\\Z" "Bordo" "Inviluppo convesso" "Operatore faccia" "notes.tex" "sc" "o" "sp" "notes.tex" "Gruppo abeliano generato" "$ k $-catene singolari" "notes.tex" "init-local.el" "$ k $-simplesso singolare" "notes.tex" "init-local.el" "*Messages*" "notes.tex" "init-local.el" "Simplesso standard" "notes.tex" "notes.tex" "Pla" "init-local.el" "notes.tex" "LaTeX-mode-" "LaTeX-mode-hoo" "TeX-mas" "LaTeX-auto-save" "init-local.el" "LaTeX-math" "notes.tex" "init-local.el" "notes.tex" "init-local.el" "notes.tex" "init-local.el" "LaTeX-math-list" " LaTeX-math-list" "notes.tex" "init-local.el" "notes.tex" "chapter" "scrbook" "chap:" "cha" "Gruppi di omotopia superiore" "Laccio" "Omotopia | \\vedi{Relazione di omotopia}" "Omotopia" "Spazio topologico puntato" "Gruppo fondam" "Insieme compatto" "Ricoprimento"))
-(setq minibuffer-history '("sbozzolo" "subcaption" "sbozzolo" "Teoria del grado" "sbozzolo" "Omologia delle sfere" "t" "sbozzolo" "Omotopia Singolare" "sbozzolo" "t" "mathtools" "sbozzolo" "amsfonts" "amssymb" "amsmath" "sbozzolo" "Generatori di un toro" "htbp" "TeX-evince-sync-view" "Toro piatto" "htbp" "tikz" "1" "sbozzolo" "Richiami sul gruppo fondamentale" "sbozzolo" "Omologia" "\\" "1" "Omomorfismo tra $ \\mathbb{R} $ e $ \\mathbb{R}^N $" "set" "Richiami di geometria" "Introduzione" "lmodern" "/usr/local/bin/zsh" "ising" "/usr/local/bin/zsh" "sbozzolo" "/usr/local/bin/zsh" "/usr/bin/python3 -i" "sbozzolo" "eq:vettore_tangente" "eq:metrica_problema_2" "eq:eq_friedmann" "italiano" "sbozzolo" "frac" "eq:carica_buco_nero" "fig:krusakl"))
+(setq ivy-history '("exercises.tex" "mone" "ex" "notes.tex" "settings.org" "notes.tex" "settings.org" "notes.tex" "settings.org" "notes.tex" "sett" "note" "boo" "notes.tex" "exercises.tex" "o" "exercises.tex" "sec:" "section" "exercises.tex" "notes.tex" "e" "notes.tex" "Caratteristica di Eulero di un CW-complesso" "subs" "notes.tex" "mo" "#x20AC" "italiano" "mag" "notes.tex" "books.org" "notes.tex" "settings.org" "notes.tex" "no" "notes.tex" "LaTeX-mode-ho" "settings.org" "notes.tex" "settings.org" "notes.tex" "settings.org" "n" "set" "Gruppo dei coifficienti" "notes.tex" "notes.tex" "notes.tex" "to" "align-cu" "Rappresentazione spinoriale di SO(3)" "Spazio dodecaedrico" "notes.tex" "Dimensione di una varietà topologica" "Varietà topologica" "section" "s" "Z" "notes.tex" "Spazio proiettivo reale" "Cella" "$ k $-scheletro" "$ 0 $-scheletro" "CW-complesso" "notes.tex" "lemma:composizione_funzioni_omotopia" "ital" "Topologia dell'unione disgiunta" "Somma topologica" "section" "chap:" "chapter" "notes.tex" "se" "notes.tex" "Omomo" "Eilenberg ! \\vedi{Teoria omologica}" "Steendord ! \\vedi{Teoria omologica}" "Teoria omologica" "Omologia singolare ridotta" "Succes" "Sezione dell'omomorfismo" "ita" "Successione spezza" "Omologia singolare relativa" "sect" "command-ex" "cpu+mem" "Mappa di complessi" "notes.tex" "settings.org" "notes.tex" "notes.tex" "cpu+mem" "Omomorfismo di connessione" "notes.tex" "exercises.tex" "subse" "fig:lez3:torus"))
+(setq minibuffer-history '("Esercizio " "sbozzolo" "Applicazioni " "sbozzolo" "Maths and Programming" "Congettura di Poincaré" "sbozzolo" "Complessi CW" "Omologia cellulare" "sbozzolo" "Assioni di una teoria omologica" "Omologia singolare ridotta" "Omologia singolare relativa" "Successioni esatte" "Morfismi indotti" "password" "pokey" "exit" "pokey" "root" "$ H_0(X) $" "45.0\\linewidth" "htop" "45.0\\linewidth" "htop" "Omomorfismo di connessione" "sbozzolo" "Esercizio 1.1.19 (vii)" "sbozzolo" "Esercizio 1.1.19 (iv)" "sbozzolo" "Richimi di algebra e geometria" "sbozzolo" "subcaption" "sbozzolo" "Teoria del grado" "sbozzolo" "Omologia delle sfere" "t" "sbozzolo" "Omotopia Singolare" "sbozzolo" "t" "mathtools" "sbozzolo" "amsfonts" "amssymb" "amsmath" "sbozzolo" "Generatori di un toro"))
 (setq org-clock-history nil)
 (setq org-refile-history nil)
 (setq org-tags-history nil)
-(setq query-replace-history '("n-1" "k" "" "*\\factor" "perch" "k-cut" "k" "N-cut" "N" "str(round(" "round(str(" "\\d s^2" "ds^2" "\\d{s^2}" "ds^2" "K" "S" "\\varphi" "\\phi" "^" "_" "\\d r^2" "dr^2" "\\d t^2" "dt^2" "\\dddd " "d^4" ">" "<" "<" ">" "<" ">" "\\d \\Omega" "d\\Omega" "\\d \\phi" "d\\phi" "\\d \\theta" "d\\theta" "\\d r " "dr" "\\d w" "dw" "\\d v " "dv" "\\d v" "dv" "n" "s" "\\d{\\tau}" "d\\tau" "" "d\\tau" "\\d " "d" "\\hg" "\\hat{g}" "\\frac{2m}{r}" "2mr^{-1}" ""))
+(setq query-replace-history '("perché" "perchè" "\\set{p}" "\\{ p \\}" "k" "1" "\\rar" "\\arrow{r}{}" "(P,P)" "{P,P}" "1" "k" "w" "y" "t" "x" "g" "1" "Y,B" "X,A" "C" "A" "B" "A" "C" "A" "B" "A" "\\gamma" "\\phi" "\\deg" "\\mathrm{deg}" "n-1" "k" "" "*\\factor" "perch" "k-cut" "k" "N-cut" "N" "str(round(" "round(str(" "\\d s^2" "ds^2" "\\d{s^2}" "ds^2" "K" "S" "\\varphi" "\\phi" "^" "_" "\\d r^2" "dr^2" "\\d t^2" "dt^2" "\\dddd " "d^4" ">"))
 (setq read-expression-history nil)
 (setq regexp-history nil)
 (setq regexp-search-ring nil)
-(setq register-alist (list (desktop-list* 32 (let ((mk (make-marker))) (add-hook 'desktop-delay-hook `(lambda nil (set-marker ,mk ,62855 (get-buffer ,"notes.tex")))) mk)) '(7 file-query "/home/sbozzolo/MEGA/LaTeX/Topologia-Algebrica/notes.tex" 56650) '(99 file-query "/home/sbozzolo/MEGA/LaTeX/Topologia-Algebrica/notes.tex" 56650) '(114 file-query "/home/sbozzolo/MEGA/LaTeX/Topologia-Algebrica/notes.tex" 35699) '(48 . " \\phi:  \\pi_1(X) & \\to H_!(X) \\\\\n    [f]_H & \\mapsto [f]_{hom}")))
-(setq search-ring '("aligned" "tikzc" "svg" "simplesso" "telegram" "guru-" "cli" "cliff" "in=" "align" "underbra" "align" "textbu" "figure" "i" "incl"))
+(setq register-alist (list (desktop-list* 32 (let ((mk (make-marker))) (add-hook 'desktop-delay-hook `(lambda nil (set-marker ,mk ,176617 (get-buffer ,"notes.tex")))) mk)) '(7 file-query "/home/sbozzolo/MEGA/LaTeX/Topologia-Algebrica/notes.tex" 56650) '(99 file-query "/home/sbozzolo/MEGA/LaTeX/Topologia-Algebrica/notes.tex" 56650) '(114 file-query "/home/sbozzolo/MEGA/LaTeX/Topologia-Algebrica/notes.tex" 35699) '(48 . "[\n  \n\\]")))
+(setq search-ring '("Si trova c" "teoria del gra" "teoria" "ho la " "assumo s" "assumo " "omologia delle sfere" "successione esatta corta" "Omologia delle" "eccez" "lezione " "omeomorfismo tra " "se e solo se" "se e solo" "s" "PR"))
 (setq shell-command-history '("ping 8.8.8.8" "ls"))
 (setq tags-file-name nil)
 (setq tags-table-list nil)
 
 ;; Buffer section -- buffers listed in same order as in buffer list:
 (desktop-create-buffer 208
-  "/home/sbozzolo/MEGA/LaTeX/Topologia-Algebrica/notes.tex"
-  "notes.tex"
+  "/home/sbozzolo/MEGA/LaTeX/Topologia-Algebrica/exercises.tex"
+  "exercises.tex"
   'latex-mode
-  '(anzu-mode auto-revert-mode global-auto-revert-mode undo-tree-mode whole-line-or-region-mode hes-mode whitespace-cleanup-mode auto-compile-on-load-mode override-global-mode guru-mode immortal-scratch-mode projectile-mode guide-key-mode TeX-PDF-mode company-mode ivy-mode counsel-mode flycheck-mode flyspell-mode)
-  63011
-  '(62882 nil)
+  '(anzu-mode auto-revert-mode global-auto-revert-mode undo-tree-mode whole-line-or-region-mode hes-mode whitespace-cleanup-mode auto-compile-on-load-mode override-global-mode immortal-scratch-mode projectile-mode guide-key-mode TeX-PDF-mode company-mode ivy-mode counsel-mode flycheck-mode)
+  12263
+  '(230 nil)
   nil
   nil
   '((indent-tabs-mode) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (TeX-master . t))
-  '((mark-ring (62855 53480 53588 62855 62757 62733 62680 62542 62524 62524 62496 62522 62478 62493 62438 62368))))
+  '((mark-ring (12390 12371 12342 1 6249 12242 11832 12165 12134 11598 12242 12201 12165 12134 12053 12262))))
 
 (desktop-create-buffer 208
-  "/home/sbozzolo/MEGA/LaTeX/Topologia-Algebrica/notes.log"
-  "notes.log"
-  'latex-mode
-  '(anzu-mode global-auto-revert-mode undo-tree-mode whole-line-or-region-mode hes-mode whitespace-cleanup-mode auto-compile-on-load-mode override-global-mode guru-mode immortal-scratch-mode projectile-mode guide-key-mode TeX-PDF-mode company-mode ivy-mode counsel-mode flycheck-mode)
-  45700
-  '(nil nil)
-  t
+  "/home/sbozzolo/MEGA/money.dat"
+  "money.dat"
+  'ledger-mode
+  '(auto-fill-mode anzu-mode global-auto-revert-mode undo-tree-mode whole-line-or-region-mode hes-mode whitespace-cleanup-mode auto-compile-on-load-mode goto-address-prog-mode override-global-mode guru-mode immortal-scratch-mode projectile-mode guide-key-mode TeX-PDF-mode company-mode ivy-mode counsel-mode flycheck-mode)
+  1531
+  '(1447 nil)
   nil
-  '((indent-tabs-mode) (buffer-file-coding-system . iso-latin-1-unix) (overwrite-mode))
-  '((mark-ring nil)))
+  nil
+  '((buffer-file-coding-system . utf-8-unix) (overwrite-mode))
+  '((mark-ring (1446 1343 1139 1138 473 1018 915 821 601 693 757 747 590 590 383 1529))))
 
 (desktop-create-buffer 208
-  "/home/sbozzolo/Documents/errori_slide.org"
-  "errori_slide.org"
+  "/home/sbozzolo/MEGA/LaTeX/Topologia-Algebrica/notes.tex"
+  "notes.tex"
+  'latex-mode
+  '(anzu-mode auto-revert-mode global-auto-revert-mode undo-tree-mode whole-line-or-region-mode hes-mode whitespace-cleanup-mode auto-compile-on-load-mode override-global-mode immortal-scratch-mode projectile-mode guide-key-mode TeX-PDF-mode company-mode ivy-mode counsel-mode)
+  156904
+  '(156152 nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (TeX-master . t))
+  '((mark-ring (152172 151608 151647 150391 150264 150417 150391 150221 150065 150050 150198 150116 149948 149932 149907 156900))))
+
+(desktop-create-buffer 208
+  "/home/sbozzolo/MEGA/Scripts/dotfiles/emacs.d/settings.org"
+  "settings.org"
   'org-mode
-  '(anzu-mode global-auto-revert-mode undo-tree-mode page-break-lines-mode whole-line-or-region-mode hes-mode whitespace-cleanup-mode auto-compile-on-load-mode override-global-mode guru-mode immortal-scratch-mode projectile-mode guide-key-mode TeX-PDF-mode company-mode ivy-mode counsel-mode flycheck-mode)
-  482
-  '(889 nil)
+  '(auto-fill-mode anzu-mode auto-revert-mode global-auto-revert-mode undo-tree-mode page-break-lines-mode whole-line-or-region-mode hes-mode whitespace-cleanup-mode auto-compile-on-load-mode override-global-mode guru-mode immortal-scratch-mode projectile-mode guide-key-mode TeX-PDF-mode company-mode ivy-mode counsel-mode flycheck-mode)
+  970
+  '(966 nil)
   nil
   nil
   '((buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines . t))
-  '((mark-ring (795 795))))
+  '((mark-ring (966 913 905 905 5120 4227 4226 4008 4250 2969 3701 3730 3668 3612 3618 966))))
+
+(desktop-create-buffer 208
+  "/home/sbozzolo/MEGA/books.org"
+  "books.org"
+  'org-mode
+  '(auto-fill-mode anzu-mode global-auto-revert-mode undo-tree-mode page-break-lines-mode whole-line-or-region-mode hes-mode whitespace-cleanup-mode auto-compile-on-load-mode override-global-mode guru-mode immortal-scratch-mode projectile-mode guide-key-mode TeX-PDF-mode company-mode ivy-mode counsel-mode flycheck-mode)
+  3163
+  '(3121 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines . t))
+  '((mark-ring (3121 3121 3121 3121 3121 3121 3121 3121 3121 1 3121 3121 3121 3121 3121 3163))))
+
+(desktop-create-buffer 208
+  "/home/sbozzolo/MEGA/todo.org"
+  "todo.org"
+  'org-mode
+  '(auto-fill-mode anzu-mode global-auto-revert-mode undo-tree-mode page-break-lines-mode whole-line-or-region-mode hes-mode whitespace-cleanup-mode auto-compile-on-load-mode override-global-mode guru-mode immortal-scratch-mode projectile-mode guide-key-mode TeX-PDF-mode company-mode ivy-mode counsel-mode flycheck-mode)
+  61
+  '(445 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines . t))
+  '((mark-ring (37 11639 11999 11618 11836 11906 11838 11712 11639 11711 11637 11619 9 21 37 61))))
+
+(desktop-create-buffer 208
+  "/home/sbozzolo/MEGA/Scripts/dotfiles/emacs.d/lisp/init-local.el"
+  "init-local.el"
+  'emacs-lisp-mode
+  '(eldoc-mode anzu-mode auto-revert-mode global-auto-revert-mode undo-tree-mode page-break-lines-mode whole-line-or-region-mode hes-mode whitespace-cleanup-mode auto-compile-mode auto-compile-on-load-mode highlight-symbol-mode goto-address-prog-mode paredit-mode bug-reference-prog-mode diff-hl-mode rainbow-delimiters-mode highlight-quoted-mode aggressive-indent-mode redshank-mode elisp-slime-nav-mode override-global-mode guru-mode immortal-scratch-mode projectile-mode guide-key-mode TeX-PDF-mode company-mode ivy-mode counsel-mode subword-mode flycheck-mode)
+  99
+  '(100 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . utf-8-unix) (overwrite-mode))
+  '((mark-ring (100 99 99 99 99 99 78 78 78 78 78 78 78 78 78 99))))
 
 (desktop-create-buffer 208
   "/home/sbozzolo/MEGA/films.org"
   "films.org"
   'org-mode
-  '(anzu-mode global-auto-revert-mode undo-tree-mode page-break-lines-mode whole-line-or-region-mode hes-mode whitespace-cleanup-mode auto-compile-on-load-mode override-global-mode guru-mode immortal-scratch-mode projectile-mode guide-key-mode TeX-PDF-mode company-mode ivy-mode counsel-mode flycheck-mode)
-  1053
+  '(auto-fill-mode anzu-mode global-auto-revert-mode undo-tree-mode page-break-lines-mode whole-line-or-region-mode hes-mode whitespace-cleanup-mode auto-compile-on-load-mode override-global-mode guru-mode immortal-scratch-mode projectile-mode guide-key-mode TeX-PDF-mode company-mode ivy-mode counsel-mode flycheck-mode)
+  1147
   '(1061 nil)
   nil
   nil
   '((buffer-file-coding-system . undecided-unix) (overwrite-mode) (truncate-lines . t))
-  '((mark-ring (1061 1061 1061 8 1061))))
+  '((mark-ring (1061 1061 1061 8 1061 957 1074))))
+
+(desktop-create-buffer 208
+  "/home/sbozzolo/MEGA/Scripts/dotfiles/emacs.d/custom.el"
+  "custom.el"
+  'emacs-lisp-mode
+  '(eldoc-mode anzu-mode auto-revert-mode global-auto-revert-mode undo-tree-mode page-break-lines-mode whole-line-or-region-mode hes-mode whitespace-cleanup-mode auto-compile-mode auto-compile-on-load-mode highlight-symbol-mode goto-address-prog-mode paredit-mode bug-reference-prog-mode diff-hl-mode rainbow-delimiters-mode highlight-quoted-mode aggressive-indent-mode redshank-mode elisp-slime-nav-mode override-global-mode guru-mode immortal-scratch-mode projectile-mode guide-key-mode TeX-PDF-mode company-mode ivy-mode counsel-mode subword-mode flycheck-mode)
+  1307
+  '(1307 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . prefer-utf-8-unix) (overwrite-mode))
+  '((mark-ring (3486 1 1 1 1 1 1 275 318 284 1307))))
+
+(desktop-create-buffer 208
+  "/home/sbozzolo/MEGA/LaTeX/Topologia-Algebrica/notes.log"
+  "notes.log"
+  'latex-mode
+  '(anzu-mode global-auto-revert-mode undo-tree-mode whole-line-or-region-mode hes-mode whitespace-cleanup-mode auto-compile-on-load-mode override-global-mode immortal-scratch-mode projectile-mode guide-key-mode TeX-PDF-mode company-mode ivy-mode counsel-mode flycheck-mode)
+  1
+  '(nil nil)
+  t
+  nil
+  '((indent-tabs-mode) (buffer-file-coding-system . iso-latin-1-unix) (overwrite-mode))
+  '((mark-ring nil)))
 
 (desktop-create-buffer 208
   nil
@@ -98,38 +170,14 @@
   '((mark-ring nil)))
 
 (desktop-create-buffer 208
-  "/home/sbozzolo/MEGA/Scripts/ising/sphere.py"
-  "sphere.py"
-  'python-mode
-  '(eldoc-mode anzu-mode global-auto-revert-mode undo-tree-mode whole-line-or-region-mode hes-mode whitespace-cleanup-mode auto-compile-on-load-mode override-global-mode guru-mode immortal-scratch-mode projectile-mode guide-key-mode TeX-PDF-mode company-mode ivy-mode counsel-mode flycheck-mode highlight-symbol-mode subword-mode goto-address-prog-mode paredit-everywhere-mode bug-reference-prog-mode diff-hl-mode rainbow-delimiters-mode indent-guide-mode anaconda-mode anaconda-eldoc-mode)
-  1355
-  '(1154 nil)
-  nil
-  nil
-  '((tab-width . 8) (indent-tabs-mode) (buffer-file-coding-system . utf-8-unix) (overwrite-mode))
-  '((mark-ring (1292 1185 1609 1935 1160 252 3004 3087 2939 2939 2939 2939 2999 2939 3024 1355))))
-
-(desktop-create-buffer 208
-  "/home/sbozzolo/MEGA/todo.org"
-  "todo.org"
-  'org-mode
-  '(anzu-mode global-auto-revert-mode undo-tree-mode page-break-lines-mode whole-line-or-region-mode hes-mode whitespace-cleanup-mode auto-compile-on-load-mode override-global-mode guru-mode immortal-scratch-mode projectile-mode guide-key-mode TeX-PDF-mode company-mode ivy-mode counsel-mode flycheck-mode)
-  37
+  "/home/sbozzolo/MEGA/LaTeX/Topologia-Algebrica/exercises.log"
+  "exercises.log"
+  'fundamental-mode
+  '(anzu-mode global-auto-revert-mode undo-tree-mode whole-line-or-region-mode hes-mode whitespace-cleanup-mode auto-compile-on-load-mode override-global-mode immortal-scratch-mode projectile-mode guide-key-mode TeX-PDF-mode company-mode ivy-mode counsel-mode flycheck-mode)
+  3694
   '(nil nil)
+  t
   nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines . t))
+  '((indent-tabs-mode) (buffer-file-coding-system . undecided-unix))
   '((mark-ring nil)))
-
-(desktop-create-buffer 208
-  "/home/sbozzolo/MEGA/books.org"
-  "books.org"
-  'org-mode
-  '(anzu-mode global-auto-revert-mode undo-tree-mode page-break-lines-mode whole-line-or-region-mode hes-mode whitespace-cleanup-mode auto-compile-on-load-mode override-global-mode guru-mode immortal-scratch-mode projectile-mode guide-key-mode TeX-PDF-mode company-mode ivy-mode counsel-mode flycheck-mode)
-  2765
-  '(2795 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines . t))
-  '((mark-ring (2795 2795 2795 2795 2795 2795 1 2795 2795 2795 2795 2795 2795 2795 2795 2795))))
 

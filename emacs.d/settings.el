@@ -25,8 +25,7 @@
                           (cons "$" "$"))))
 (add-hook 'LaTeX-mode-hook
           (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
-                          (cons "\\(" "\\)"))))
-(add-hook 'latex-mode-hook 'pretty-symbols-mode)
+                          (cons "$" "$"))))
 
 (require 'bind-key)
 (require 'epa-file)
@@ -70,4 +69,25 @@
 
 (bind-key "C-c c" 'copy-line)
 
-(global-prettify-symbols-mode)
+(global-prettify-symbols-mode t)
+(add-hook 'LaTeX-mode-hook
+            (lambda ()
+              (push '("\\colon" . ?:) prettify-symbols-alist)))
+(add-hook 'LaTeX-mode-hook
+            (lambda ()
+              (push '("\\pm" . ?±) prettify-symbols-alist)))
+(add-hook 'LaTeX-mode-hook
+            (lambda ()
+              (push '("\\dots" . ?…) prettify-symbols-alist)))
+
+(add-hook 'org-mode-hook
+          (lambda ()
+            (org-bullets-mode t)))
+(setq org-ellipsis "⤵")
+(setq org-src-fontify-natively t)
+
+(require 'guru-mode)
+
+(fset 'euro
+   (lambda (&optional arg) "Keyboard macro." (interactive "p")
+(kmacro-exec-ring-item (quote ([24 56 return 35 120 50 48 65 67 return] 0 "%d")) arg)))
