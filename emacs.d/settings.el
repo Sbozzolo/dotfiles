@@ -16,6 +16,7 @@
 (sensible-defaults/bind-commenting-and-uncommenting)
 
 (setq LaTeX-math-list '((?, "partial" "Misc Symbol" 8706)))
+(setq LaTeX-math-list '((?o "circ" "Binary Operator" .)))
 (setq TeX-parse-self t)
 (setq TeX-auto-save t)
 (setq-default TeX-master nil)
@@ -79,6 +80,15 @@
 (add-hook 'LaTeX-mode-hook
             (lambda ()
               (push '("\\dots" . ?…) prettify-symbols-alist)))
+(add-hook 'LaTeX-mode-hook
+            (lambda ()
+              (push '("\\rrbracket" . 10215) prettify-symbols-alist))) ;;;⟧
+(add-hook 'LaTeX-mode-hook
+            (lambda ()
+              (push '("\\llbracket" . 10214) prettify-symbols-alist))) ;;;⟦
+(add-hook 'LaTeX-mode-hook
+            (lambda ()
+              (push '("\\incl" . ?↪) prettify-symbols-alist)))
 
 (add-hook 'org-mode-hook
           (lambda ()
@@ -91,3 +101,37 @@
 (fset 'euro
    (lambda (&optional arg) "Keyboard macro." (interactive "p")
 (kmacro-exec-ring-item (quote ([24 56 return 35 120 50 48 65 67 return] 0 "%d")) arg)))
+
+(defun smarter-move-beginning-of-line (arg)
+  "Move point back to indentation of beginning of line.
+
+Move point to the first non-whitespace character on this line.
+If point is already there, move to the beginning of the line.
+Effectively toggle between the first non-whitespace character and
+the beginning of the line.
+
+If ARG is not nil or 1, move forward ARG - 1 lines first.  If
+point reaches the beginning or end of the buffer, stop there."
+  (interactive "^p")
+  (setq arg (or arg 1))
+
+  ;; Move lines first
+  (when (/= arg 1)
+    (let ((line-move-visual nil))
+      (forward-line (1- arg))))
+
+  (let ((orig-point (point)))
+    (back-to-indentation)
+    (when (= orig-point (point))
+      (move-beginning-of-line 1))))
+
+;; remap C-a to `smarter-move-beginning-of-line'
+(global-set-key [remap move-beginning-of-line]
+                'smarter-move-beginning-of-line)
+
+(bind-key "C-y" 'counsel-yank-pop)
+
+(bind-key "<f5>" 'revert-buffer)
+
+(bind-key "C-s" 'swiper)
+(bind-key "C-r" 'swiper)

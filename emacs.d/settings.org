@@ -13,14 +13,12 @@
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/els/")
 #+END_SRC
-
 * Wolfram-mode to edit Mathematica files
 #+BEGIN_SRC emacs-lisp
 (autoload 'wolfram-mode "wolfram-mode" nil t)
 (autoload 'run-wolfram "wolfram-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.m$" . wolfram-mode))
 #+END_SRC
-
 * Use sensible-defaults.el
 #+BEGIN_SRC emacs-lisp
 (load-file "~/.emacs.d/sensible-defaults.el/sensible-defaults.el")
@@ -162,4 +160,17 @@ point reaches the beginning or end of the buffer, stop there."
 ;; remap C-a to `smarter-move-beginning-of-line'
 (global-set-key [remap move-beginning-of-line]
                 'smarter-move-beginning-of-line)
+#+END_SRC
+* Rebind C-y
+#+BEGIN_SRC emacs-lisp
+(bind-key "C-y" 'counsel-yank-pop)
+#+END_SRC
+* F5 to revert buffer
+#+BEGIN_SRC emacs-lisp
+(bind-key "<f5>" 'revert-buffer)
+#+END_SRC
+* Swiper for searching
+#+BEGIN_SRC emacs-lisp
+(bind-key "C-s" 'swiper)
+(bind-key "C-r" 'swiper)
 #+END_SRC

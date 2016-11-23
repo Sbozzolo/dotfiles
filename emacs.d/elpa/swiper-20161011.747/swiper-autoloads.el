@@ -3,8 +3,9 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "swiper" "swiper.el" (22542 28094 298311 359000))
-;;; Generated autoloads from swiper.el
+;;;### (autoloads nil "swiper" "../../../../../../.emacs.d/elpa/swiper-20161011.747/swiper.el"
+;;;;;;  "864d4f5a5f22c9bede435bea427120fb")
+;;; Generated autoloads from ../../../../../../.emacs.d/elpa/swiper-20161011.747/swiper.el
 
 (autoload 'swiper-avy "swiper" "\
 Jump to one of the current swiper candidates.
@@ -16,6 +17,12 @@ Jump to one of the current swiper candidates.
 When non-nil, INITIAL-INPUT is the initial search pattern.
 
 \(fn &optional INITIAL-INPUT)" t nil)
+
+;;;***
+
+;;;### (autoloads nil nil ("../../../../../../.emacs.d/elpa/swiper-20161011.747/swiper-autoloads.el"
+;;;;;;  "../../../../../../.emacs.d/elpa/swiper-20161011.747/swiper.el")
+;;;;;;  (22574 6576 349334 939000))
 
 ;;;***
 

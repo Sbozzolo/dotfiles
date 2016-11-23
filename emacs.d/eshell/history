@@ -1,3 +1,7 @@
 ledger -f money.dat bal Assets:Wallet:Daily
 ledger -f money.dat account Assets:Wallet:Daily
 ledger -f money.dat bal Assets:Wallet:Daily
+cd Lavoro/
+l
+ls
+mkdir Adeodata

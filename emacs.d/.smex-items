@@ -1,10 +1,10 @@
 
 ;; ----- smex-history -----
 (
+ ediff
  battery
  describe-function
  describe-variable
- profiler-report
  profiler-start
  ispell-change-dictionary
  align-current
@@ -71,4 +71,5 @@
  (dun-mode . 1)
  (describe-mode . 2)
  (describe-function . 1)
+ (ediff . 1)
 )
