@@ -1,13 +1,13 @@
 
 ;; ----- smex-history -----
 (
- ediff
- battery
- describe-function
- describe-variable
- profiler-start
+ load-theme
  ispell-change-dictionary
- align-current
+ flycheck-mode
+ flyspell-mode
+ pop-to-mark-command
+ euro
+ magit-push
 )
 
 ;; ----- smex-data -----
@@ -19,14 +19,14 @@
  (lcm-shell . 16)
  (image-mode . 1)
  (indent-to . 1)
- (magit-push . 27)
+ (magit-push . 28)
  (magit-status . 7)
  (package-list-packages . 9)
  (revert-buffer . 28)
  (TeX-mode . 5)
  (package-refresh-contents . 1)
- (flyspell-mode . 23)
- (ispell-change-dictionary . 22)
+ (flyspell-mode . 25)
+ (ispell-change-dictionary . 26)
  (ispell-word . 5)
  (server-start . 2)
  (lunar-phases . 1)
@@ -37,7 +37,7 @@
  (ispell-buffer . 2)
  (customize . 1)
  (set-variable . 1)
- (describe-variable . 17)
+ (describe-variable . 20)
  (eval-buffer . 7)
  (clear-rectangle . 2)
  (fundamental-mode . 2)
@@ -56,12 +56,12 @@
  (man . 1)
  (time-stamp . 1)
  (electric-pair-mode . 4)
- (prettify-symbols-mode . 36)
+ (prettify-symbols-mode . 40)
  (bubbles . 1)
  (projectile-ag . 1)
  (guru-mode . 3)
  (ledger-add-transaction . 1)
- (euro . 1)
+ (euro . 3)
  (guru-global-mode . 1)
  (mail . 1)
  (profiler-stop . 1)
@@ -72,4 +72,8 @@
  (describe-mode . 2)
  (describe-function . 1)
  (ediff . 1)
+ (flycheck-mode . 5)
+ (LaTeX-mode . 2)
+ (pop-to-mark-command . 3)
+ (load-theme . 13)
 )

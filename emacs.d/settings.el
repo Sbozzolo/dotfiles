@@ -5,6 +5,10 @@
       calendar-longitude 9.04
       calendar-location-name "Milan, Italy")
 
+(unless (package-installed-p 'use-package)
+        (package-refresh-contents)
+        (package-install 'use-package))
+
 (add-to-list 'load-path "~/.emacs.d/els/")
 
 (autoload 'wolfram-mode "wolfram-mode" nil t)
@@ -16,7 +20,9 @@
 (sensible-defaults/bind-commenting-and-uncommenting)
 
 (setq LaTeX-math-list '((?, "partial" "Misc Symbol" 8706)))
-(setq LaTeX-math-list '((?o "circ" "Binary Operator" .)))
+;; NOT WORKING!!!
+;;(setq LaTeX-math-list (append '(?o "circ" "Binary Operator" .) LaTeX-math-list))
+;;(setq LaTeX-math-list (append '(?= "cong" "Binary Operator" ) LaTeX-math-list))
 (setq TeX-parse-self t)
 (setq TeX-auto-save t)
 (setq-default TeX-master nil)
@@ -96,7 +102,11 @@
 (setq org-ellipsis "⤵")
 (setq org-src-fontify-natively t)
 
-(require 'guru-mode)
+(use-package guru-mode
+  :ensure t
+  :init
+  (guru-global-mode +1))
+;; (require 'guru-mode)
 
 (fset 'euro
    (lambda (&optional arg) "Keyboard macro." (interactive "p")
@@ -135,3 +145,23 @@ point reaches the beginning or end of the buffer, stop there."
 
 (bind-key "C-s" 'swiper)
 (bind-key "C-r" 'swiper)
+
+;; last t is for NO-ENABLE
+(load-theme 'sanityinc-solarized-dark t t)
+(load-theme 'tango-dark t t)
+
+(defun mb/pick-color-theme (frame)
+  (select-frame frame)
+  (if (window-system frame)
+      (progn
+        (disable-theme 'tango-dark) ; in case it was active
+        (enable-theme 'sanityinc-solarized-dark))
+    (progn
+      (disable-theme 'sanityinc-solarized-dark) ; in case it was active
+      (enable-theme 'tango-dark))))
+(add-hook 'after-make-frame-functions 'mb/pick-color-theme)
+
+;; For when started with emacs or emacs -nw rather than emacs --daemon
+(if window-system
+    (enable-theme 'sanityinc-solarized-dark)
+  (enable-theme 'tango-dark))
