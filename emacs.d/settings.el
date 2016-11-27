@@ -19,20 +19,22 @@
 (sensible-defaults/use-all-settings)
 (sensible-defaults/bind-commenting-and-uncommenting)
 
-(setq LaTeX-math-list '((?, "partial" "Misc Symbol" 8706)))
-;; NOT WORKING!!!
-;;(setq LaTeX-math-list (append '(?o "circ" "Binary Operator" .) LaTeX-math-list))
-;;(setq LaTeX-math-list (append '(?= "cong" "Binary Operator" ) LaTeX-math-list))
-(setq TeX-parse-self t)
-(setq TeX-auto-save t)
-(setq-default TeX-master nil)
-(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-(add-hook 'plain-TeX-mode-hook
-          (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
-                          (cons "$" "$"))))
-(add-hook 'LaTeX-mode-hook
-          (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
-                          (cons "$" "$"))))
+(setq LaTeX-math-list '(
+                        (111 "circ" "Binary Operator" 9675)
+                        (44 "partial" "Misc Symbol" 8706)
+                        (?= "cong" "Binary Operator" 2265)
+                        ))
+
+ (setq TeX-parse-self t)
+ (setq TeX-auto-save t)
+ (setq-default TeX-master nil)
+ (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+ (add-hook 'plain-TeX-mode-hook
+           (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
+                      (cons "$" "$"))))
+ (add-hook 'LaTeX-mode-hook
+           (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
+                      (cons "$" "$"))))
 
 (require 'bind-key)
 (require 'epa-file)
