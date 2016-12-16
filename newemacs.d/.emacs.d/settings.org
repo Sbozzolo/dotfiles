@@ -1,0 +1,71 @@
+#+TITLE: Emacs configuration
+
+* Personal info
+  #+BEGIN_SRC emacs-lisp
+  (setq user-full-name "Gabriele Bozzola"
+        user-mail-address "sbozzolator@gmail.com"
+        calendar-latitude 45.63
+        calendar-longitude 9.04
+        calendar-location-name "Milan, Italy")
+   #+END_SRC
+* Look and feel
+  #+BEGIN_SRC emacs-lisp
+  ;; Disable useless screens
+  (setq use-file-dialog nil)
+  (setq use-dialog-box nil)
+  (setq inhibit-startup-screen t)
+  (setq inhibit-startup-echo-area-message t)
+
+  ;; Show a marker in the left fringe for lines not in the buffer
+  (setq indicate-empty-lines t)
+
+  ;; Turn on syntax highlighting whenever possible.
+  (global-font-lock-mode t)
+
+  ;; Ask if you're sure that you want to close Emacs
+  (setq confirm-kill-emacs 'y-or-n-p)
+
+  Visually indicate matching pairs of parentheses
+  (show-paren-mode t)
+  (setq show-paren-delay 0.0)
+
+  #+END_SRC
+
+* Setup package manager
+  I use ELPA and MELPA
+  #+BEGIN_SRC emacs-lisp
+  (require 'package)
+  (setq package-enable-at-startup nil)
+  ;; org
+  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
+  ;; MELPA
+  (add-to-list 'package-archives `("melpa" . "https://melpa.org/packages/"))
+  (package-initialize)
+  #+END_SRC
+* Setup use-package
+  I will config everything with use-package
+#+BEGIN_SRC emacs-lisp
+(unless (package-installed-p 'use-package)
+(package-refresh-contents)
+(package-install 'use-package))
+#+END_SRC
+* Start emacs server
+  To use everywhere emacsclient
+#+BEGIN_SRC emacs-lisp
+  (require 'server)
+  (unless (server-running-p)
+    (server-start))
+#+END_SRC
+* Misc configurations (mostly taken form Harry Schwartz's dotfiles)
+  #+BEGIN_SRC emacs-lisp
+    ;; When opening a file, always follow symlinks.
+    (setq vc-follow-symlinks t)
+
+    ;; When saving a file that starts with `#!', make it executable.
+    (add-hook 'after-save-hook
+              'executable-make-buffer-file-executable-if-script-p)
+
+    ;; Don't assume that sentences should have two spaces after
+    ;; periods.
+    (setq sentence-end-double-space nil)
+  #+END_SRC

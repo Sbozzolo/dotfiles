@@ -1,4 +1,3 @@
-
 (setq user-full-name "Gabriele Bozzola"
       user-mail-address "sbozzolator@gmail.com"
       calendar-latitude 45.63
@@ -19,27 +18,40 @@
 (sensible-defaults/use-all-settings)
 (sensible-defaults/bind-commenting-and-uncommenting)
 
+;; (use-package auctex
+;;   :ensure t
+;;   ;;   :mode ("\\.tex\\'" . latex-mode)
+;;   :init
 (setq LaTeX-math-list '(
-                        (111 "circ" "Binary Operator" 9675)
-                        (44 "partial" "Misc Symbol" 8706)
+                        (?o "circ" "Binary Operator" 9675)
+                        (?, "partial" "Misc Symbol" 8706)
                         (?= "cong" "Binary Operator" 2265)
                         ))
 
- (setq TeX-parse-self t)
- (setq TeX-auto-save t)
- (setq-default TeX-master nil)
- (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
- (add-hook 'plain-TeX-mode-hook
-           (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
-                      (cons "$" "$"))))
- (add-hook 'LaTeX-mode-hook
-           (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
-                      (cons "$" "$"))))
+(setq TeX-parse-self t)
+(setq TeX-auto-save t)
+(setq-default TeX-master nil)
+;; Turn on RefTeX in AUCTeX
+(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+;; Activate nice interface between RefTeX and AUCTeX
+(setq reftex-plug-into-AUCTeX t)
+(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+(add-hook 'LaTeX-mode-hook 'flyspell-mode)
+(add-hook 'plain-TeX-mode-hook
+          (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
+                     (cons "$" "$"))))
+(add-hook 'LaTeX-mode-hook
+          (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
+                     (cons "$" "$"))))
+;;Enable SyncTex
+(setq TeX-source-correlate-mode t)
 
-(require 'bind-key)
+(use-package bind-key
+  :ensure t)
 (require 'epa-file)
 
 (defun lcm-shell ()
+  "Open a shell on LCM"
   (interactive)
   (let ((default-directory "/ssh:sbozzolo@lcm.mi.infn.it:"))
     (shell))
@@ -97,12 +109,67 @@
 (add-hook 'LaTeX-mode-hook
             (lambda ()
               (push '("\\incl" . ?↪) prettify-symbols-alist)))
+(add-hook 'LaTeX-mode-hook
+            (lambda ()
+              (push '("\\slash" . ?/) prettify-symbols-alist)))
+(add-hook 'LaTeX-mode-hook
+            (lambda ()
+              (push '("\\bigcup" . ?⋃) prettify-symbols-alist)))
 
 (add-hook 'org-mode-hook
           (lambda ()
             (org-bullets-mode t)))
 (setq org-ellipsis "⤵")
 (setq org-src-fontify-natively t)
+(bind-key "<f12>" 'org-capture)
+
+;;org-capture stuff
+(setq org-capture-templates
+      '(
+        ("o" "Ordinary Life")
+        ("ot" "TODO" entry (file+headline  "~/MEGA/orgs/todo.org" "PROJECT ORDINARY LIFE")
+         "** TODO %?" :immediate-finish)
+        ("ol" "Links" entry (file+headline "~/MEGA/orgs/todo.org" "LINKS")
+         "* %? [[%x][%^{Description}]] %^g \n":immediate-finish)
+        ("t" "Thesis")
+        ("ta" "Article" entry (file+headline "~/MEGA/orgs/master_thesis.org" "Articles")
+         "* %^{Title}\n   %^{Authors} %^{Year}\n   [[%^{ArXiv Link}][ArXiv]]\n** Description\n   %^{Description}\n** BibTex Entry\n   %^{BibTex Entry}  %?\n")
+        ("tt" "Thesis Links" entry (file+headline "~/MEGA/orgs/master_thesis.org" "Links")
+         "* %? [[%x][%^{Description}]] \n":immediate-finish)
+        ))
+
+(defadvice org-capture-finalize
+    (after delete-capture-frame activate)
+  "Advise capture-finalize to close the frame"
+  (if (equal "capture" (frame-parameter nil 'name))
+      (delete-frame)))
+
+(defadvice org-capture-destroy
+    (after delete-capture-frame activate)
+  "Advise capture-destroy to close the frame"
+  (if (equal "capture" (frame-parameter nil 'name))
+      (delete-frame)))
+
+(use-package noflet
+  :ensure t )
+(defun make-capture-frame ()
+  "Create a new frame and run org-capture."
+  (interactive)
+  (make-frame '((name . "capture")))
+  (select-frame-by-name "capture")
+  (delete-other-windows)
+  (noflet ((switch-to-buffer-other-window (buf) (switch-to-buffer buf)))
+    (org-capture)))
+
+;; org-reveal
+;; (use-package ox-reveal
+;;   :ensure ox-reveal)
+
+;; (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.3.0/")
+;; (setq org-reveal-mathjax t)
+
+;; (use-package htmlize
+;;   :ensure t)
 
 (use-package guru-mode
   :ensure t
@@ -141,7 +208,8 @@ point reaches the beginning or end of the buffer, stop there."
 (global-set-key [remap move-beginning-of-line]
                 'smarter-move-beginning-of-line)
 
-(bind-key "C-y" 'counsel-yank-pop)
+;;(bind-key "C-y" 'counsel-yank-pop)
+;;(define-key minibuffer-local-map (kbd "C-y") 'yank-pop)
 
 (bind-key "<f5>" 'revert-buffer)
 
@@ -167,3 +235,29 @@ point reaches the beginning or end of the buffer, stop there."
 (if window-system
     (enable-theme 'sanityinc-solarized-dark)
   (enable-theme 'tango-dark))
+
+(use-package counsel
+  :ensure t
+  :bind
+  (("M-y" . counsel-yank-pop)
+   :map ivy-minibuffer-map
+   ("M-y" . ivy-next-line)))
+
+(use-package flycheck-pos-tip
+  :ensure t
+  )
+
+(use-package flycheck
+  :ensure t
+  :init
+  (add-hook 'prog-mode-hook (lambda () (flycheck-mode)))
+  :config (progn
+            (setq flycheck-check-syntax-automatically '(save mode-enabled))
+            (setq flycheck-standard-error-navigation nil)
+            ;; flycheck errors on a tooltip (doesnt work on console)
+            (when (display-graphic-p (selected-frame))
+              (eval-after-load 'flycheck
+                '(custom-set-variables
+                  '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+              ))
+  )

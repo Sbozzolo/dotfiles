@@ -8,7 +8,6 @@
         calendar-longitude 9.04
         calendar-location-name "Milan, Italy")
 #+END_SRC
-
 * Set up usepackage
 #+BEGIN_SRC emacs-lisp
 (unless (package-installed-p 'use-package)
@@ -31,38 +30,51 @@
 (sensible-defaults/use-all-settings)
 (sensible-defaults/bind-commenting-and-uncommenting)
 #+END_SRC
-* COMMENT AucTeX
+* AucTeX
 #+BEGIN_SRC emacs-lisp
+  ;; (use-package auctex
+  ;;   :ensure t
+  ;;   ;;   :mode ("\\.tex\\'" . latex-mode)
+  ;;   :init
   (setq LaTeX-math-list '(
                           (?o "circ" "Binary Operator" 9675)
                           (?, "partial" "Misc Symbol" 8706)
                           (?= "cong" "Binary Operator" 2265)
                           ))
 
-   (setq TeX-parse-self t)
-   (setq TeX-auto-save t)
-   (setq-default TeX-master nil)
-   (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-   (add-hook 'plain-TeX-mode-hook
-             (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
-                        (cons "$" "$"))))
-   (add-hook 'LaTeX-mode-hook
-             (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
-                        (cons "$" "$"))))
+  (setq TeX-parse-self t)
+  (setq TeX-auto-save t)
+  (setq-default TeX-master nil)
+  ;; Turn on RefTeX in AUCTeX
+  (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+  ;; Activate nice interface between RefTeX and AUCTeX
+  (setq reftex-plug-into-AUCTeX t)
+  (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+  (add-hook 'LaTeX-mode-hook 'flyspell-mode)
+  (add-hook 'plain-TeX-mode-hook
+            (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
+                       (cons "$" "$"))))
+  (add-hook 'LaTeX-mode-hook
+            (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
+                       (cons "$" "$"))))
+  ;;Enable SyncTex
+  (setq TeX-source-correlate-mode t)
 #+END_SRC
 * Requires
 #+BEGIN_SRC emacs-lisp
-(require 'bind-key)
-(require 'epa-file)
+  (use-package bind-key
+    :ensure t)
+  (require 'epa-file)
 #+END_SRC
 * LCM shell
 #+BEGIN_SRC emacs-lisp
-(defun lcm-shell ()
-  (interactive)
-  (let ((default-directory "/ssh:sbozzolo@lcm.mi.infn.it:"))
-    (shell))
-  (setq default-directory "~/")
-  )
+  (defun lcm-shell ()
+    "Open a shell on LCM"
+    (interactive)
+    (let ((default-directory "/ssh:sbozzolo@lcm.mi.infn.it:"))
+      (shell))
+    (setq default-directory "~/")
+    )
 #+END_SRC
 * Kill backward line
 #+BEGIN_SRC emacs-lisp
@@ -123,14 +135,69 @@
 (add-hook 'LaTeX-mode-hook
             (lambda ()
               (push '("\\incl" . ?↪) prettify-symbols-alist)))
+(add-hook 'LaTeX-mode-hook
+            (lambda ()
+              (push '("\\slash" . ?/) prettify-symbols-alist)))
+(add-hook 'LaTeX-mode-hook
+            (lambda ()
+              (push '("\\bigcup" . ?⋃) prettify-symbols-alist)))
 #+END_SRC
 * Org-mode
 #+BEGIN_SRC emacs-lisp
-(add-hook 'org-mode-hook
-          (lambda ()
-            (org-bullets-mode t)))
-(setq org-ellipsis "⤵")
-(setq org-src-fontify-natively t)
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (org-bullets-mode t)))
+  (setq org-ellipsis "⤵")
+  (setq org-src-fontify-natively t)
+  (bind-key "<f12>" 'org-capture)
+
+  ;;org-capture stuff
+  (setq org-capture-templates
+        '(
+          ("o" "Ordinary Life")
+          ("ot" "TODO" entry (file+headline  "~/MEGA/orgs/todo.org" "PROJECT ORDINARY LIFE")
+           "** TODO %?" :immediate-finish)
+          ("ol" "Links" entry (file+headline "~/MEGA/orgs/todo.org" "LINKS")
+           "* %? [[%x][%^{Description}]] %^g \n":immediate-finish)
+          ("t" "Thesis")
+          ("ta" "Article" entry (file+headline "~/MEGA/orgs/master_thesis.org" "Articles")
+           "* %^{Title}\n   %^{Authors} %^{Year}\n   [[%^{ArXiv Link}][ArXiv]]\n** Description\n   %^{Description}\n** BibTex Entry\n   %^{BibTex Entry}  %?\n")
+          ("tt" "Thesis Links" entry (file+headline "~/MEGA/orgs/master_thesis.org" "Links")
+           "* %? [[%x][%^{Description}]] \n":immediate-finish)
+          ))
+
+  (defadvice org-capture-finalize
+      (after delete-capture-frame activate)
+    "Advise capture-finalize to close the frame"
+    (if (equal "capture" (frame-parameter nil 'name))
+        (delete-frame)))
+
+  (defadvice org-capture-destroy
+      (after delete-capture-frame activate)
+    "Advise capture-destroy to close the frame"
+    (if (equal "capture" (frame-parameter nil 'name))
+        (delete-frame)))
+
+  (use-package noflet
+    :ensure t )
+  (defun make-capture-frame ()
+    "Create a new frame and run org-capture."
+    (interactive)
+    (make-frame '((name . "capture")))
+    (select-frame-by-name "capture")
+    (delete-other-windows)
+    (noflet ((switch-to-buffer-other-window (buf) (switch-to-buffer buf)))
+      (org-capture)))
+
+  ;; org-reveal
+  ;; (use-package ox-reveal
+  ;;   :ensure ox-reveal)
+
+  ;; (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.3.0/")
+  ;; (setq org-reveal-mathjax t)
+
+  ;; (use-package htmlize
+  ;;   :ensure t)
 #+END_SRC
 * Guru-mode
 #+BEGIN_SRC emacs-lisp
@@ -176,8 +243,10 @@ point reaches the beginning or end of the buffer, stop there."
                 'smarter-move-beginning-of-line)
 #+END_SRC
 * Rebind C-y
+  Experimental
 #+BEGIN_SRC emacs-lisp
-(bind-key "C-y" 'counsel-yank-pop)
+;;(bind-key "C-y" 'counsel-yank-pop)
+;;(define-key minibuffer-local-map (kbd "C-y") 'yank-pop)
 #+END_SRC
 * F5 to revert buffer
 #+BEGIN_SRC emacs-lisp
@@ -210,3 +279,41 @@ point reaches the beginning or end of the buffer, stop there."
       (enable-theme 'sanityinc-solarized-dark)
     (enable-theme 'tango-dark))
 #+END_SRC
+
+* Counsel for yanking
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel
+    :ensure t
+    :bind
+    (("M-y" . counsel-yank-pop)
+     :map ivy-minibuffer-map
+     ("M-y" . ivy-next-line)))
+#+END_SRC
+
+* Flycheck
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck-pos-tip
+    :ensure t
+    )
+
+  (use-package flycheck
+    :ensure t
+    :init
+    (add-hook 'prog-mode-hook (lambda () (flycheck-mode)))
+    :config (progn
+              (setq flycheck-check-syntax-automatically '(save mode-enabled))
+              (setq flycheck-standard-error-navigation nil)
+              ;; flycheck errors on a tooltip (doesnt work on console)
+              (when (display-graphic-p (selected-frame))
+                (eval-after-load 'flycheck
+                  '(custom-set-variables
+                    '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+                ))
+    )
+#+END_SRC
+
+
+* TO-DO and whishes
+** Remove Purcell's customization to use only settings.org
+** Use for everything use-package
+** DONE Set up org-capture

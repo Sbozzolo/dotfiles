@@ -1,1 +1,1 @@
-("~/MEGA/Scripts/dotfiles/" "~/MEGA/LaTeX/Topologia-Algebrica/" "/ssh:sbozzolo@lcm.mi.infn.it:/home/sbozzolo/ising/")
+("~/MEGA/Scripts/dotfiles/" "~/MEGA/LaTeX/Topologia-Algebrica/" "~/MEGA/Master Thesis/" "/ssh:sbozzolo@lcm.mi.infn.it:/home/sbozzolo/ising/")
