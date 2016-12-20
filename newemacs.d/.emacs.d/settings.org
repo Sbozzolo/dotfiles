@@ -10,29 +10,30 @@
    #+END_SRC
 * Look and feel
   #+BEGIN_SRC emacs-lisp
-  ;; Disable useless screens
-  (setq use-file-dialog nil)
-  (setq use-dialog-box nil)
-  (setq inhibit-startup-screen t)
-  (setq inhibit-startup-echo-area-message t)
 
-  ;; Show a marker in the left fringe for lines not in the buffer
-  (setq indicate-empty-lines t)
+    ;; Disable useless screens
+    (setq use-file-dialog nil)
+    (setq use-dialog-box nil)
+    (setq inhibit-startup-screen t)
+    (setq inhibit-startup-echo-area-message t)
+    ;; NO toolbar
+    (tool-bar-mode -1)
 
-  ;; Turn on syntax highlighting whenever possible.
-  (global-font-lock-mode t)
+    ;; Show a marker in the left fringe for lines not in the buffer
+    (setq indicate-empty-lines t)
 
-  ;; Ask if you're sure that you want to close Emacs
-  (setq confirm-kill-emacs 'y-or-n-p)
+    ;; Visually indicate matching pairs of parentheses
+    (show-paren-mode t)
+    (setq show-paren-delay 0.0)
 
-  Visually indicate matching pairs of parentheses
-  (show-paren-mode t)
-  (setq show-paren-delay 0.0)
+    ;; Theme
+    (load-theme 'tango-dark)
+
+    ;; Enable prettification everywhere
+    (global-prettify-symbols-mode t)
 
   #+END_SRC
-
 * Setup package manager
-  I use ELPA and MELPA
   #+BEGIN_SRC emacs-lisp
   (require 'package)
   (setq package-enable-at-startup nil)
@@ -44,18 +45,18 @@
   #+END_SRC
 * Setup use-package
   I will config everything with use-package
-#+BEGIN_SRC emacs-lisp
-(unless (package-installed-p 'use-package)
-(package-refresh-contents)
-(package-install 'use-package))
-#+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (unless (package-installed-p 'use-package)
+      (package-refresh-contents)
+      (package-install 'use-package))
+  #+END_SRC
 * Start emacs server
   To use everywhere emacsclient
-#+BEGIN_SRC emacs-lisp
-  (require 'server)
-  (unless (server-running-p)
-    (server-start))
-#+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (require 'server)
+    (unless (server-running-p)
+      (server-start))
+  #+END_SRC
 * Misc configurations (mostly taken form Harry Schwartz's dotfiles)
   #+BEGIN_SRC emacs-lisp
     ;; When opening a file, always follow symlinks.
@@ -68,4 +69,380 @@
     ;; Don't assume that sentences should have two spaces after
     ;; periods.
     (setq sentence-end-double-space nil)
+
+    ;; When you double-click on a file in the Files open it as a
+    ;; buffer in the existing Emacs frame, rather than creating a new
+    ;; frame just for that file.
+    (setq pop-up-frames nil)
+
+    ;; Don't ask `yes/no?', ask `y/n?'.
+    (fset 'yes-or-no-p 'y-or-n-p)
+
+    ;; Turn on syntax highlighting whenever possible.
+    (global-font-lock-mode t)
+
+    ;; Ask if you're sure that you want to close Emacs
+    (setq confirm-kill-emacs 'y-or-n-p)
+  #+END_SRC
+
+  Smarter move beginning of line
+  #+BEGIN_SRC emacs-lisp
+    (defun smarter-move-beginning-of-line (arg)
+      "Move point back to indentation of beginning of line.
+
+    Move point to the first non-whitespace character on this line.
+    If point is already there, move to the beginning of the line.
+    Effectively toggle between the first non-whitespace character and
+    the beginning of the line.
+
+    If ARG is not nil or 1, move forward ARG - 1 lines first.  If
+    point reaches the beginning or end of the buffer, stop there."
+      (interactive "^p")
+      (setq arg (or arg 1))
+
+      ;; Move lines first
+      (when (/= arg 1)
+        (let ((line-move-visual nil))
+          (forward-line (1- arg))))
+
+      (let ((orig-point (point)))
+        (back-to-indentation)
+        (when (= orig-point (point))
+          (move-beginning-of-line 1))))
+
+    ;; remap C-a to `smarter-move-beginning-of-line'
+    (global-set-key [remap move-beginning-of-line]
+                    'smarter-move-beginning-of-line)
+  #+END_SRC
+
+  Kill this buffer without asking
+  #+BEGIN_SRC emacs-lisp
+    (global-set-key (kbd "C-x k") 'kill-this-buffer)
+  #+END_SRC
+
+  Time to start:
+  #+BEGIN_SRC emacs-lisp
+  (add-hook 'after-init-hook
+          (lambda ()
+            (message "init completed in %.2fms"
+                     (sanityinc/time-subtract-millis after-init-time before-init-time)))
+)
+  #+END_SRC
+* Guru-mode
+  #+BEGIN_SRC emacs-lisp
+    (use-package guru-mode
+      :diminish guru-mode
+      :ensure t
+      :init
+      (guru-global-mode +1))
+  #+END_SRC
+* Whitespaces
+  #+BEGIN_SRC emacs-lisp
+    (use-package whitespace-cleanup-mode
+      :diminish whitespace-cleanup-mode
+      :ensure t
+      :init
+      ;; Show whitespaces
+      (setq-default show-trailing-whitespace t)
+      ;; Clean thitespaces
+      (global-whitespace-cleanup-mode t)
+      ;; Cycle spacing kills every space except one the first ime
+      ;; it is called, the second kills everyone
+      (global-set-key [remap just-one-space] 'cycle-spacing)
+
+      (defun sanityinc/no-trailing-whitespace ()
+        "Turn off display of trailing whitespace in this buffer."
+        (setq show-trailing-whitespace nil))
+      ;; But don't show trailing whitespace in SQLi, inf-ruby etc.
+      (dolist (hook '(special-mode-hook
+                      Info-mode-hook
+                      eww-mode-hook
+                      term-mode-hook
+                      comint-mode-hook
+                      compilation-mode-hook
+                      twittering-mode-hook
+                      minibuffer-setup-hook))
+        (add-hook hook #'sanityinc/no-trailing-whitespace))
+      )
+  #+END_SRC
+* Company
+  #+BEGIN_SRC emacs-lisp
+    (use-package company
+      :diminish company-mode
+      :ensure t
+      :init
+      (add-hook 'after-init-hook 'global-company-mode)
+      :config
+      (setq completion-cycle-threshold 5)
+      ;; To have completion with TAB
+      (setq tab-always-indent 'complete)
+      )
+  #+END_SRC
+* Ido
+  I want to switch to IVY
+  #+BEGIN_SRC emacs-lisp
+    ;; (ido-mode t)
+    ;; (ido-everywhere t)
+    ;; (setq ido-enable-flex-matching t)
+    ;; (setq ido-use-filename-at-point nil)
+    ;; (setq ido-auto-merge-work-directories-length -1)
+    ;; (setq ido-use-virtual-buffers t)
+    ;; (setq-default org-completion-use-ido t)
+    ;; (setq-default magit-completing-read-function 'magit-ido-completing-read)
+
+    ;; (use-package ido-ubiquitous
+    ;;   :ensure t
+    ;;   :init
+    ;;   (ido-ubiquitous-mode t))
+
+    ;; ;; Allow the same buffer to be open in different frames
+    ;; (setq ido-default-buffer-method 'selected-window)
+
+    ;; ;; http://www.reddit.com/r/emacs/comments/21a4p9/use_recentf_and_ido_together/cgbprem
+    ;; (add-hook 'ido-setup-hook (lambda () (define-key ido-completion-map [up] 'previous-history-element)))
+  #+END_SRC
+* Ivy
+  #+BEGIN_SRC emacs-lisp
+    (use-package counsel
+      :diminish counsel-mode
+      :ensure t
+      :init
+      (setq-default counsel-mode-override-describe-bindings t)
+      (add-hook 'after-init-hook 'counsel-mode)
+      :bind
+      ("M-x" . counsel-M-x)
+      )
+    (use-package ivy
+      :diminish ivy-mode
+      :ensure t
+      :config
+      (ivy-mode 1)
+      (setq-default ivy-use-virtual-buffers t
+                    ivy-count-format ""
+                    projectile-completion-system 'ivy
+                    ivy-initial-inputs-alist
+                    '((counsel-M-x . "^")
+                      (man . "^")
+                      (woman . "^")))
+      ;; IDO-style directory navigation
+      (define-key ivy-minibuffer-map (kbd "C-j") #'ivy-immediate-done)
+      (define-key ivy-minibuffer-map (kbd "RET") #'ivy-alt-done)
+      )
+
+  #+END_SRC
+* Diminish
+  To not have the modeline full of minor modes I use globally
+  #+BEGIN_SRC emacs-lisp
+    (use-package diminish
+      :ensure t
+      )
+  #+END_SRC
+* GNUs
+  #+BEGIN_SRC emacs-lisp
+    ;;;; RECEIVE
+    (setq gnus-secondary-select-methods
+          '((nnimap "gmail"
+                    (nnimap-address "imap.gmail.com")
+                    (nnimap-server-port 993)
+                    (nnimap-authenticator login)
+                    (nnimap-expunge-on-close 'never)
+                    (nnimap-stream ssl))))
+
+    (setq imap-ssl-program "openssl s_client -quiet -ssl3 -connect %s:%p")
+    (setq imap-log t)
+
+    ;;;; SEND
+    (setq message-send-mail-function 'smtpmail-send-it
+          smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+          smtpmail-auth-credentials '(("smtp.gmail.com" 587 "sbozzolator@gmail.com" nil))
+          smtpmail-default-smtp-server "smtp.gmail.com"
+          smtpmail-smtp-server "smtp.gmail.com"
+          smtpmail-smtp-service 587
+          mail-host-address "sbozzolator@gmail.com")
+  #+END_SRC
+* Purcell's
+  #+BEGIN_SRC emacs-lisp
+    (defun sanityinc/time-subtract-millis (b a)
+      (* 1000.0 (float-time (time-subtract b a))))
+
+
+    (defvar sanityinc/require-times nil
+      "A list of (FEATURE . LOAD-DURATION).
+    LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
+
+    (defadvice require (around sanityinc/build-require-times (feature &optional filename noerror) activate)
+      "Note in `sanityinc/require-times' the time taken to require each feature."
+      (let* ((already-loaded (memq feature features))
+             (require-start-time (and (not already-loaded) (current-time))))
+        (prog1
+            ad-do-it
+          (when (and (not already-loaded) (memq feature features))
+            (let ((time (sanityinc/time-subtract-millis (current-time) require-start-time)))
+              (add-to-list 'sanityinc/require-times
+                           (cons feature time)
+                           t))))))
+
+  #+END_SRC
+* Sessions
+  #+BEGIN_SRC emacs-lisp
+    (use-package session
+      :ensure t
+      :init
+      ;; save a list of open files in ~/.emacs.d/.emacs.desktop
+      (setq desktop-path (list user-emacs-directory)
+            desktop-auto-save-timeout 600)
+      (desktop-save-mode 1)
+
+      (defadvice desktop-read (around time-restore activate)
+        (let ((start-time (current-time)))
+          (prog1
+              ad-do-it
+            (message "Desktop restored in %.2fms"
+                     (sanityinc/time-subtract-millis (current-time)
+                                                     start-time)))))
+
+      (defadvice desktop-create-buffer (around time-create activate)
+        (let ((start-time (current-time))
+              (filename (ad-get-arg 1)))
+          (prog1
+              ad-do-it
+            (message "Desktop: %.2fms to restore %s"
+                     (sanityinc/time-subtract-millis (current-time)
+                                                     start-time)
+                     (when filename
+                       (abbreviate-file-name filename))))))
+
+      ;;----------------------------------------------------------------------------
+      ;; Restore histories and registers after saving
+      ;;----------------------------------------------------------------------------
+      (setq-default history-length 1000)
+      (savehist-mode t)
+      (add-hook 'after-init-hook 'session-initialize)
+
+      :config
+
+      ;; save a bunch of variables to the desktop file
+      ;; for lists specify the len of the maximal saved data also
+      (setq desktop-globals-to-save
+            (append '((comint-input-ring        . 50)
+                      (compile-history          . 30)
+                      desktop-missing-file-warning
+                      (dired-regexp-history     . 20)
+                      (extended-command-history . 30)
+                      (face-name-history        . 20)
+                      (file-name-history        . 100)
+                      (grep-find-history        . 30)
+                      (grep-history             . 30)
+                      (ido-buffer-history       . 100)
+                      (ido-last-directory-list  . 100)
+                      (ido-work-directory-list  . 100)
+                      (ido-work-file-list       . 100)
+                      (ivy-history              . 100)
+                      (magit-read-rev-history   . 50)
+                      (minibuffer-history       . 50)
+                      (org-clock-history        . 50)
+                      (org-refile-history       . 50)
+                      (org-tags-history         . 50)
+                      (query-replace-history    . 60)
+                      (read-expression-history  . 60)
+                      (regexp-history           . 60)
+                      (regexp-search-ring       . 20)
+                      register-alist
+                      (search-ring              . 20)
+                      (shell-command-history    . 50)
+                      tags-file-name
+                      tags-table-list)))
+
+      (setq session-save-file (expand-file-name ".session" user-emacs-directory))
+      (setq session-name-disable-regexp "\\(?:\\`'/tmp\\|\\.git/[A-Z_]+\\'\\)")
+      )
+  #+END_SRC
+* Recentf
+  #+BEGIN_SRC emacs-lisp
+    (recentf-mode 1)
+    (setq-default
+     recentf-max-saved-items 1000
+     recentf-exclude '("/tmp/" "/ssh:"))
+  #+END_SRC
+* Smex
+  #+BEGIN_SRC emacs-lisp
+    (use-package smex
+      :ensure t
+      :config
+      (setq-default smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
+      (global-set-key [remap execute-extended-command] 'smex))
+  #+END_SRC
+
+* AucTeX
+  #+BEGIN_SRC emacs-lisp
+    (use-package auctex
+      :defer t
+      :ensure t
+      :init
+      ;; Turn on RefTeX in AUCTeX
+      (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+      ;; Enable always math mode
+      (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+      ;; Enable flyspell for spell checking
+      (add-hook 'LaTeX-mode-hook 'flyspell-mode)
+      ;; Electric $ $
+      (add-hook 'plain-TeX-mode-hook
+                (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
+                           (cons "$" "$"))))
+      (add-hook 'LaTeX-mode-hook
+                (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
+                           (cons "$" "$"))))
+
+      ;;   (add-hook 'LaTeX-mode-hook 'prettify-symbols-mode)
+      ;; (with-eval-after-load 'LaTeX-mode
+      ;;   (prettify-symbols-mode))
+
+      :config
+      ;;   (prettify-symbols-mode)
+
+      ;; Personal bindings
+      (setq LaTeX-math-list '(
+                              (?o "circ" "Binary Operator" 9675)
+                              (?, "partial" "Misc Symbol" 8706)
+                              (?= "cong" "Binary Operator" 2265)
+                              ))
+
+      (setq TeX-parse-self t)
+      (setq TeX-auto-save t)
+      (setq-default TeX-master nil)
+
+      ;; Activate nice interface between RefTeX and AUCTeX
+      (setq reftex-plug-into-AUCTeX t)
+
+      ;;Enable SyncTex
+      (setq TeX-source-correlate-mode t)
+
+      )
+  #+END_SRC
+* Prettification (AucTeX)
+  #+BEGIN_SRC emacs-lisp
+    (add-hook 'LaTeX-mode-hook
+              (lambda ()
+                (push '("\\colon" . ?:) prettify-symbols-alist)))
+    (add-hook 'LaTeX-mode-hook
+              (lambda ()
+                (push '("\\pm" . ?±) prettify-symbols-alist)))
+    (add-hook 'LaTeX-mode-hook
+              (lambda ()
+                (push '("\\dots" . ?…) prettify-symbols-alist)))
+    (add-hook 'LaTeX-mode-hook
+              (lambda ()
+                (push '("\\rrbracket" . 10215) prettify-symbols-alist))) ;;;⟧
+    (add-hook 'LaTeX-mode-hook
+              (lambda ()
+                (push '("\\llbracket" . 10214) prettify-symbols-alist))) ;;;⟦
+    (add-hook 'LaTeX-mode-hook
+              (lambda ()
+                (push '("\\incl" . ?↪) prettify-symbols-alist)))
+    (add-hook 'LaTeX-mode-hook
+              (lambda ()
+                (push '("\\slash" . ?/) prettify-symbols-alist)))
+    (add-hook 'LaTeX-mode-hook
+              (lambda ()
+                (push '("\\bigcup" . ?⋃) prettify-symbols-alist)))
   #+END_SRC
