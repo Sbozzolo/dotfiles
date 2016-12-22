@@ -120,13 +120,70 @@
     (global-set-key (kbd "C-x k") 'kill-this-buffer)
   #+END_SRC
 
-  Time to start:
+  Kill backward line
   #+BEGIN_SRC emacs-lisp
-  (add-hook 'after-init-hook
-          (lambda ()
-            (message "init completed in %.2fms"
-                     (sanityinc/time-subtract-millis after-init-time before-init-time)))
-)
+    (defun backward-kill-line (arg)
+      "Kill ARG lines backward."
+      (interactive "p")
+      (kill-line (- 1 arg)))
+
+    (global-set-key (kbd "C-c k")  'backward-kill-line)
+  #+END_SRC
+
+  Copy whole line
+  #+BEGIN_SRC emacs-lisp
+    (defun copy-line (arg)
+      "Copy lines (as many as prefix argument) in the kill ring.
+          Ease of use features:
+          - Move to start of next line.
+          - Appends the copy on sequential calls.
+          - Use newline as last char even on the last line of the buffer.
+          - If region is active, copy its lines."
+      (interactive "p")
+      (let ((beg (line-beginning-position))
+            (end (line-end-position arg)))
+        (when mark-active
+          (if (> (point) (mark))
+              (setq beg (save-excursion (goto-char (mark)) (line-beginning-position)))
+            (setq end (save-excursion (goto-char (mark)) (line-end-position)))))
+        (if (eq last-command 'copy-line)
+            (kill-append (buffer-substring beg end) (< end beg))
+          (kill-ring-save beg end)))
+      (kill-append "\n" nil)
+      (beginning-of-line (or (and arg (1+ arg)) 2))
+      (if (and arg (not (= 1 arg))) (message "%d lines copied" arg)))
+
+    (global-set-key (kbd "C-c c")  'copy-line)
+  #+END_SRC
+
+  Smarter move beginning of line:
+  #+BEGIN_SRC emacs-lisp
+    (defun smarter-move-beginning-of-line (arg)
+      "Move point back to indentation of beginning of line.
+
+    Move point to the first non-whitespace character on this line.
+    If point is already there, move to the beginning of the line.
+    Effectively toggle between the first non-whitespace character and
+    the beginning of the line.
+
+    If ARG is not nil or 1, move forward ARG - 1 lines first.  If
+    point reaches the beginning or end of the buffer, stop there."
+      (interactive "^p")
+      (setq arg (or arg 1))
+
+      ;; Move lines first
+      (when (/= arg 1)
+        (let ((line-move-visual nil))
+          (forward-line (1- arg))))
+
+      (let ((orig-point (point)))
+        (back-to-indentation)
+        (when (= orig-point (point))
+          (move-beginning-of-line 1))))
+
+    ;; remap C-a to `smarter-move-beginning-of-line'
+    (global-set-key [remap move-beginning-of-line]
+                    'smarter-move-beginning-of-line)
   #+END_SRC
 * Guru-mode
   #+BEGIN_SRC emacs-lisp
@@ -146,13 +203,11 @@
       (setq-default show-trailing-whitespace t)
       ;; Clean thitespaces
       (global-whitespace-cleanup-mode t)
-      ;; Cycle spacing kills every space except one the first ime
-      ;; it is called, the second kills everyone
-      (global-set-key [remap just-one-space] 'cycle-spacing)
 
       (defun sanityinc/no-trailing-whitespace ()
         "Turn off display of trailing whitespace in this buffer."
         (setq show-trailing-whitespace nil))
+
       ;; But don't show trailing whitespace in SQLi, inf-ruby etc.
       (dolist (hook '(special-mode-hook
                       Info-mode-hook
@@ -163,6 +218,11 @@
                       twittering-mode-hook
                       minibuffer-setup-hook))
         (add-hook hook #'sanityinc/no-trailing-whitespace))
+
+      :config
+      ;; Cycle spacing kills every space except one the first ime
+      ;; it is called, the second kills everyone
+      (global-set-key [remap just-one-space] 'cycle-spacing)
       )
   #+END_SRC
 * Company
@@ -177,29 +237,6 @@
       ;; To have completion with TAB
       (setq tab-always-indent 'complete)
       )
-  #+END_SRC
-* Ido
-  I want to switch to IVY
-  #+BEGIN_SRC emacs-lisp
-    ;; (ido-mode t)
-    ;; (ido-everywhere t)
-    ;; (setq ido-enable-flex-matching t)
-    ;; (setq ido-use-filename-at-point nil)
-    ;; (setq ido-auto-merge-work-directories-length -1)
-    ;; (setq ido-use-virtual-buffers t)
-    ;; (setq-default org-completion-use-ido t)
-    ;; (setq-default magit-completing-read-function 'magit-ido-completing-read)
-
-    ;; (use-package ido-ubiquitous
-    ;;   :ensure t
-    ;;   :init
-    ;;   (ido-ubiquitous-mode t))
-
-    ;; ;; Allow the same buffer to be open in different frames
-    ;; (setq ido-default-buffer-method 'selected-window)
-
-    ;; ;; http://www.reddit.com/r/emacs/comments/21a4p9/use_recentf_and_ido_together/cgbprem
-    ;; (add-hook 'ido-setup-hook (lambda () (define-key ido-completion-map [up] 'previous-history-element)))
   #+END_SRC
 * Ivy
   #+BEGIN_SRC emacs-lisp
@@ -364,15 +401,6 @@
      recentf-max-saved-items 1000
      recentf-exclude '("/tmp/" "/ssh:"))
   #+END_SRC
-* Smex
-  #+BEGIN_SRC emacs-lisp
-    (use-package smex
-      :ensure t
-      :config
-      (setq-default smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
-      (global-set-key [remap execute-extended-command] 'smex))
-  #+END_SRC
-
 * AucTeX
   #+BEGIN_SRC emacs-lisp
     (use-package auctex
@@ -445,4 +473,219 @@
     (add-hook 'LaTeX-mode-hook
               (lambda ()
                 (push '("\\bigcup" . ?⋃) prettify-symbols-alist)))
+  #+END_SRC
+* Org-mode
+  Org look
+  #+BEGIN_SRC emacs-lisp
+    (add-hook 'org-mode-hook
+              (lambda ()
+                (org-bullets-mode t)))
+    (setq org-ellipsis "⤵")
+    (setq org-src-fontify-natively t)
+  #+END_SRC
+
+
+  Org reval for reveal.js presentations
+  #+BEGIN_SRC emacs-lisp
+    (use-package ox-reveal
+      :ensure ox-reveal
+      :config
+      (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+      (setq org-reveal-mathjax t)
+      )
+
+    (use-package htmlize
+      :ensure t)
+  #+END_SRC
+
+  Org capture
+  #+BEGIN_SRC emacs-lisp
+
+    (setq org-capture-templates
+          '(
+            ("o" "Ordinary Life")
+            ("ot" "TODO" entry (file+headline  "~/MEGA/orgs/todo.org" "PROJECT ORDINARY LIFE")
+             "** TODO %?" :immediate-finish)
+            ("ol" "Links" entry (file+headline "~/MEGA/orgs/todo.org" "LINKS")
+             "* %? [[%x][%^{Description}]] %^g \n":immediate-finish)
+            ("t" "Thesis")
+            ("ta" "Article" entry (file+headline "~/MEGA/orgs/master_thesis.org" "Articles")
+             "* %^{Title}\n   %^{Authors} %^{Year}\n   [[%^{ArXiv Link}][ArXiv]]\n** Description\n   %^{Description}\n** BibTex Entry\n   %^{BibTex Entry}  %?\n")
+            ("tt" "Thesis Links" entry (file+headline "~/MEGA/orgs/master_thesis.org" "Links")
+             "* %? [[%x][%^{Description}]] \n":immediate-finish)
+            ))
+
+    (defadvice org-capture-finalize
+        (after delete-capture-frame activate)
+      "Advise capture-finalize to close the frame"
+      (if (equal "capture" (frame-parameter nil 'name))
+          (delete-frame)))
+
+    (defadvice org-capture-destroy
+        (after delete-capture-frame activate)
+      "Advise capture-destroy to close the frame"
+      (if (equal "capture" (frame-parameter nil 'name))
+          (delete-frame)))
+
+    (use-package noflet
+      :ensure t )
+    (defun make-capture-frame ()
+      "Create a new frame and run org-capture."
+      (interactive)
+      (make-frame '((name . "capture")))
+      (select-frame-by-name "capture")
+      (delete-other-windows)
+      (noflet ((switch-to-buffer-other-window (buf) (switch-to-buffer buf)))
+        (org-capture)))
+  #+END_SRC
+* Delete and rename buffer and file
+  Functions (interactive) to delete and or rename a file
+  #+BEGIN_SRC emacs-lisp
+    ;;----------------------------------------------------------------------------
+    ;; Delete the current file
+    ;;----------------------------------------------------------------------------
+    (defun delete-this-file ()
+      "Delete the current file, and kill the buffer."
+      (interactive)
+      (or (buffer-file-name) (error "No file is currently being edited"))
+      (when (yes-or-no-p (format "Really delete '%s'?"
+                                 (file-name-nondirectory buffer-file-name)))
+        (delete-file (buffer-file-name))
+        (kill-this-buffer)))
+
+
+    ;;----------------------------------------------------------------------------
+    ;; Rename the current file
+    ;;----------------------------------------------------------------------------
+    (defun rename-this-file-and-buffer (new-name)
+      "Renames both current buffer and file it's visiting to NEW-NAME."
+      (interactive "sNew name: ")
+      (let ((name (buffer-name))
+            (filename (buffer-file-name)))
+        (unless filename
+          (error "Buffer '%s' is not visiting a file!" name))
+        (progn
+          (when (file-exists-p filename)
+            (rename-file filename new-name 1))
+          (set-visited-file-name new-name)
+          (rename-buffer new-name))))
+
+  #+END_SRC
+* Swiper for searching
+  #+BEGIN_SRC emacs-lisp
+  (global-set-key "\C-s" 'swiper)
+  (global-set-key "\C-r" 'swiper)
+  #+END_SRC
+* Flycheck
+  #+BEGIN_SRC emacs-lisp
+    (use-package flycheck-pos-tip
+      :ensure t
+      )
+
+    (use-package flycheck
+      :ensure t
+      :init
+      (add-hook 'prog-mode-hook (lambda () (flycheck-mode)))
+      :config (progn
+                (setq flycheck-check-syntax-automatically '(save mode-enabled))
+                (setq flycheck-standard-error-navigation nil)
+                ;; flycheck errors on a tooltip (doesnt work on console)
+                (when (display-graphic-p (selected-frame))
+                  (eval-after-load 'flycheck
+                    '(custom-set-variables
+                      '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+                  ))
+      )
+  #+END_SRC
+* F5 to revert buffer
+  #+BEGIN_SRC emacs-lisp
+    (global-set-key (kbd "<f5>") 'rever-buffer)
+  #+END_SRC
+* Counsel for yanking
+  #+BEGIN_SRC emacs-lisp
+    (use-package counsel
+      :ensure t
+      :bind
+      (("M-y" . counsel-yank-pop)
+       :map ivy-minibuffer-map
+       ("M-y" . ivy-next-line)))
+  #+END_SRC
+* EXWM
+  #+BEGIN_SRC emacs-lisp
+    (setq use-exwm t)
+    
+    (when (eq use-exwm t)
+    (require 'exwm)
+      (use-package exwm
+        :ensure t
+        :init
+
+        ;; Shrink fringes to 1 pixel
+        (fringe-mode 10)
+
+        ;; You may want Emacs to show you the time
+        (setq display-time-default-load-average nil)
+        (display-time-mode t)
+
+        ;; Set the initial number of workspaces.
+        (setq exwm-workspace-number 4)
+
+        ;; `exwm-input-set-key' allows you to set a global key binding (available in
+        ;; any case). Following are a few examples.
+        ;; + We always need a way to go back to line-mode from char-mode
+        (exwm-input-set-key (kbd "s-r") #'exwm-reset)
+        ;; + Bind a key to switch workspace interactively
+        (exwm-input-set-key (kbd "s-w") #'exwm-workspace-switch)
+        ;; + Bind "s-0" to "s-9" to switch to the corresponding workspace.
+        (dotimes (i 10)
+          (exwm-input-set-key (kbd (format "s-%d" i))
+                              `(lambda ()
+                                 (interactive)
+                                 (exwm-workspace-switch-create ,i))))
+        ;; + Application launcher ('M-&' also works if the output buffer does not
+        ;;   bother you). Note that there is no need for processes to be created by
+        ;;   Emacs.
+        (exwm-input-set-key (kbd "s-&")
+                            (lambda (command)
+                              (interactive (list (read-shell-command "$ ")))
+                              (start-process-shell-command command nil command)))
+        ;; + 'slock' is a simple X display locker provided by suckless tools.
+        (exwm-input-set-key (kbd "s-<f2>")
+                            (lambda () (interactive) (start-process "" nil "slock")))
+
+        ;; The following example demonstrates how to set a key binding only available
+        ;; in line mode. It's simply done by first push the prefix key to
+        ;; `exwm-input-prefix-keys' and then add the key sequence to `exwm-mode-map'.
+        ;; The example shorten 'C-c q' to 'C-q'.
+        (push ?\C-q exwm-input-prefix-keys)
+        (define-key exwm-mode-map [?\C-q] #'exwm-input-send-next-key)
+
+        ;; The following example demonstrates how to use simulation keys to mimic the
+        ;; behavior of Emacs. The argument to `exwm-input-set-simulation-keys' is a
+        ;; list of cons cells (SRC . DEST), where SRC is the key sequence you press and
+        ;; DEST is what EXWM actually sends to application. Note that SRC must be a key
+        ;; sequence (of type vector or string), while DEST can also be a single key.
+        (exwm-input-set-simulation-keys
+         '(([?\C-b] . left)
+           ([?\C-f] . right)
+           ([?\C-p] . up)
+           ([?\C-n] . down)
+           ([?\C-a] . home)
+           ([?\C-e] . end)
+           ([?\M-v] . prior)
+           ([?\C-v] . next)
+           ([?\C-d] . delete)
+           ([?\C-k] . (S-end delete))))
+
+        ;; You can hide the mode-line of floating X windows by uncommenting the
+        ;; following lines
+        ;; (add-hook 'exwm-floating-setup-hook #'exwm-layout-hide-mode-line)
+        ;; You can hide the minibuffer and echo area when they're not used, by
+        ;; uncommenting the following line
+        ;;(setq exwm-workspace-minibuffer-position 'bottom)
+
+        ;; Do not forget to enable EXWM. It will start by itself when things are ready.
+        (exwm-enable)
+        )
+	)
   #+END_SRC
