@@ -8,6 +8,23 @@
         calendar-longitude 9.04
         calendar-location-name "Milan, Italy")
    #+END_SRC
+* Setup package manager
+  #+BEGIN_SRC emacs-lisp
+  (require 'package)
+  (setq package-enable-at-startup nil)
+  ;; org
+  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
+  ;; MELPA
+  (add-to-list 'package-archives `("melpa" . "https://melpa.org/packages/"))
+  (package-initialize)
+  #+END_SRC
+* Setup use-package
+  I will config everything with use-package
+  #+BEGIN_SRC emacs-lisp
+    (unless (package-installed-p 'use-package)
+      (package-refresh-contents)
+      (package-install 'use-package))
+  #+END_SRC
 * Look and feel
   #+BEGIN_SRC emacs-lisp
 
@@ -39,23 +56,6 @@
     ;; Enable prettification everywhere
     (global-prettify-symbols-mode t)
 
-  #+END_SRC
-* Setup package manager
-  #+BEGIN_SRC emacs-lisp
-  (require 'package)
-  (setq package-enable-at-startup nil)
-  ;; org
-  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
-  ;; MELPA
-  (add-to-list 'package-archives `("melpa" . "https://melpa.org/packages/"))
-  (package-initialize)
-  #+END_SRC
-* Setup use-package
-  I will config everything with use-package
-  #+BEGIN_SRC emacs-lisp
-    (unless (package-installed-p 'use-package)
-      (package-refresh-contents)
-      (package-install 'use-package))
   #+END_SRC
 * Start emacs server
   To use everywhere emacsclient
@@ -94,15 +94,6 @@
     ;; Indent with spaces not tabs
     (setq-default indent-tabs-mode nil)
 
-    ;;"Store backups and auto-saved files in
-    ;; TEMPORARY-FILE-DIRECTORY (which defaults to /tmp on Unix),
-    ;; instead of in the same directory as the file. This means we're
-    ;; still making backups, but not where they'll get in the way.
-    (setq backup-directory-alist
-          `((".*" . ,temporary-file-directory)))
-    (setq auto-save-file-name-transforms
-          `((".*" ,temporary-file-directory t)))
-
     ;; When something changes a file, automatically refresh the
     ;; buffer containing that file so they can't get out of sync.
     (global-auto-revert-mode t)
@@ -110,7 +101,7 @@
     ;; Comment or uncomment a region by hitting M-;.
     (defun comment-or-uncomment-region-or-line ()
       "Comments or uncomments the region or the current line if
-    there's no active region."
+        there's no active region."
       (interactive)
       (let (beg end)
         (if (region-active-p)
@@ -229,6 +220,14 @@
       :ensure t
       :init
       (guru-global-mode +1))
+  #+END_SRC
+* Which-key-mode
+  Show help when typing a command
+  #+BEGIN_SRC emacs-lisp
+   (use-package which-key
+	:ensure t
+	:config
+	(which-key-mode))
   #+END_SRC
 * Whitespaces
   #+BEGIN_SRC emacs-lisp
@@ -639,20 +638,49 @@
 
   Org capture
   #+BEGIN_SRC emacs-lisp
+    (setq org-directory (expand-file-name "~/MEGA/orgs"))
+    (setq org-todo-file (concat org-directory "/todo.org")
+          org-links-file (concat org-directory "/links.org")
+          org-goals-file (concat org-directory "/goals.org")
+          org-ideas-file (concat org-directory "/ideas.org")
+          org-money-file (concat org-directory "/money.dat")
+          org-books-file (concat org-directory "/books.org")
+          org-films-file (concat org-directory "/films.org")
+          org-wishlists-file (concat org-directory "/wishlists.org")
+          )
 
     (setq org-capture-templates
           '(
             ("o" "Ordinary Life")
-            ("ot" "TODO" entry (file+headline  "~/MEGA/orgs/todo.org" "PROJECT ORDINARY LIFE")
-             "** TODO %?" :immediate-finish)
-            ("ol" "Links" entry (file+headline "~/MEGA/orgs/todo.org" "LINKS")
-             "* %? [[%x][%^{Description}]] %^g \n":immediate-finish)
+            ("ot" "TODO" entry (file+headline org-todo-file "PROJECT ORDINARY LIFE")
+             "** TODO %^{TODO} \n   Entered on %U"
+             :immediate-finish t)
+            ("ol" "Links" entry (file org-links-file)
+             "* %? [[%x][%^{Description}]] %^g"
+             :immediate-finish t)
+            ("w" "Whishlist")
+            ("wi" "Whishlist Items" entry (file+headline org-wishlists-file "Items")
+             "** TODO %^{Item} %?  \n   Entered on %U"
+             :immediate-finish t)
+            ("wb" "Whishlist Books" entry (file+headline org-wishlists-file "Books")
+             "** TODO %^{Book} %?  \n   Entered on %U"
+             :immediate-finish t)
+            ("wf" "Whishlist Films" entry (file+headline org-wishlists-file "Films")
+             "** TODO %^{Film} %? \n   Entered on %U"
+             :immediate-finish t)
+            ("i" "Idea" entry (file+headline org-ideas-file "Misc")
+             "* TODO %^{Idea} %?\n   Entered on %U")
+            ("b" "Book" plain (file org-books-file)
+             "| %^{Title} | %^{Author} | %^{Language|IT|EN} | %^{Year} | %^{Pages} | %^{Genre} | %^{Started}u | %^{Finished}u | %^{Rating|+|-|0}")
+            ("f" "Film" plain (file org-films-file)
+             "| %^{Title} | %^{Language|IT|EN} | %^{Year}  | %^{Genre} | %^{Wathced}u | %^{Rating|+|-|0}")
             ("t" "Thesis")
             ("ta" "Article" entry (file+headline "~/MEGA/orgs/master_thesis.org" "Articles")
              "* %^{Title}\n   %^{Authors} %^{Year}\n   [[%^{ArXiv Link}][ArXiv]]\n** Description\n   %^{Description}\n** BibTex Entry\n   %^{BibTex Entry}  %?\n")
             ("tt" "Thesis Links" entry (file+headline "~/MEGA/orgs/master_thesis.org" "Links")
-             "* %? [[%x][%^{Description}]] \n":immediate-finish)
-            ))
+             "* %? [[%x][%^{Description}]] \n":immediate-finish t)
+            )
+          )
 
     (defadvice org-capture-finalize
         (after delete-capture-frame activate)
@@ -804,4 +832,28 @@
     (global-set-key (kbd "C-x C-b") 'ibuffer)
     (autoload 'ibuffer "ibuffer" "List buffers." t)
   #+END_SRC
-  
+
+* Backups
+  #+BEGIN_SRC emacs-lisp
+    ;; make backup to a designated dir, mirroring the full path
+    (defun my-backup-file-name (fpath)
+      "Return a new file path of a given file path.
+    If the new path's directories does not exist, create them."
+      (let* (
+             (backupRootDir "~/.emacs.d/backups/")
+             (backupFilePath (replace-regexp-in-string "//" "/" (concat backupRootDir filePath "~") ))
+             )
+        (make-directory (file-name-directory backupFilePath) (file-name-directory backupFilePath))
+        backupFilePath
+        )
+      )
+
+    (setq make-backup-file-name-function 'my-backup-file-name)
+
+    (setq vc-make-backup-files t ;; Use version control for backups
+          version-control t     ;; Use version numbers for backups.
+          kept-new-versions 10 ;; Number of newest versions to keep.
+          kept-old-versions 1 ;; Number of oldest versions to keep.
+          delete-old-versions t ;; Don't ask to delete excess backup versions.
+          backup-by-copying t) ;; Copy all files, don't rename them.
+  #+END_SRC
