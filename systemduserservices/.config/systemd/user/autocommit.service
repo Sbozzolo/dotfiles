@@ -1,0 +1,7 @@
+[Unit]
+Description=Run autocommit for orgs file
+
+[Service]
+Type=simple
+WorkingDirectory=/home/sbozzolo/MEGA/orgs/
+ExecStart=/home/sbozzolo/MEGA/orgs/autocommit.sh

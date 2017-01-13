@@ -1,0 +1,33 @@
+# Xbindkeys Configuration
+
+# Brightness Down with workaround for EXWM (TEMPORARY!)
+"xbacklight -1 ; killall -CONT emacs "
+   XF86MonBrightnessDown
+
+# Brightness Up with workaround for EXWM (TEMPORARY!)
+"xbacklight +1 ; killall -CONT emacs"
+   XF86MonBrightnessUp
+
+# Fast brightness Down with workaround for EXWM (TEMPORARY!)
+"xbacklight -10 ; killall -CONT emacs "
+   Control + XF86MonBrightnessDown
+
+# Fast brightness Up with workaround for EXWM (TEMPORARY!)
+"xbacklight +10 ; killall -CONT emacs"
+   Control + XF86MonBrightnessUp
+
+# Lockscreen with slock with workaround for EXWM (TEMPORARY!)
+"slock ; killall -CONT emacs"
+   XF86ScreenSaver
+
+# Toggle master audio
+"amixer -q sset Master toggle"
+  XF86AudioMute
+
+# Increase master volume by 3%
+"if amixer get Master | grep -q "off" ; then amixer -q sset Master unmute; amixer -q sset Master 3%+; else amixer -q sset Master 3%+; fi"
+   XF86AudioRaiseVolume
+
+# Decrease master volume by 3%
+"if amixer get Master | grep -q "off" ; then amixer -q sset Master unmute; amixer -q sset Master 3%-; else amixer -q sset Master 3%-; fi"
+   XF86AudioLowerVolume

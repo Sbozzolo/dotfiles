@@ -1,0 +1,1161 @@
+#+TITLE: Emacs configuration
+
+* Personal info
+  #+BEGIN_SRC emacs-lisp
+  (setq user-full-name "Gabriele Bozzola"
+        user-mail-address "sbozzolator@gmail.com"
+        calendar-latitude 45.63
+        calendar-longitude 9.04
+        calendar-location-name "Milan, Italy")
+   #+END_SRC
+* Setup package manager
+  #+BEGIN_SRC emacs-lisp
+  (require 'package)
+  (setq package-enable-at-startup nil)
+  ;; org
+  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
+  ;; MELPA
+  (add-to-list 'package-archives `("melpa" . "https://melpa.org/packages/"))
+  (package-initialize)
+  #+END_SRC
+* Setup use-package
+  I will config everything with use-package
+  #+BEGIN_SRC emacs-lisp
+    (unless (package-installed-p 'use-package)
+      (package-refresh-contents)
+      (package-install 'use-package))
+  #+END_SRC
+* Start emacs server
+  To use everywhere emacsclient
+  #+BEGIN_SRC emacs-lisp
+    (require 'server)
+    (unless (server-running-p)
+      (server-start))
+  #+END_SRC
+* Look and feel
+  #+BEGIN_SRC emacs-lisp
+
+    ;; Disable useless screens
+    (setq use-file-dialog nil)
+    (setq use-dialog-box nil)
+    (setq inhibit-startup-screen t)
+    (setq inhibit-startup-echo-area-message t)
+    ;; NO toolbar
+    (tool-bar-mode -1)
+
+    ;; Battery in modeline
+    (display-battery-mode t)
+
+    ;; You may want Emacs to show you the time
+    (setq display-time-default-load-average nil)
+    (display-time-mode t)
+
+    ;; Highlight line where the point is
+    (global-hl-line-mode)
+
+    ;; Show a marker in the left fringe for lines not in the buffer
+    (setq indicate-empty-lines t)
+
+    ;; Visually indicate matching pairs of parentheses
+    (show-paren-mode t)
+    (setq show-paren-delay 0.0)
+
+    ;; 80 columns
+    (setq-default fill-column 80)
+
+    ;; Theme
+    (use-package color-theme-sanityinc-solarized
+      :ensure t
+      :init
+      (load-theme 'sanityinc-solarized-dark t)
+      )
+
+    ;; Enable prettification everywhere
+    (global-prettify-symbols-mode t)
+
+    ;; C-w kill line if no region is active
+    (use-package whole-line-or-region
+      :diminish whole-line-or-region-mode
+      :ensure t
+      :config
+      (whole-line-or-region-mode t)
+      (make-variable-buffer-local 'whole-line-or-region-mode)
+      )
+
+    ;; Start find file from ~
+    (setq default-directory (substitute-in-file-name "$HOME"))
+
+    ;; Yank at point not where cursor is
+    (setq mouse-yank-at-point t)
+
+    ;; Overwrite highlithed text
+    (delete-selection-mode 1)
+
+    ;; Insert () [] {}
+    (electric-pair-mode 1)
+
+    ;; Force vertical split
+    (setq split-height-threshold nil)
+    (setq split-width-threshold 0)
+
+  #+END_SRC
+* Misc configurations (mostly taken form Harry Schwartz's dotfiles)
+  #+BEGIN_SRC emacs-lisp
+    ;; When opening a file, always follow symlinks.
+    (setq vc-follow-symlinks t)
+
+    ;; When saving a file that starts with `#!', make it executable.
+    (add-hook 'after-save-hook
+              'executable-make-buffer-file-executable-if-script-p)
+
+    ;; Don't assume that sentences should have two spaces after
+    ;; periods.
+    (setq sentence-end-double-space nil)
+
+    ;; When you double-click on a file in the Files open it as a
+    ;; buffer in the existing Emacs frame, rather than creating a new
+    ;; frame just for that file.
+    (setq pop-up-frames nil)
+
+    ;; Don't ask `yes/no?', ask `y/n?'.
+    (fset 'yes-or-no-p 'y-or-n-p)
+
+    ;; Turn on syntax highlighting whenever possible.
+    (global-font-lock-mode t)
+
+    ;; Ask if you're sure that you want to close Emacs
+    (setq confirm-kill-emacs 'y-or-n-p)
+
+    ;; Indent with spaces not tabs
+    (setq-default indent-tabs-mode nil)
+
+    ;; When something changes a file, automatically refresh the
+    ;; buffer containing that file so they can't get out of sync.
+    (global-auto-revert-mode t)
+
+    ;; Comment or uncomment a region by hitting M-;.
+    (defun comment-or-uncomment-region-or-line ()
+      "Comments or uncomments the region or the current line if
+        there's no active region."
+      (interactive)
+      (let (beg end)
+        (if (region-active-p)
+            (setq beg (region-beginning) end (region-end))
+          (setq beg (line-beginning-position) end (line-end-position)))
+        (comment-or-uncomment-region beg end)))
+
+    (global-set-key (kbd "M-;") 'comment-or-uncomment-region-or-line)
+
+  #+END_SRC
+
+  Smarter move beginning of line
+  #+BEGIN_SRC emacs-lisp
+    (defun smarter-move-beginning-of-line (arg)
+      "Move point back to indentation of beginning of line.
+
+    Move point to the first non-whitespace character on this line.
+    If point is already there, move to the beginning of the line.
+    Effectively toggle between the first non-whitespace character and
+    the beginning of the line.
+
+    If ARG is not nil or 1, move forward ARG - 1 lines first.  If
+    point reaches the beginning or end of the buffer, stop there."
+      (interactive "^p")
+      (setq arg (or arg 1))
+
+      ;; Move lines first
+      (when (/= arg 1)
+        (let ((line-move-visual nil))
+          (forward-line (1- arg))))
+
+      (let ((orig-point (point)))
+        (back-to-indentation)
+        (when (= orig-point (point))
+          (move-beginning-of-line 1))))
+
+    ;; remap C-a to `smarter-move-beginning-of-line'
+    (global-set-key [remap move-beginning-of-line]
+                    'smarter-move-beginning-of-line)
+  #+END_SRC
+
+  Kill this buffer without asking
+  #+BEGIN_SRC emacs-lisp
+    (global-set-key (kbd "C-x k") 'kill-this-buffer)
+  #+END_SRC
+
+  Kill backward line
+  #+BEGIN_SRC emacs-lisp
+    (defun backward-kill-line (arg)
+      "Kill ARG lines backward."
+      (interactive "p")
+      (kill-line (- 1 arg)))
+
+    (global-set-key (kbd "C-c k")  'backward-kill-line)
+  #+END_SRC
+
+  Copy whole line
+  #+BEGIN_SRC emacs-lisp
+    (defun copy-line (arg)
+      "Copy lines (as many as prefix argument) in the kill ring.
+          Ease of use features:
+          - Move to start of next line.
+          - Appends the copy on sequential calls.
+          - Use newline as last char even on the last line of the buffer.
+          - If region is active, copy its lines."
+      (interactive "p")
+      (let ((beg (line-beginning-position))
+            (end (line-end-position arg)))
+        (when mark-active
+          (if (> (point) (mark))
+              (setq beg (save-excursion (goto-char (mark)) (line-beginning-position)))
+            (setq end (save-excursion (goto-char (mark)) (line-end-position)))))
+        (if (eq last-command 'copy-line)
+            (kill-append (buffer-substring beg end) (< end beg))
+          (kill-ring-save beg end)))
+      (kill-append "\n" nil)
+      (beginning-of-line (or (and arg (1+ arg)) 2))
+      (if (and arg (not (= 1 arg))) (message "%d lines copied" arg)))
+
+    (global-set-key (kbd "C-c c")  'copy-line)
+  #+END_SRC
+
+  Smarter move beginning of line:
+  #+BEGIN_SRC emacs-lisp
+    (defun smarter-move-beginning-of-line (arg)
+      "Move point back to indentation of beginning of line.
+
+    Move point to the first non-whitespace character on this line.
+    If point is already there, move to the beginning of the line.
+    Effectively toggle between the first non-whitespace character and
+    the beginning of the line.
+
+    If ARG is not nil or 1, move forward ARG - 1 lines first.  If
+    point reaches the beginning or end of the buffer, stop there."
+      (interactive "^p")
+      (setq arg (or arg 1))
+
+      ;; Move lines first
+      (when (/= arg 1)
+        (let ((line-move-visual nil))
+          (forward-line (1- arg))))
+
+      (let ((orig-point (point)))
+        (back-to-indentation)
+        (when (= orig-point (point))
+          (move-beginning-of-line 1))))
+
+    ;; remap C-a to `smarter-move-beginning-of-line'
+    (global-set-key [remap move-beginning-of-line]
+                    'smarter-move-beginning-of-line)
+  #+END_SRC
+
+* Backups
+  #+BEGIN_SRC emacs-lisp
+    (setq backup-directory-alist    '(("." . "~/.emacs.d/backup"))
+         vc-make-backup-files t ;; Use version control for backups
+          version-control t     ;; Use version numbers for backups.
+          kept-new-versions 2 ;; Number of newest versions to keep.
+          kept-old-versions 1 ;; Number of oldest versions to keep.
+          delete-old-versions t ;; Don't ask to delete excess backup versions.
+          backup-by-copying t) ;; Copy all files, don't rename them.
+  #+END_SRC
+* Guru-mode
+  #+BEGIN_SRC emacs-lisp
+    (use-package guru-mode
+      :diminish guru-mode
+      :ensure t
+      :init
+      (guru-global-mode +1))
+  #+END_SRC
+* Which-key-mode
+  Show help when typing a command. Switch to Guide key?
+  #+BEGIN_SRC emacs-lisp
+    ;; (use-package which-key
+    ;;      :diminish which-key-mode
+    ;;      :ensure t
+    ;;      :config
+    ;;      (which-key-setup-side-window-right)
+    ;;      ;(which-key-mode)
+    ;;      )
+  #+END_SRC
+* Whitespaces
+  #+BEGIN_SRC emacs-lisp
+    (use-package whitespace-cleanup-mode
+      :diminish whitespace-cleanup-mode
+      :ensure t
+      :init
+      ;; Show whitespaces
+      (setq-default show-trailing-whitespace t)
+      ;; Clean thitespaces
+      (global-whitespace-cleanup-mode t)
+      ;; Delete trailing whitespaces every time a buffer is saved
+      (add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+      (defun sanityinc/no-trailing-whitespace ()
+        "Turn off display of trailing whitespace in this buffer."
+        (setq show-trailing-whitespace nil))
+
+      ;; But don't show trailing whitespace in SQLi, inf-ruby etc.
+      (dolist (hook '(special-mode-hook
+                      Info-mode-hook
+                      eww-mode-hook
+                      term-mode-hook
+                      comint-mode-hook
+                      compilation-mode-hook
+                      twittering-mode-hook
+                      minibuffer-setup-hook))
+        (add-hook hook #'sanityinc/no-trailing-whitespace))
+
+      :config
+      ;; Cycle spacing kills every space except one the first ime
+      ;; it is called, the second kills everyone
+      (global-set-key [remap just-one-space] 'cycle-spacing)
+      )
+  #+END_SRC
+* Company
+  #+BEGIN_SRC emacs-lisp
+    (use-package company
+      :diminish company-mode
+      :ensure t
+      :init
+      (add-hook 'after-init-hook 'global-company-mode)
+      :config
+      (setq completion-cycle-threshold 5)
+      ;; To have completion with TAB
+      (setq tab-always-indent 'complete)
+      )
+  #+END_SRC
+* Ivy
+  #+BEGIN_SRC emacs-lisp
+    (use-package counsel
+      :diminish counsel-mode
+      :ensure t
+      :init
+      (setq-default counsel-mode-override-describe-bindings t)
+      (add-hook 'after-init-hook 'counsel-mode)
+      :bind
+      ("M-x" . counsel-M-x)
+      ("C-x C-f" . counsel-find-file)
+      )
+    (use-package ivy
+      :diminish ivy-mode
+      :ensure t
+      :bind
+      (("C-x b" . ivy-switch-buffer))
+      :config
+      (ivy-mode 1)
+      (setq-default ivy-use-virtual-buffers t
+                    ivy-count-format ""
+                    ivy-display-style 'fancy
+                    projectile-completion-system 'ivy
+                    ivy-initial-inputs-alist
+                    '((counsel-M-x . "^")
+                      (man . "^")
+                      (woman . "^")))
+      ;; IDO-style directory navigation
+      (define-key ivy-minibuffer-map (kbd "C-j") #'ivy-immediate-done)
+      (define-key ivy-minibuffer-map (kbd "RET") #'ivy-alt-done)
+      )
+
+  #+END_SRC
+* Diminish
+  To not have the modeline full of minor modes I use globally
+  #+BEGIN_SRC emacs-lisp
+    (use-package diminish
+      :ensure t
+      )
+  #+END_SRC
+* GNUs
+  #+BEGIN_SRC emacs-lisp
+    ;;;; RECEIVE
+    (setq gnus-secondary-select-methods
+          '((nnimap "gmail"
+                    (nnimap-address "imap.gmail.com")
+                    (nnimap-server-port 993)
+                    (nnimap-authenticator login)
+                    (nnimap-expunge-on-close 'never)
+                    (nnimap-stream ssl))))
+
+    (setq imap-ssl-program "openssl s_client -quiet -ssl3 -connect %s:%p")
+    (setq imap-log t)
+
+    ;;;; SEND
+    (setq message-send-mail-function 'smtpmail-send-it
+          smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+          smtpmail-auth-credentials '(("smtp.gmail.com" 587 "sbozzolator@gmail.com" nil))
+          smtpmail-default-smtp-server "smtp.gmail.com"
+          smtpmail-smtp-server "smtp.gmail.com"
+          smtpmail-smtp-service 587
+          mail-host-address "sbozzolator@gmail.com")
+  #+END_SRC
+* Purcell's
+  #+BEGIN_SRC emacs-lisp
+    ;; (defun sanityinc/time-subtract-millis (b a)
+    ;;   (* 1000.0 (float-time (time-subtract b a))))
+
+
+    ;; (defvar sanityinc/require-times nil
+    ;;   "A list of (FEATURE . LOAD-DURATION).
+    ;; LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
+
+    ;; (defadvice require (around sanityinc/build-require-times (feature &optional filename noerror) activate)
+    ;;   "Note in `sanityinc/require-times' the time taken to require each feature."
+    ;;   (let* ((already-loaded (memq feature features))
+    ;;          (require-start-time (and (not already-loaded) (current-time))))
+    ;;     (prog1
+    ;;         ad-do-it
+    ;;       (when (and (not already-loaded) (memq feature features))
+    ;;         (let ((time (sanityinc/time-subtract-millis (current-time) require-start-time)))
+    ;;           (add-to-list 'sanityinc/require-times
+    ;;                        (cons feature time)
+    ;;                        t))))))
+
+  #+END_SRC
+* Smex
+  To save minibuffer history
+  #+BEGIN_SRC emacs-lisp
+    (use-package smex
+      :ensure t
+      :config
+      (setq-default smex-save-file (expand-file-name ".smex-intems" user-emacs-directory))
+      )
+  #+END_SRC
+* Sessions
+  #+BEGIN_SRC emacs-lisp
+    (use-package session
+      :ensure t
+      :init
+      ;; save a list of open files in ~/.emacs.d/.emacs.desktop
+      (setq desktop-path (list user-emacs-directory)
+            desktop-auto-save-timeout 600
+            desktop-restore-frames nil)
+
+          ;;(setq desktop-restore-eager 1)
+      (desktop-save-mode 1)
+
+      ;; (defadvice desktop-read (around time-restore activate)
+      ;;   (let ((start-time (current-time)))
+      ;;   (prog1
+      ;;         ad-do-it
+      ;;       (message "Desktop restored in %.2fms"
+      ;;                (sanityinc/time-subtract-millis (current-time)
+      ;;                                                start-time)))))
+
+      ;; (defadvice desktop-create-buffer (around time-create activate)
+      ;;   (let ((start-time (current-time))
+      ;;         (filename (ad-get-arg 1)))
+      ;;   (prog1
+      ;;         ad-do-it
+      ;;       (message "Desktop: %.2fms to restore %s"
+      ;;                (sanityinc/time-subtract-millis (current-time)
+      ;;                                                start-time)
+      ;;                (when filename
+      ;;                  (abbreviate-file-name filename))))))
+
+      ;;----------------------------------------------------------------------------
+      ;; Restore histories and registers after saving
+      ;;----------------------------------------------------------------------------
+      (setq-default history-length 1000)
+      (savehist-mode t)
+      (add-hook 'after-init-hook 'session-initialize)
+
+      :config
+
+      ;; save a bunch of variables to the desktop file
+      ;; for lists specify the len of the maximal saved data also
+      (setq desktop-globals-to-save
+            (append '((comint-input-ring        . 50)
+                      (compile-history          . 30)
+                      desktop-missing-file-warning
+                      (dired-regexp-history     . 20)
+                      (extended-command-history . 30)
+                      (face-name-history        . 20)
+                      (file-name-history        . 100)
+                      (grep-find-history        . 30)
+                      (grep-history             . 30)
+                      (ido-buffer-history       . 100)
+                      (ido-last-directory-list  . 100)
+                      (ido-work-directory-list  . 100)
+                      (ido-work-file-list       . 100)
+                      (ivy-history              . 100)
+                      (magit-read-rev-history   . 50)
+                      (minibuffer-history       . 50)
+                      (org-clock-history        . 50)
+                      (org-refile-history       . 50)
+                      (org-tags-history         . 50)
+                      (query-replace-history    . 60)
+                      (read-expression-history  . 60)
+                      (regexp-history           . 60)
+                      (regexp-search-ring       . 20)
+                      register-alist
+                      (search-ring              . 20)
+                      (shell-command-history    . 50)
+                      tags-file-name
+                      tags-table-list)))
+
+      (setq session-save-file (expand-file-name ".session" user-emacs-directory))
+      (setq session-name-disable-regexp "\\(?:\\`'/tmp\\|\\.git/[A-Z_]+\\'\\)")
+      )
+  #+END_SRC
+* Recentf
+  #+BEGIN_SRC emacs-lisp
+    (recentf-mode 1)
+    (setq-default
+     recentf-max-saved-items 1000
+     recentf-exclude '("/tmp/" "/ssh:"))
+  #+END_SRC
+* AucTeX
+  #+BEGIN_SRC emacs-lisp
+    (use-package tex
+      :defer t
+      :ensure auctex
+      :init
+      ;; Turn on RefTeX in AUCTeX
+      (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+      ;; Enable always math mode
+      (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+      ;; Enable flyspell for spell checking
+      (add-hook 'LaTeX-mode-hook 'flyspell-mode)
+      ;; Electric $ $
+      (add-hook 'plain-TeX-mode-hook
+                (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
+                           (cons "$" "$"))))
+      (add-hook 'LaTeX-mode-hook
+                (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
+                           (cons "$" "$"))))
+
+      ;;   (add-hook 'LaTeX-mode-hook 'prettify-symbols-mode)
+      ;; (with-eval-after-load 'LaTeX-mode
+      ;;   (prettify-symbols-mode))
+
+      :config
+      ;;   (prettify-symbols-mode)
+
+      ;; Personal bindings
+      (setq LaTeX-math-list '(
+                              (?o "circ" "Binary Operator" 9675)
+                              (?, "partial" "Misc Symbol" 8706)
+                              (?= "cong" "Binary Operator" 2265)
+                              ))
+
+      (setq TeX-parse-self t)
+      (setq TeX-auto-save t)
+      (setq-default TeX-master nil)
+
+      ;; Activate nice interface between RefTeX and AUCTeX
+      (setq reftex-plug-into-AUCTeX t)
+
+      ;;Enable SyncTex
+      (setq TeX-source-correlate-mode t)
+
+      )
+  #+END_SRC
+* Prettification (AucTeX)
+  #+BEGIN_SRC emacs-lisp
+    (add-hook 'LaTeX-mode-hook
+              (lambda ()
+                (push '("\\colon" . ?:) prettify-symbols-alist)))
+    (add-hook 'LaTeX-mode-hook
+              (lambda ()
+                (push '("\\pm" . ?±) prettify-symbols-alist)))
+    (add-hook 'LaTeX-mode-hook
+              (lambda ()
+                (push '("\\dots" . ?…) prettify-symbols-alist)))
+    (add-hook 'LaTeX-mode-hook
+              (lambda ()
+                (push '("\\rrbracket" . 10215) prettify-symbols-alist))) ;;;⟧
+    (add-hook 'LaTeX-mode-hook
+              (lambda ()
+                (push '("\\llbracket" . 10214) prettify-symbols-alist))) ;;;⟦
+    (add-hook 'LaTeX-mode-hook
+              (lambda ()
+                (push '("\\incl" . ?↪) prettify-symbols-alist)))
+    (add-hook 'LaTeX-mode-hook
+              (lambda ()
+                (push '("\\slash" . ?/) prettify-symbols-alist)))
+    (add-hook 'LaTeX-mode-hook
+              (lambda ()
+                (push '("\\bigcup" . ?⋃) prettify-symbols-alist)))
+  #+END_SRC
+* Org-mode
+
+  Make sure org and org-archive are open with org-mode
+  #+BEGIN_SRC emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+  (add-to-list 'auto-mode-alist '("\\.org_archive\\'" . org-mode))
+  #+END_SRC
+
+  Org look
+  #+BEGIN_SRC emacs-lisp
+    ;; Cuter bullets
+    (use-package org-bullets
+      :ensure t
+      :init
+      (add-hook 'org-mode-hook
+  	      (lambda ()
+  		(org-bullets-mode t)))
+      )
+
+    (setq org-ellipsis "⤵")
+
+    ;; Syntax highlighting in source blocks
+    (setq org-src-fontify-natively t)
+
+    ;; Hide markers when text is markup
+    (setq org-hide-emphasis-markers t)
+  #+END_SRC
+
+  Org babel languages
+  #+BEGIN_SRC emacs-lisp
+    ;; active Babel languages
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       (latex . t)
+       ))
+  #+END_SRC
+
+  Rebind things in org-mode
+  #+BEGIN_SRC emacs-lisp
+  (define-key org-mode-map (kbd "C-a") nil)
+  (define-key org-mode-map (kbd "M-<tab>") nil)
+  (define-key org-mode-map (kbd "M-<iso-lefttab>") nil)
+  #+END_SRC
+
+
+  Org reval for reveal.js presentations
+  #+BEGIN_SRC emacs-lisp
+    (use-package ox-reveal
+      :ensure ox-reveal
+      :config
+      (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+      (setq org-reveal-mathjax t)
+      )
+
+    (use-package htmlize
+      :ensure t)
+  #+END_SRC
+
+  Org capture
+  #+BEGIN_SRC emacs-lisp
+
+    (setq org-directory (expand-file-name "~/orgs"))
+    (setq org-todo-file (concat org-directory "/todo.org")
+          org-links-file (concat org-directory "/links.org")
+          org-goals-file (concat org-directory "/goals.org")
+          org-ideas-file (concat org-directory "/ideas.org")
+          org-money-file (concat org-directory "/money.dat")
+          org-books-file (concat org-directory "/books.org")
+          org-films-file (concat org-directory "/films.org")
+          org-wishlists-file (concat org-directory "/wishlists.org")
+          )
+
+    (setq org-capture-templates
+          '(
+            ("o" "Ordinary Life")
+            ("ot" "TODO" entry (file+headline org-todo-file "PROJECT ORDINARY LIFE")
+             "** TODO %^{TODO} \n   Entered on %U"
+             :immediate-finish t)
+            ("ol" "Links" entry (file org-links-file)
+             "* %? [[%x][%^{Description}]] %^g"
+             :immediate-finish t)
+            ("oa" "Arch TODO" entry (file+headline org-todo-file "PROJECT ArchT430")
+             "** TODO %^{TODO} \n   Entered on %U"
+             :immediate-finish t)
+            ("w" "Whishlist")
+            ("wi" "Whishlist Items" entry (file+headline org-wishlists-file "Items")
+             "** TODO %^{Item} %?  \n   Entered on %U"
+             :immediate-finish t)
+            ("wb" "Whishlist Books" entry (file+headline org-wishlists-file "Books")
+             "** TODO %^{Book} %?  \n   Entered on %U"
+             :immediate-finish t)
+            ("wf" "Whishlist Films" entry (file+headline org-wishlists-file "Films")
+             "** TODO %^{Film} %? \n   Entered on %U"
+             :immediate-finish t)
+            ("i" "Idea" entry (file+headline org-ideas-file "Misc")
+             "* TODO %^{Idea} %?\n   Entered on %U")
+            ("b" "Book" plain (file org-books-file)
+             "| %^{Title} | %^{Author} | %^{Language|IT|EN} | %^{Year} | %^{Pages} | %^{Genre} | %^{Started}u | %^{Finished}u | %^{Rating|+|-|0}")
+            ("f" "Film" plain (file org-films-file)
+             "| %^{Title} | %^{Language|IT|EN} | %^{Year}  | %^{Genre} | %^{Wathced}u | %^{Rating|+|-|0}")
+            ("t" "Thesis")
+            ("ta" "Article" entry (file+headline "~/MEGA/orgs/master_thesis.org" "Articles")
+             "* %^{Title}\n   %^{Authors} %^{Year}\n   [[%^{ArXiv Link}][ArXiv]]\n** Description\n   %^{Description}\n** BibTex Entry\n   %^{BibTex Entry}  %?\n")
+            ("tt" "Thesis Links" entry (file+headline "~/MEGA/orgs/master_thesis.org" "Links")
+             "* %? [[%x][%^{Description}]] \n":immediate-finish t)
+            )
+          )
+
+    ;;( defadvice org-capture-finalize
+    ;;     (after delete-capture-frame activate)
+    ;;   "Advise capture-finalize to close the frame"
+    ;;   (if (equal "capture" (frame-parameter nil 'name))
+    ;;       (delete-frame)))
+
+    ;; (defadvice org-capture-destroy
+    ;;     (after delete-capture-frame activate)
+    ;;   "Advise capture-destroy to close the frame"
+    ;;   (if (equal "capture" (frame-parameter nil 'name))
+    ;;       (delete-frame)))
+
+    ;; (use-package noflet
+    ;;   :ensure t )
+    ;; (defun make-capture-frame ()
+    ;;   "Create a new frame and run org-capture."
+    ;;   (interactive)
+    ;;   (make-frame '((name . "capture")))
+    ;;   (select-frame-by-name "capture")
+    ;;   (delete-other-windows)
+    ;;   (noflet ((switch-to-buffer-other-window (buf) (switch-to-buffer buf)))
+    ;;     (org-capture)))
+  #+END_SRC
+* Delete and rename buffer and file
+  Functions (interactive) to delete and or rename a file
+  #+BEGIN_SRC emacs-lisp
+    ;;----------------------------------------------------------------------------
+    ;; Delete the current file
+    ;;----------------------------------------------------------------------------
+    (defun delete-this-file ()
+      "Delete the current file, and kill the buffer."
+      (interactive)
+      (or (buffer-file-name) (error "No file is currently being edited"))
+      (when (yes-or-no-p (format "Really delete '%s'?"
+                                 (file-name-nondirectory buffer-file-name)))
+        (delete-file (buffer-file-name))
+        (kill-this-buffer)))
+
+
+    ;;----------------------------------------------------------------------------
+    ;; Rename the current file
+    ;;----------------------------------------------------------------------------
+    (defun rename-this-file-and-buffer (new-name)
+      "Renames both current buffer and file it's visiting to NEW-NAME."
+      (interactive "sNew name: ")
+      (let ((name (buffer-name))
+            (filename (buffer-file-name)))
+        (unless filename
+          (error "Buffer '%s' is not visiting a file!" name))
+        (progn
+          (when (file-exists-p filename)
+            (rename-file filename new-name 1))
+          (set-visited-file-name new-name)
+          (rename-buffer new-name))))
+
+  #+END_SRC
+* Swiper for searching
+  #+BEGIN_SRC emacs-lisp
+  (global-set-key "\C-s" 'swiper)
+  (global-set-key "\C-r" 'swiper)
+  #+END_SRC
+* Flycheck
+  #+BEGIN_SRC emacs-lisp
+    (use-package flycheck-pos-tip
+      :ensure t
+      )
+
+    (use-package flycheck
+      :ensure t
+      :init
+      (add-hook 'prog-mode-hook (lambda () (flycheck-mode)))
+      :config (progn
+                (setq flycheck-check-syntax-automatically '(save mode-enabled))
+                (setq flycheck-standard-error-navigation nil)
+                ;; flycheck errors on a tooltip (doesnt work on console)
+                (when (display-graphic-p (selected-frame))
+                  (eval-after-load 'flycheck
+                    '(custom-set-variables
+                      '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+                  ))
+      )
+  #+END_SRC
+* F5 to revert buffer
+  #+BEGIN_SRC emacs-lisp
+    (global-set-key (kbd "<f5>") 'revert-buffer)
+  #+END_SRC
+* Counsel for yanking
+  #+BEGIN_SRC emacs-lisp
+    (use-package counsel
+      :ensure t
+      :bind
+      (("M-y" . counsel-yank-pop)
+       :map ivy-minibuffer-map
+       ("M-y" . ivy-next-line)))
+  #+END_SRC
+* Google-translate
+  #+BEGIN_SRC emacs-lisp
+  ;; Google translate
+  (use-package google-translate
+    :ensure t
+    :init
+    (require 'google-translate)
+    (require 'google-translate-smooth-ui)
+    :bind
+    (("\C-ct" . google-translate-smooth-translate))
+    :config
+    (setq google-translate-translation-directions-alist
+          '(("it" . "en") ("en" . "it")))
+   )
+  #+END_SRC
+* Engine-mode
+  #+BEGIN_SRC emacs-lisp
+    (use-package engine-mode
+      :ensure t
+      :config
+      (defengine google
+        "http://www.google.com/search?ie=utf-8&oe=utf-8&q=%s"
+        :keybinding "g"  )
+
+      (defengine wikipedia
+        "http://www.wikipedia.org/search-redirect.php?language=en&go=Go&search=%s"
+        :keybinding "w")
+      )
+   (engine-mode t)
+  #+END_SRC
+* Magit
+  #+BEGIN_SRC emacs-lisp
+  (use-package magit
+  :ensure t
+  :bind
+  (("\C-x g" . magit-status))
+  )
+  #+END_SRC
+* Synonyms
+  #+BEGIN_SRC emacs-lisp
+    (use-package synonyms
+      :ensure t
+      :config
+      (if (file-exists-p (substitute-in-file-name "$HOME/.emacs.d/mthesaur.txt"))
+          nil (url-copy-file "https://archive.org/download/mobythesauruslis03202gut/mthesaur.txt" (substitute-in-file-name "$HOME/.emacs.d/mthesaur.txt")))
+      (setq synonyms-file (substitute-in-file-name "$HOME/.emacs.d/mthesaur.txt"))
+      (setq synonyms-cache-file (substitute-in-file-name "$HOME/.emacs.d/syn.cache"))
+      (setq synonyms-match-more-flag nil)
+      )
+  #+END_SRC
+* Ibuffer
+  #+BEGIN_SRC emacs-lisp
+    (global-set-key (kbd "C-x C-b") 'ibuffer)
+    (autoload 'ibuffer "ibuffer" "List buffers." t)
+  #+END_SRC
+* Iflipb
+  Iflipb to switch buffers like in Windows with Alt+Tab
+  #+BEGIN_SRC emacs-lisp
+    (use-package iflipb
+      :ensure t
+      :bind
+       ("<M-tab>" . iflipb-next-buffer)
+       ("<M-iso-lefttab>" . iflipb-previous-buffer)
+       )
+  #+END_SRC
+* Smart-mode-line format
+  #+BEGIN_SRC emacs-lisp
+        (use-package smart-mode-line
+          :ensure t
+          :config
+          (setq sml/theme 'respectful)
+          (setq sml/no-confirm-load-theme t)
+          (setq sml/battery-format " %p ")
+          (sml/setup)
+          (custom-set-faces
+           '(sml/charging ((t (:inherit sml/global :foreground "lawn green" :weight bold :height 1.1 ))))
+           '(sml/discharging ((t (:inherit sml/global :foreground "Red" :weight bold :height 1.1 )))))
+          '(sml/time ((t (:inherit sml/modes :weight bold :height 1.1 ))))
+
+          (defun internet-up-p (&optional host)
+            (interactive)
+            (= 0 (call-process "ping" nil nil nil "-c" "1" "-W" "1"
+                               (if host host "www.google.com"))))
+
+          (setq mode-line-connected
+                (if (internet-up-p)
+                    (propertize "Connected " 'face '(:foreground "green") 'help-echo "CIAO")
+                                (propertize "NO INTERNET " 'face '(:foreground "red") ))
+                  )
+
+
+    (setq-default mode-line-format
+                  (list
+                   "%e"
+                   mode-line-front-space
+                   mode-line-mule-info mode-line-client
+                   mode-line-modified mode-line-remote
+                   mode-line-frame-identification
+                   mode-line-buffer-identification
+                   sml/pos-id-separator
+                   mode-line-position
+                   ;; (vc-mode vc-mode)
+                   sml/pre-modes-separator
+                   mode-line-modes
+                   mode-line-connected
+                   mode-line-misc-info
+                   mode-line-end-spaces
+                   )
+                  )
+    )
+
+  #+END_SRC
+*
+* Multi-term
+  #+BEGIN_SRC emacs-lisp
+    (use-package multi-term
+      :ensure t
+      :init
+      ;; Fix encoding
+      (defadvice multi-term (after advise-multi-term-coding-system)
+        (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
+      (ad-activate 'multi-term)
+      )
+  #+END_SRC
+* Undo-tree
+  #+BEGIN_SRC emacs-lisp
+    (use-package undo-tree
+      :ensure t
+      :bind (("\C-x u" . undo-tree-visualize))
+      )
+  #+END_SRC
+* Systemd
+  #+BEGIN_SRC emacs-lisp
+    (use-package systemd
+      :ensure t)
+  #+END_SRC
+* Expand region
+  #+BEGIN_SRC emacs-lisp
+    ; Expand the marked region in semantic increments (negative prefix to reduce region)
+    (use-package expand-region
+      :ensure t
+      :config
+      (global-set-key (kbd "C-=") 'er/expand-region)
+      )
+  #+END_SRC
+* Force UTF8
+  #+BEGIN_SRC emacs-lisp
+    (prefer-coding-system 'utf-8)
+    (set-default-coding-systems 'utf-8)
+    (set-terminal-coding-system 'utf-8)
+    (set-keyboard-coding-system 'utf-8)
+    ;; backwards compatibility as default-buffer-file-coding-system
+    ;; is deprecated in 23.2.
+    (if (boundp 'buffer-file-coding-system)
+        (setq-default buffer-file-coding-system 'utf-8)
+      (setq default-buffer-file-coding-system 'utf-8))
+
+    ;; Treat clipboard input as UTF-8 string first; compound text next, etc.
+    (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
+  #+END_SRC
+* Pdftools
+  #+BEGIN_SRC emacs-lisp
+    (use-package pdf-tools
+      :ensure t
+      :init
+      (pdf-tools-install)
+      (setq TeX-view-program-selection '((output-pdf "pdf-tools")))
+      (setq TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view")))
+      :config
+      (defun th/pdf-view-revert-buffer-maybe (file)
+        (let ((buf (find-buffer-visiting file)))
+          (when buf
+            (with-current-buffer buf
+              (when (derived-mode-p 'pdf-view-mode)
+                (pdf-view-revert-buffer nil t))))))
+      (add-hook 'TeX-after-TeX-LaTeX-command-finished-hook
+                #'th/pdf-view-revert-buffer-maybe)
+      )
+  #+END_SRC
+* Shutdown
+  #+BEGIN_SRC emacs-lisp
+    (defun shutdown ()
+      "Kills gracefully emacs and the whole system appending
+    shutdown to kill-emacs-hook"
+      (interactive)
+      (if (y-or-n-p "Shutdown? ")
+          (progn
+            (add-hook 'kill-emacs-hook (lambda () (shell-command "systemctl poweroff")) t)
+            (save-buffers-kill-terminal)
+            )
+        (progn
+          (message "Staying alive")
+          )
+        )
+      )
+
+    ;;THIS FUNCTION KILLS PROCESS TOO BRUTALLY. I WANT TO SEND SINGHUP TO EVERYONE
+    ;; FIXME
+    ;; (defun shutdown (&optional arg)
+    ;;   "Append shutdown to kill-emacs-hook."
+    ;;   (interactive "P")
+    ;;   (save-some-buffers)
+    ;;   (and (or (not (fboundp 'process-list))
+    ;;        ;; process-list is not defined on MSDOS.
+    ;;        (let ((processes (process-list))
+    ;;          active)
+    ;;          (while processes
+    ;;            (and (memq (process-status (car processes)) '(run stop open listen))
+    ;;             (process-query-on-exit-flag (car processes))
+    ;;             (setq active t))
+    ;;            (setq processes (cdr processes)))
+    ;;          (or (not active)
+    ;;          (progn (list-processes t)
+    ;;             (yes-or-no-p "Active processes exist; kill them and exit anyway? ")))))
+    ;;        ;; Query the user for other things, perhaps.
+    ;;        (run-hook-with-args-until-failure 'kill-emacs-query-functions)
+    ;;        (or (null confirm-kill-emacs)
+    ;;        (funcall confirm-kill-emacs "Really Shutdown? "))
+    ;;        (add-hook 'kill-emacs-hook '(shell-command "systemctl poweroff"))
+    ;;        (kill-emacs)))
+  #+END_SRC
+* Flyspell
+  #+BEGIN_SRC emacs-lisp
+  (setq ispell-program-name "hunspell")
+  (setq ispell-local-dictionary "en_US")
+  #+END_SRC
+* Ledger
+  #+BEGIN_SRC emacs-lisp
+    (use-package ledger-mode
+      :ensure t
+      )
+  #+END_SRC
+* EXWM
+  #+BEGIN_SRC emacs-lisp
+    (setq use-exwm t)
+
+    (add-to-list 'load-path "/home/sbozzolo/.emacs.d/lisp/xelb/")
+    (add-to-list 'load-path "/home/sbozzolo/.emacs.d/lisp/exwm/")
+
+    (require 'exwm)
+
+    ;; (setq debug-on-error t)
+    ;; (setq debug-on-quit t)
+    ;; (setq edebug-all-forms t)
+    ;; (setq exwm-debug-on t)
+
+    ;;(when (eq use-exwm t)
+    (require 'exwm)
+    ;;(use-package exwm
+    ;; :ensure t
+    ;;:init
+
+
+                                            ; (menu-bar-mode -1)
+
+    ;; Shrink fringes to 1 pixel
+    (fringe-mode 10)
+
+    ;; Set the initial number of workspaces.
+    ;; (setq exwm-workspace-number 4)
+
+    ;; `exwm-input-set-key' allows you to set a global key binding (available in
+    ;; any case). Following are a few examples.
+    ;; + We always need a way to go back to line-mode from char-mode
+    (exwm-input-set-key (kbd "s-r") #'exwm-reset)
+    ;; + Bind a key to switch workspace interactively
+    (exwm-input-set-key (kbd "s-w") #'exwm-workspace-switch)
+    ;; + Bind "s-0" to "s-9" to switch to the corresponding workspace.
+    (dotimes (i 10)
+      (exwm-input-set-key (kbd (format "s-%d" i))
+                          `(lambda ()
+                             (interactive)
+                             (exwm-workspace-switch-create ,i))))
+    ;; + Application launcher ('M-&' also works if the output buffer does not
+    ;;   bother you). Note that there is no need for processes to be created by
+    ;;   Emacs.
+    (exwm-input-set-key (kbd "s-&")
+                        (lambda (command)
+                          (interactive (list (read-shell-command "$ ")))
+                          (start-process-shell-command command nil command)))
+    ;; + 'slock' is a simple X display locker provided by suckless tools.
+    (exwm-input-set-key (kbd "s-<f2>")
+                        (lambda () (interactive) (start-process "" nil "slock")))
+
+    ;; The following example demonstrates how to set a key binding only available
+    ;; in line mode. It's simply done by first push the prefix key to
+    ;; `exwm-input-prefix-keys' and then add the key sequence to `exwm-mode-map'.
+    ;; The example shorten 'C-c q' to 'C-q'.
+    (push ?\C-q exwm-input-prefix-keys)
+    (define-key exwm-mode-map [?\C-q] #'exwm-input-send-next-key)
+
+    (exwm-input-set-key (kbd "M-<tab>") #'iflipb-next-buffer)
+    (exwm-input-set-key (kbd "s-<tab>") #'iflipb-next-buffer)
+    (exwm-input-set-key (kbd "s-<iso-lefttab>") #'iflipb-next-buffer)
+
+
+    ;; The following example demonstrates how to use simulation keys to mimic the
+    ;; behavior of Emacs. The argument to `exwm-input-set-simulation-keys' is a
+    ;; list of cons cells (SRC . DEST), where SRC is the key sequence you press and
+    ;; DEST is what EXWM actually sends to application. Note that SRC must be a key
+    ;; sequence (of type vector or string), while DEST can also be a single key.
+    (exwm-input-set-simulation-keys
+     '(([?\C-b] . left)
+       ([?\C-f] . right)
+       ([?\C-p] . up)
+       ([?\C-n] . down)
+       ([?\C-a] . home)
+       ([?\C-e] . end)
+       ([?\M-v] . prior)
+       ([?\C-v] . next)
+       ([?\C-d] . delete)
+       ([?\C-k] . (S-end delete))))
+
+    ;; You can hide the mode-line of floating X windows by uncommenting the
+    ;; following lines
+    ;; (add-hook 'exwm-floating-setup-hook #'exwm-layout-hide-mode-line)
+    ;; You can hide the minibuffer and echo area when they're not used, by
+    ;; uncommenting the following line
+    (setq exwm-workspace-minibuffer-position 'bottom)
+
+    (defun showsystemtray ()
+    (interactive)
+    (message " ")
+    )
+
+        (exwm-input-set-key (kbd "s-z") #'showsystemtray)
+
+    ;; Systemtray
+    (require 'exwm-systemtray)
+    (exwm-systemtray-enable)
+
+    ;; Launch chrome
+    (defun chrome ()
+      (interactive)
+      (start-process-shell-command "chromium" nil "chromium")
+      )
+    (exwm-input-set-key (kbd "s-c") 'chrome)
+
+    ;; Rename buffer with title
+    (defun exwm-rename-buffer ()
+      (interactive)
+      (exwm-workspace-rename-buffer
+       (concat exwm-class-name ":"
+               (if (<= (length exwm-title) 50) exwm-title
+                 (concat (substring exwm-title 0 49) "...")))))
+
+    ;; Add these hooks in a suitable place (e.g., as done in exwm-config-default)
+    (add-hook 'exwm-update-class-hook 'exwm-rename-buffer)
+    (add-hook 'exwm-update-title-hook 'exwm-rename-buffer)
+
+    ;; Launch multi-term
+    (exwm-input-set-key (kbd "s-t") 'multi-term)
+
+    ;; Launch cutegram
+    (defun cutegram ()
+      (interactive)
+      (start-process-shell-command "cutegram" nil "cutegram")
+      )
+    (exwm-input-set-key (kbd "s-q") 'cutegram)
+
+    (exwm-input-set-key (kbd "<M-f4>") 'kill-this-buffer)
+
+    ;; (require 'exwm-randr)
+    ;; (setq exwm-randr-workspace-output-plist '(0 "VGA1"))
+    ;; (add-hook 'exwm-randr-screen-change-hook
+    ;;           (lambda ()
+    ;;             (start-process-shell-command
+    ;;              "xrandr" nil "xrandr --output VGA1 --left-of LVDS1 --auto")))
+    ;; (exwm-randr-enable)
+
+    (exwm-input-set-key (kbd "<f12>") #'org-capture)
+
+
+    ;; Do not forget to enable EXWM. It will start by itself when things are ready.
+    (exwm-enable)
+    ;; )
+    ;;)
+  #+END_SRC

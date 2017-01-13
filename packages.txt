@@ -1,0 +1,31 @@
+# List of packages
+
+git
+stow
+emacs
+xorg-server
+xorg-utils
+xorg-apps
+zsh
+zsh-syntax-highlitning
+# ttf-ubuntu-fonts (not ready... missing important symbols!)
+ttf-dejavu
+chromium
+redshift
+openssh
+yaourt
+# megatools (not ready... waiting for v 2.00 for force upload)
+megasync
+powertop
+slock
+fasd
+texlive
+alsa-utils
+htop
+mlocate
+hunspell
+hunspell-en
+hunspell-it
+imagemagick
+poppler-glib
+ledger

@@ -1,0 +1,10 @@
+[Unit]
+Description=Backup files specfied in MEGAbackup script
+
+[Service]
+Type=simple
+ExecStart=/home/sbozzolo/bin/MEGAbackup
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
