@@ -6,6 +6,7 @@ emacs
 xorg-server
 xorg-utils
 xorg-apps
+xorg-xfd
 zsh
 zsh-syntax-highlitning
 # ttf-ubuntu-fonts (not ready... missing important symbols!)
@@ -13,10 +14,13 @@ ttf-dejavu
 chromium
 redshift
 openssh
-yaourt
+pacaur
 # megatools (not ready... waiting for v 2.00 for force upload)
 megasync
 powertop
+tlp
+acpi_call (for tlp)
+tlp_rdw
 slock
 fasd
 texlive
@@ -29,3 +33,6 @@ hunspell-it
 imagemagick
 poppler-glib
 ledger
+telegram-desktop
+pepper-flash (for spotify...)
+vlc

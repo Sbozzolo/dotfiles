@@ -1,6 +1,8 @@
 ! Fonts
 
-*.font:                 DejaVu Sans Mono:pixelsize=18:style=Book
+*.font:                         DejaVu Sans Mono:pixelsize=18:style=Book
+Emacs.pane.menubar.font:        Sans Mono:pixelsize=18:style=Book
+
 
 ! Better displays fonts
 Xft.dpi:                96

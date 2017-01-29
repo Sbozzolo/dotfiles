@@ -1,0 +1,14 @@
+#!/bin/sh
+
+logfile="/tmp/$$.log"
+cd "/home/sbozzolo/orgs/"
+git add * >> $logfile
+git commit -m "$(date +'%Y-%m-%d %H:%M')" >> $logfile
+git push origin master >> $logfile
+# /home/sbozzolo/tg/bin/telegram-cli -W -e  "msg Gabriele_Bozzola '*Ho committato gli orgs!*'"
+# while read -r line
+# do
+#     /home/sbozzolo/tg/bin/telegram-cli -W -e  "msg Gabriele_Bozzola $line"
+# done < $logfile
+# /home/sbozzolo/tg/bin/telegram-cli -W -e  "msg Gabriele_Bozzola 'Commit del giorno"
+rm $logfile

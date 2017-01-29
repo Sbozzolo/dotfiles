@@ -24,6 +24,10 @@
 "amixer -q sset Master toggle"
   XF86AudioMute
 
+# Toggle microphone
+"amixer -q set Capture toggle"
+  XF86AudioMicMute
+
 # Increase master volume by 3%
 "if amixer get Master | grep -q "off" ; then amixer -q sset Master unmute; amixer -q sset Master 3%+; else amixer -q sset Master 3%+; fi"
    XF86AudioRaiseVolume

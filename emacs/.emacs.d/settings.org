@@ -42,6 +42,8 @@
     (setq inhibit-startup-echo-area-message t)
     ;; NO toolbar
     (tool-bar-mode -1)
+    (scroll-bar-mode -1)
+    (menu-bar-mode -1)
 
     ;; Battery in modeline
     (display-battery-mode t)
@@ -83,7 +85,7 @@
       )
 
     ;; Start find file from ~
-    (setq default-directory (substitute-in-file-name "$HOME"))
+    (setq default-directory "~/")
 
     ;; Yank at point not where cursor is
     (setq mouse-yank-at-point t)
@@ -97,6 +99,13 @@
     ;; Force vertical split
     (setq split-height-threshold nil)
     (setq split-width-threshold 0)
+
+    ;; Increase and decrease font with C-+ and C--
+    (define-key global-map (kbd "C-+") 'text-scale-increase)
+    ;(define-key global-map (kbd "C--") 'text-scale-decrease)
+
+    ;; Clear the scratch buffer
+    (setq initial-scratch-message nil)
 
   #+END_SRC
 * Misc configurations (mostly taken form Harry Schwartz's dotfiles)
@@ -133,10 +142,20 @@
     ;; buffer containing that file so they can't get out of sync.
     (global-auto-revert-mode t)
 
+    ;; When saving a file in a directory that doesn't exist, offer
+    ;; to (recursively) create the file's parent directories.
+    (add-hook 'before-save-hook
+              (lambda ()
+                (when buffer-file-name
+                  (let ((dir (file-name-directory buffer-file-name)))
+                    (when (and (not (file-exists-p dir))
+                               (y-or-n-p (format "Directory %s does not exist. Create it?" dir)))
+                      (make-directory dir t))))))
+
     ;; Comment or uncomment a region by hitting M-;.
     (defun comment-or-uncomment-region-or-line ()
       "Comments or uncomments the region or the current line if
-        there's no active region."
+            there's no active region."
       (interactive)
       (let (beg end)
         (if (region-active-p)
@@ -145,37 +164,16 @@
         (comment-or-uncomment-region beg end)))
 
     (global-set-key (kbd "M-;") 'comment-or-uncomment-region-or-line)
-
   #+END_SRC
 
-  Smarter move beginning of line
+  When opening a new buffer change to focus to it
+  (Taken from [[http://stackoverflow.com/questions/6464738/how-can-i-switch-focus-after-buffer-split-in-emacs][StackExchange]])
   #+BEGIN_SRC emacs-lisp
-    (defun smarter-move-beginning-of-line (arg)
-      "Move point back to indentation of beginning of line.
-
-    Move point to the first non-whitespace character on this line.
-    If point is already there, move to the beginning of the line.
-    Effectively toggle between the first non-whitespace character and
-    the beginning of the line.
-
-    If ARG is not nil or 1, move forward ARG - 1 lines first.  If
-    point reaches the beginning or end of the buffer, stop there."
-      (interactive "^p")
-      (setq arg (or arg 1))
-
-      ;; Move lines first
-      (when (/= arg 1)
-        (let ((line-move-visual nil))
-          (forward-line (1- arg))))
-
-      (let ((orig-point (point)))
-        (back-to-indentation)
-        (when (= orig-point (point))
-          (move-beginning-of-line 1))))
-
-    ;; remap C-a to `smarter-move-beginning-of-line'
-    (global-set-key [remap move-beginning-of-line]
-                    'smarter-move-beginning-of-line)
+    (setq split-window-preferred-function 'my/split-window-func)
+    (defun my/split-window-func (&optional window)
+      (let ((new-window (split-window-sensibly window)))
+        (if (not (active-minibuffer-window))
+            (select-window new-window))))
   #+END_SRC
 
   Kill this buffer without asking
@@ -648,6 +646,7 @@
           org-books-file (concat org-directory "/books.org")
           org-films-file (concat org-directory "/films.org")
           org-wishlists-file (concat org-directory "/wishlists.org")
+          org-workout-file (concat org-directory "/workout.org")
           )
 
     (setq org-capture-templates
@@ -656,11 +655,11 @@
             ("ot" "TODO" entry (file+headline org-todo-file "PROJECT ORDINARY LIFE")
              "** TODO %^{TODO} \n   Entered on %U"
              :immediate-finish t)
-            ("ol" "Links" entry (file org-links-file)
-             "* %? [[%x][%^{Description}]] %^g"
-             :immediate-finish t)
             ("oa" "Arch TODO" entry (file+headline org-todo-file "PROJECT ArchT430")
              "** TODO %^{TODO} \n   Entered on %U"
+             :immediate-finish t)
+            ("l" "Links" entry (file org-links-file)
+             "* %? [[%x][%^{Description}]] %^g"
              :immediate-finish t)
             ("w" "Whishlist")
             ("wi" "Whishlist Items" entry (file+headline org-wishlists-file "Items")
@@ -672,6 +671,11 @@
             ("wf" "Whishlist Films" entry (file+headline org-wishlists-file "Films")
              "** TODO %^{Film} %? \n   Entered on %U"
              :immediate-finish t)
+            ("W" "Workout")
+            ("Wr" "Workout Rest" entry (file org-workout-file)
+             "* %u\n** Rest\n   %?")
+            ("Wg" "Workout Gym" entry (file org-workout-file)
+             "* %u\n** Running\n   *Time*: %^{Running Time} min\n   *Velocity*: %^{Running Velocity} km/h\n   *Length*: %^{Running Length} km\n   %?")
             ("i" "Idea" entry (file+headline org-ideas-file "Misc")
              "* TODO %^{Idea} %?\n   Entered on %U")
             ("b" "Book" plain (file org-books-file)
@@ -848,49 +852,50 @@
   #+END_SRC
 * Smart-mode-line format
   #+BEGIN_SRC emacs-lisp
-        (use-package smart-mode-line
-          :ensure t
-          :config
-          (setq sml/theme 'respectful)
-          (setq sml/no-confirm-load-theme t)
-          (setq sml/battery-format " %p ")
-          (sml/setup)
-          (custom-set-faces
-           '(sml/charging ((t (:inherit sml/global :foreground "lawn green" :weight bold :height 1.1 ))))
-           '(sml/discharging ((t (:inherit sml/global :foreground "Red" :weight bold :height 1.1 )))))
-          '(sml/time ((t (:inherit sml/modes :weight bold :height 1.1 ))))
+    (use-package smart-mode-line
+      :ensure t
+      :config
+      (setq sml/theme 'respectful)
+      (setq sml/no-confirm-load-theme t)
+      (setq sml/battery-format " %p ")
+      (sml/setup)
+      (custom-set-faces
+       '(sml/charging ((t (:inherit sml/global :foreground "lawn green" :weight bold :height 1.1 ))))
+       '(sml/discharging ((t (:inherit sml/global :foreground "Red" :weight bold :height 1.1 )))))
+      '(sml/time ((t (:inherit sml/modes :weight bold :height 1.1 ))))
 
-          (defun internet-up-p (&optional host)
-            (interactive)
-            (= 0 (call-process "ping" nil nil nil "-c" "1" "-W" "1"
-                               (if host host "www.google.com"))))
+      (defun internet-up-p (&optional host)
+        (interactive)
+        (= 0 (call-process "ping" nil nil nil "-c" "1" "-W" "1"
+                           (if host host "www.google.com"))))
 
-          (setq mode-line-connected
-                (if (internet-up-p)
-                    (propertize "Connected " 'face '(:foreground "green") 'help-echo "CIAO")
-                                (propertize "NO INTERNET " 'face '(:foreground "red") ))
-                  )
-
-
-    (setq-default mode-line-format
-                  (list
-                   "%e"
-                   mode-line-front-space
-                   mode-line-mule-info mode-line-client
-                   mode-line-modified mode-line-remote
-                   mode-line-frame-identification
-                   mode-line-buffer-identification
-                   sml/pos-id-separator
-                   mode-line-position
-                   ;; (vc-mode vc-mode)
-                   sml/pre-modes-separator
-                   mode-line-modes
-                   mode-line-connected
-                   mode-line-misc-info
-                   mode-line-end-spaces
-                   )
-                  )
-    )
+      (setq-default mode-line-format
+                    (list
+                     "%e"
+                     mode-line-front-space
+                     mode-line-mule-info mode-line-client
+                     mode-line-modified mode-line-remote
+                     mode-line-frame-identification
+                     mode-line-buffer-identification
+                     sml/pos-id-separator
+                     mode-line-position
+                     ;; (vc-mode vc-mode)
+                     sml/pre-modes-separator
+                     mode-line-modes
+                     ;;  mode-line-connected
+                      ;; '(:eval (if (internet-up-p)
+                      ;;            (propertize "Connected " 'face '(:foreground "green")
+                      ;;                        ;; 'help-echo (substring
+                      ;;                        ;;             (shell-command-to-string
+                      ;;                        ;;              "nmcli -t -f active,ssid dev wifi | egrep '^yes' | cut -d: -f2 ")
+                      ;;                        ;;             0 -1)
+                      ;;                        )
+                      ;;          (propertize "NO INTERNET " 'face '(:foreground "red") )))
+                     mode-line-misc-info
+                     mode-line-end-spaces
+                     )
+                    )
+      )
 
   #+END_SRC
 *
@@ -903,6 +908,29 @@
       (defadvice multi-term (after advise-multi-term-coding-system)
         (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
       (ad-activate 'multi-term)
+      (custom-set-variables
+       '(term-bind-key-alist
+         (quote
+          (("C-c C-c" . term-interrupt-subjob)
+           ("C-c C-e" . term-send-esc)
+           ("C-p" . previous-line)
+           ("C-n" . next-line)
+           ("C-s" . isearch-forward)
+           ("M-r" . isearch-backward)
+           ("C-m" . term-send-return)
+           ("C-y" . term-paste)
+           ("M-f" . term-send-forward-word)
+           ("M-b" . term-send-backward-word)
+           ("M-o" . term-send-backspace)
+           ("M-p" . term-send-up)
+           ("M-n" . term-send-down)
+           ("M-M" . term-send-forward-kill-word)
+           ("M-N" . term-send-backward-kill-word)
+           ("<C-backspace>" . term-send-backward-kill-word)
+           ("C-r" . term-send-reverse-search-history)
+           ("M-d" . term-send-delete-word)
+           ("M-," . term-send-raw)
+           ("M-." . comint-dynamic-complete)))))
       )
   #+END_SRC
 * Undo-tree
@@ -959,48 +987,6 @@
       (add-hook 'TeX-after-TeX-LaTeX-command-finished-hook
                 #'th/pdf-view-revert-buffer-maybe)
       )
-  #+END_SRC
-* Shutdown
-  #+BEGIN_SRC emacs-lisp
-    (defun shutdown ()
-      "Kills gracefully emacs and the whole system appending
-    shutdown to kill-emacs-hook"
-      (interactive)
-      (if (y-or-n-p "Shutdown? ")
-          (progn
-            (add-hook 'kill-emacs-hook (lambda () (shell-command "systemctl poweroff")) t)
-            (save-buffers-kill-terminal)
-            )
-        (progn
-          (message "Staying alive")
-          )
-        )
-      )
-
-    ;;THIS FUNCTION KILLS PROCESS TOO BRUTALLY. I WANT TO SEND SINGHUP TO EVERYONE
-    ;; FIXME
-    ;; (defun shutdown (&optional arg)
-    ;;   "Append shutdown to kill-emacs-hook."
-    ;;   (interactive "P")
-    ;;   (save-some-buffers)
-    ;;   (and (or (not (fboundp 'process-list))
-    ;;        ;; process-list is not defined on MSDOS.
-    ;;        (let ((processes (process-list))
-    ;;          active)
-    ;;          (while processes
-    ;;            (and (memq (process-status (car processes)) '(run stop open listen))
-    ;;             (process-query-on-exit-flag (car processes))
-    ;;             (setq active t))
-    ;;            (setq processes (cdr processes)))
-    ;;          (or (not active)
-    ;;          (progn (list-processes t)
-    ;;             (yes-or-no-p "Active processes exist; kill them and exit anyway? ")))))
-    ;;        ;; Query the user for other things, perhaps.
-    ;;        (run-hook-with-args-until-failure 'kill-emacs-query-functions)
-    ;;        (or (null confirm-kill-emacs)
-    ;;        (funcall confirm-kill-emacs "Really Shutdown? "))
-    ;;        (add-hook 'kill-emacs-hook '(shell-command "systemctl poweroff"))
-    ;;        (kill-emacs)))
   #+END_SRC
 * Flyspell
   #+BEGIN_SRC emacs-lisp
@@ -1134,28 +1120,164 @@
     ;; Launch multi-term
     (exwm-input-set-key (kbd "s-t") 'multi-term)
 
-    ;; Launch cutegram
-    (defun cutegram ()
+    ;; Launch telegram
+    (defun telegram ()
       (interactive)
-      (start-process-shell-command "cutegram" nil "cutegram")
+      (start-process-shell-command "telegram-desktop" nil "telegram-desktop")
       )
-    (exwm-input-set-key (kbd "s-q") 'cutegram)
+    (exwm-input-set-key (kbd "s-q") 'telegram)
 
     (exwm-input-set-key (kbd "<M-f4>") 'kill-this-buffer)
 
-    ;; (require 'exwm-randr)
-    ;; (setq exwm-randr-workspace-output-plist '(0 "VGA1"))
-    ;; (add-hook 'exwm-randr-screen-change-hook
-    ;;           (lambda ()
-    ;;             (start-process-shell-command
-    ;;              "xrandr" nil "xrandr --output VGA1 --left-of LVDS1 --auto")))
-    ;; (exwm-randr-enable)
+    (require 'exwm-randr)
+    (add-hook 'exwm-randr-screen-change-hook
+              (lambda ()
+                (start-process-shell-command
+                 "xrandr" nil "xrandr --output VGA1 --same-as LVDS1 --auto")))
+    (setq exwm-randr-clone t)
 
-    (exwm-input-set-key (kbd "<f12>") #'org-capture)
+    (setq exwm-randr-workspace-output-plist '(0 "LVDS1"))
+    (setq exwm-randr-workspace-output-plist '(1 "VGA1"))
 
+
+    (defun toggle-exwm-randr ()
+    (interactive)
+      (if (eq exwm-randr-clone t)
+          (progn
+           (remove-hook 'exwm-randr-screen-change-hook
+                        (lambda ()
+                          (start-process-shell-command
+                           "xrandr" nil "xrandr --output VGA1 --same-as LVDS1")))
+           (add-hook 'exwm-randr-screen-change-hook
+                     (lambda ()
+                       (start-process-shell-command
+                        "xrandr" nil "xrandr --output VGA1 --right-of LVDS1 --auto")))
+           (setq exwm-randr-clone nil)
+           (message "VGA1 on the lefte")
+           a(redraw-display)
+           )
+        (progn
+         (remove-hook 'exwm-randr-screen-change-hook
+                      (lambda ()
+                        (start-process-shell-command
+                         "xrandr" nil "xrandr --output VGA1 --right-of LVDS1 --auto")))
+         (add-hook 'exwm-randr-screen-change-hook
+                   (lambda ()
+                     (start-process-shell-command
+                      "xrandr" nil "xrandr --output VGA1 --same-as LVDS1")))
+         (setq exwm-randr-clone t)
+         (message "VGA1 is cloning, remove VGA cable, wait 1 s, insert VGA cable")
+         (redraw-display)
+         )
+        )
+      )
+
+    (exwm-input-set-key (kbd "<XF86Display>") #'toggle-exwm-randr)
+
+    (exwm-randr-enable)
 
     ;; Do not forget to enable EXWM. It will start by itself when things are ready.
     (exwm-enable)
     ;; )
     ;;)
+  #+END_SRC
+* Shutdown
+  #+BEGIN_SRC emacs-lisp
+    (defun shutdown ()
+      "Kills gracefully emacs and the whole system appending
+    shutdown to kill-emacs-hook"
+      (interactive)
+      (if (y-or-n-p "Shutdown? ")
+          (progn
+            (add-hook 'kill-emacs-hook (lambda () (shell-command "systemctl poweroff")) t)
+            (if (internet-up-p)
+                (shell-command "commitorgs"))
+            (save-buffers-kill-terminal)
+            )
+        (progn
+          (message "Staying alive")
+          )
+        )
+      )
+
+    (exwm-input-set-key (kbd "s-x s-c") #'shutdown)
+
+
+    ;;THIS FUNCTION KILLS PROCESS TOO BRUTALLY. I WANT TO SEND SINGHUP TO EVERYONE
+    ;; FIXME
+    ;; (defun shutdown (&optional arg)
+    ;;   "Append shutdown to kill-emacs-hook."
+    ;;   (interactive "P")
+    ;;   (save-some-buffers)
+    ;;   (and (or (not (fboundp 'process-list))
+    ;;        ;; process-list is not defined on MSDOS.
+    ;;        (let ((processes (process-list))
+    ;;          active)
+    ;;          (while processes
+    ;;            (and (memq (process-status (car processes)) '(run stop open listen))
+    ;;             (process-query-on-exit-flag (car processes))
+    ;;             (setq active t))
+    ;;            (setq processes (cdr processes)))
+    ;;          (or (not active)
+    ;;          (progn (list-processes t)
+    ;;             (yes-or-no-p "Active processes exist; kill them and exit anyway? ")))))
+    ;;        ;; Query the user for other things, perhaps.
+    ;;        (run-hook-with-args-until-failure 'kill-emacs-query-functions)
+    ;;        (or (null confirm-kill-emacs)
+    ;;        (funcall confirm-kill-emacs "Really Shutdown? "))
+    ;;        (add-hook 'kill-emacs-hook '(shell-command "systemctl poweroff"))
+    ;;        (kill-emacs)))
+  #+END_SRC
+* Function-keys-binding
+  #+BEGIN_SRC emacs-lisp
+    ;; (exwm-input-set-key (kbd "<f0>") #')
+    ;; (exwm-input-set-key (kbd "<f1>") #')
+    ;; (exwm-input-set-key (kbd "<f2>") #')
+    ;; (exwm-input-set-key (kbd "<f3>") #')
+    ;; (exwm-input-set-key (kbd "<f4>") #')
+    ;; (exwm-input-set-key (kbd "<f5>") #')
+    ;; (exwm-input-set-key (kbd "<f6>") #')
+    ;; (exwm-input-set-key (kbd "<f7>") #')
+    ;; (exwm-input-set-key (kbd "<f8>") #')
+    ;; (exwm-input-set-key (kbd "<f9>") #')
+    ;; (exwm-input-set-key (kbd "<f10>") #')
+    (exwm-input-set-key (kbd "<f11>") #'toggle-menu-bar-mode-from-frame)
+    (exwm-input-set-key (kbd "<f12>") #'org-capture)
+  #+END_SRC
+* Screenshot
+  #+BEGIN_SRC emacs-lisp
+    (exwm-input-set-key (kbd "<s-print>")
+                        #'(lambda () (interactive)
+                            (progn
+                              (shell-command "import -window root ~/screenshot/$(date +%Y-%m-%d:%H:%M:%S).png")
+                              (message "Screenshot taken! Saved in ~/screenshot")
+                              )
+                            )
+                        )
+
+    (exwm-input-set-key (kbd "<s-M-print>")
+                        #'(lambda () (interactive)
+                            (progn
+                              (shell-command "import ~/screenshot/$(date +%Y-%m-%d:%H:%M:%S).png")
+                              (message "Screenshot taken! Saved in ~/screenshot")
+                              )
+                            )
+                        )
+
+  #+END_SRC
+* Autoupdate
+  #+BEGIN_SRC emacs-lisp
+    (use-package auto-package-update
+      :ensure t
+      :init
+      ;; Update every week
+      (setq auto-package-update-interval 7)
+      ;; Delete old versions
+      (setq auto-package-update-delete-old-versions t)
+      ;; Send a message saying that there will be an update
+      (add-hook 'auto-package-update-before-hook
+              (lambda () (message "I will update packages now")))
+      ;; Update at startup
+      (auto-package-update-maybe)
+    )
   #+END_SRC
