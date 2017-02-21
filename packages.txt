@@ -18,9 +18,9 @@ pacaur
 # megatools (not ready... waiting for v 2.00 for force upload)
 megasync
 powertop
-tlp
-acpi_call (for tlp)
-tlp_rdw
+# tlp
+# acpi_call (for tlp)
+# tlp_rdw
 slock
 fasd
 texlive
@@ -36,3 +36,5 @@ ledger
 telegram-desktop
 pepper-flash (for spotify...)
 vlc
+calibre
+unzip

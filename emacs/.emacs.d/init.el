@@ -15,7 +15,7 @@
  '(flycheck-display-errors-function (function flycheck-pos-tip-error-messages))
  '(package-selected-packages
    (quote
-    (auto-package-update whole-line-or-region whitespace-cleanup-mode which-key use-package undo-tree systemd synonyms smex smart-mode-line-powerline-theme session pdf-tools ox-reveal org-bullets noflet multi-term magit ledger-mode iflipb htmlize guru-mode google-translate flycheck-pos-tip exwm expand-region engine-mode counsel company color-theme-sanityinc-solarized auctex)))
+    (company-c-headers guess-language auto-package-update whole-line-or-region whitespace-cleanup-mode which-key use-package undo-tree systemd synonyms smex smart-mode-line-powerline-theme session pdf-tools ox-reveal org-bullets noflet multi-term magit ledger-mode iflipb htmlize guru-mode google-translate flycheck-pos-tip exwm expand-region engine-mode counsel company color-theme-sanityinc-solarized auctex)))
  '(session-use-package t nil (session))
  '(term-bind-key-alist
    (quote
@@ -46,3 +46,4 @@
  ;; If there is more than one, they won't work right.
  '(sml/charging ((t (:inherit sml/global :foreground "lawn green" :weight bold :height 1.1))))
  '(sml/discharging ((t (:inherit sml/global :foreground "Red" :weight bold :height 1.1)))))
+(put 'upcase-region 'disabled nil)

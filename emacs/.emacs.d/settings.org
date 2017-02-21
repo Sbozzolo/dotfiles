@@ -1,4 +1,11 @@
-#+TITLE: Emacs configuration
++TITLE: Emacs configuration
+
+# Author: Gabriele Bozzola (sbozzolo)
+# Email: sbozzolator@gmail.com
+# Version: 1.0
+# Last edit: [2017-02-19 Sun]
+# Changelog:
+#       1.0: Stable release with EXWM
 
 * Personal info
   #+BEGIN_SRC emacs-lisp
@@ -12,10 +19,15 @@
   #+BEGIN_SRC emacs-lisp
   (require 'package)
   (setq package-enable-at-startup nil)
-  ;; org
-  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
-  ;; MELPA
-  (add-to-list 'package-archives `("melpa" . "https://melpa.org/packages/"))
+  ;; Prefer MELPA Stable over MELPA
+  (setq package-archives
+      '(("GNU ELPA"     . "http://elpa.gnu.org/packages/")
+        ("MELPA Stable" . "https://stable.melpa.org/packages/")
+        ("MELPA"        . "https://melpa.org/packages/"))
+      package-archive-priorities
+      '(("MELPA Stable" . 10)
+        ("GNU ELPA"     . 5)
+        ("MELPA"        . 0)))
   (package-initialize)
   #+END_SRC
 * Setup use-package
@@ -176,6 +188,15 @@
             (select-window new-window))))
   #+END_SRC
 
+  Redefine kill-this-buffer to fix compatibility with toggle-menu-bar
+  #+BEGIN_SRC emacs-lisp
+    (defun kill-this-buffer ()	; for the menu bar
+      "Kill the current buffer overrided to work always."
+      (interactive)
+      (kill-buffer (current-buffer))
+      )
+  #+END_SRC
+
   Kill this buffer without asking
   #+BEGIN_SRC emacs-lisp
     (global-set-key (kbd "C-x k") 'kill-this-buffer)
@@ -322,6 +343,13 @@
       ;; To have completion with TAB
       (setq tab-always-indent 'complete)
       )
+
+      (use-package company-c-headers
+        :diminish company-c-headers
+        :ensure t
+        :config
+        (add-to-list 'company-backends 'company-c-headers)
+        )
   #+END_SRC
 * Ivy
   #+BEGIN_SRC emacs-lisp
@@ -385,6 +413,12 @@
           smtpmail-smtp-server "smtp.gmail.com"
           smtpmail-smtp-service 587
           mail-host-address "sbozzolator@gmail.com")
+  #+END_SRC
+* Customize
+  #+BEGIN_SRC emacs-lisp
+    ;; Move customization outside init
+    (setq custom-file "~/.emacs.d/custom.el")
+    (load custom-file 'noerror)
   #+END_SRC
 * Purcell's
   #+BEGIN_SRC emacs-lisp
@@ -494,6 +528,17 @@
       (setq session-save-file (expand-file-name ".session" user-emacs-directory))
       (setq session-name-disable-regexp "\\(?:\\`'/tmp\\|\\.git/[A-Z_]+\\'\\)")
       )
+  #+END_SRC
+* Keyfreq
+  #+BEGIN_SRC emacs-lisp
+    (use-package keyfreq
+      :ensure t
+      :init
+      (setq keyfreq-file "~/.emacs.p/keyfreq/statistics"
+            keyfreq-file-lock "~/.emacs.p/keyfreq/lockfile")
+      :config
+      (keyfreq-mode 1)
+      (keyfreq-autosave-mode 1))
   #+END_SRC
 * Recentf
   #+BEGIN_SRC emacs-lisp
@@ -616,6 +661,7 @@
   Rebind things in org-mode
   #+BEGIN_SRC emacs-lisp
   (define-key org-mode-map (kbd "C-a") nil)
+  (define-key org-mode-map (kbd "RET") nil)
   (define-key org-mode-map (kbd "M-<tab>") nil)
   (define-key org-mode-map (kbd "M-<iso-lefttab>") nil)
   #+END_SRC
@@ -771,10 +817,6 @@
                       '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
                   ))
       )
-  #+END_SRC
-* F5 to revert buffer
-  #+BEGIN_SRC emacs-lisp
-    (global-set-key (kbd "<f5>") 'revert-buffer)
   #+END_SRC
 * Counsel for yanking
   #+BEGIN_SRC emacs-lisp
@@ -940,6 +982,12 @@
       :bind (("\C-x u" . undo-tree-visualize))
       )
   #+END_SRC
+* C programming
+  #+BEGIN_SRC emacs-lisp
+    ;; Compile with C-x C-m (C-m)
+    (global-set-key (kbd "C-x C-m") 'compile)
+
+  #+END_SRC
 * Systemd
   #+BEGIN_SRC emacs-lisp
     (use-package systemd
@@ -990,8 +1038,19 @@
   #+END_SRC
 * Flyspell
   #+BEGIN_SRC emacs-lisp
-  (setq ispell-program-name "hunspell")
-  (setq ispell-local-dictionary "en_US")
+    (setq ispell-program-name "hunspell")
+    ;; (setq ispell-local-dictionary "en_US")
+    ; Automatically detect language for Flyspell
+    (use-package guess-language
+      :ensure t
+      :defer t
+      :init (add-hook 'text-mode-hook #'guess-language-mode)
+      :config
+      (setq guess-language-langcodes '((en . ("en_GB" "English"))
+                                       (it . ("it_IT" "Italian")))
+            guess-language-languages '(en it)
+            guess-language-min-paragraph-length 45)
+      :diminish guess-language-mode)
   #+END_SRC
 * Ledger
   #+BEGIN_SRC emacs-lisp
@@ -1014,10 +1073,10 @@
     ;; (setq exwm-debug-on t)
 
     ;;(when (eq use-exwm t)
-    (require 'exwm)
-    ;;(use-package exwm
-    ;; :ensure t
-    ;;:init
+    ;;(require 'exwm)
+    (use-package exwm
+     :ensure t
+     :init
 
 
                                             ; (menu-bar-mode -1)
@@ -1179,7 +1238,7 @@
     ;; Do not forget to enable EXWM. It will start by itself when things are ready.
     (exwm-enable)
     ;; )
-    ;;)
+    )
   #+END_SRC
 * Shutdown
   #+BEGIN_SRC emacs-lisp
@@ -1191,7 +1250,7 @@
           (progn
             (add-hook 'kill-emacs-hook (lambda () (shell-command "systemctl poweroff")) t)
             (if (internet-up-p)
-                (shell-command "commitorgs"))
+                (message (shell-command-to-string "commitorgs")) )
             (save-buffers-kill-terminal)
             )
         (progn
@@ -1230,12 +1289,11 @@
   #+END_SRC
 * Function-keys-binding
   #+BEGIN_SRC emacs-lisp
-    ;; (exwm-input-set-key (kbd "<f0>") #')
-    ;; (exwm-input-set-key (kbd "<f1>") #')
+    (exwm-input-set-key (kbd "<f1>") #'delete-other-windows)
     ;; (exwm-input-set-key (kbd "<f2>") #')
     ;; (exwm-input-set-key (kbd "<f3>") #')
     ;; (exwm-input-set-key (kbd "<f4>") #')
-    ;; (exwm-input-set-key (kbd "<f5>") #')
+    (exwm-input-set-key (kbd "<f5>") #'revert-buffer)
     ;; (exwm-input-set-key (kbd "<f6>") #')
     ;; (exwm-input-set-key (kbd "<f7>") #')
     ;; (exwm-input-set-key (kbd "<f8>") #')

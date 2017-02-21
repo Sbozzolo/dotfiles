@@ -97,6 +97,7 @@ alias lcm="ssh lcm"
 alias e='emacsclient -nw'
 alias pg='ping 8.8.8.8'
 
-source dailyupdater
+# If X is running run dailyupdater
+if [[ ! -z $DISPLAY ]] ; then source dailyupdater; fi
 
 if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then exec startx; fi

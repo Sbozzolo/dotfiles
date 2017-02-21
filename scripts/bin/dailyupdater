@@ -13,12 +13,28 @@ newdate=$(($epochlast + $N*86400))
 
 now=`date +%s`
 
+# Similar script to autocommit my orgs folder
+
+# In seconds
+lastorgs=`git --git-dir /home/sbozzolo/orgs/.git log -1 --date=raw | grep Date | awk '{print $2}'`
+
+# Starting from newdate this script shoud ask for update
+newdateorgs=$(($lastorgs + $N*86400))
+
+if [ "$now" -gt "$newdateorgs" ]; then
+    if ping -c 1 8.8.8.8 >> /dev/null 2>&1; then
+        echo "Comminting orgs"
+        commitorgs &
+    else
+        exit
+    fi
+fi
+
 if [ "$now" -gt "$newdate" ]; then
     if ping -c 1 8.8.8.8 >> /dev/null 2>&1; then
-        echo "Running Pacman -Syu"
-        sudo pacman -Syu
-        echo "Running Pacaur -Syu"
-        pacaur -Syu
+        echo "Updating"
+        sudo pacman -Syu && pacaur -Syu
+        # pacaur -Syu &ccc
     else
         exit
     fi
