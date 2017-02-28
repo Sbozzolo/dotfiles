@@ -1,11 +1,40 @@
-+TITLE: Emacs configuration
+#+TITLE: Emacs configuration
 
-# Author: Gabriele Bozzola (sbozzolo)
-# Email: sbozzolator@gmail.com
-# Version: 1.0
-# Last edit: [2017-02-19 Sun]
-# Changelog:
-#       1.0: Stable release with EXWM
+* Config Info
+  #+AUTHOR: Gabriele Bozzola (sbozzolo)
+  #+EMAIL: sbozzolator@gmail.com
+  Latest Version: 1.0.3.1
+  Latest Edit: [2017-02-27 Mon 10:30]
+** Changelog
+*** 1.0.3.1 ([2017-02-27 Mon])
+    - Bind kill-this-buffer to <f2>
+*** 1.0.3 ([2017-02-26 Sun])
+    - Fixed xrandr hook
+    - Added visual bell
+*** 1.0.2 ([2017-02-25 Sat])
+    - Disabled keyfreq due to its incompatibility with EXWM
+      (kill-emacs hangs if keyfreq is enabled)
+*** 1.0.1 ([2017-02-24 Fri])
+    - Fixed <f5> in X apps
+    - Fixed Screenshot functions
+*** 1.0 ([2017-02-19 Sun])
+    - Almost stable release with EXWM
+    - Started to track the development
+** Fixme
+   - [X] Second screenshot function
+     Fixed in version 1.0.1 ([2017-02-24 Fri])
+   - [ ] Fontification error (seems related to the version of org-mode)
+   - [X] Projector doesn't seem to work (seems related to X)
+     Fixed in version 1.0.3 ([2017-02-26 Sun])
+   - [ ] Terminal won't open if there is no internet (not related to emacs)
+   - [ ] Keyfreq doesn't work well with EXWM (If it is enabled Emacs won't close properly)
+
+** Wishlist
+   - [ ] Use fasd-emacs. Fasd in multiterm open a buffer.
+   - [ ] Polish config
+   - [ ] Migrate /etc confs in dotfiles folder
+   - [ ] Imporve autoupdater. It shouldn't prevent me
+         from using the terminal
 
 * Personal info
   #+BEGIN_SRC emacs-lisp
@@ -59,6 +88,10 @@
 
     ;; Battery in modeline
     (display-battery-mode t)
+
+    ;; When you perform a problematic operation, flash the screen
+    ;; instead of ringing the terminal bell.
+    (setq visible-bell t)
 
     ;; You may want Emacs to show you the time
     (setq display-time-default-load-average nil)
@@ -120,7 +153,8 @@
     (setq initial-scratch-message nil)
 
   #+END_SRC
-* Misc configurations (mostly taken form Harry Schwartz's dotfiles)
+* Misc configurations
+  Mostly taken form Harry Schwartz's dotfiles
   #+BEGIN_SRC emacs-lisp
     ;; When opening a file, always follow symlinks.
     (setq vc-follow-symlinks t)
@@ -344,12 +378,12 @@
       (setq tab-always-indent 'complete)
       )
 
-      (use-package company-c-headers
-        :diminish company-c-headers
-        :ensure t
-        :config
-        (add-to-list 'company-backends 'company-c-headers)
-        )
+    (use-package company-c-headers
+      :diminish company-c-headers
+      :ensure t
+      :config
+      (add-to-list 'company-backends 'company-c-headers)
+      )
   #+END_SRC
 * Ivy
   #+BEGIN_SRC emacs-lisp
@@ -531,14 +565,14 @@
   #+END_SRC
 * Keyfreq
   #+BEGIN_SRC emacs-lisp
-    (use-package keyfreq
-      :ensure t
-      :init
-      (setq keyfreq-file "~/.emacs.p/keyfreq/statistics"
-            keyfreq-file-lock "~/.emacs.p/keyfreq/lockfile")
-      :config
-      (keyfreq-mode 1)
-      (keyfreq-autosave-mode 1))
+    ;; (use-package keyfreq
+    ;;   :ensure t
+    ;;   :init
+    ;;   (setq keyfreq-file "~/.emacs.p/keyfreq/statistics"
+    ;;         keyfreq-file-lock "~/.emacs.p/keyfreq/lockfile")
+    ;;   :config
+    ;;   (keyfreq-mode 1)
+    ;;   (keyfreq-autosave-mode 1))
   #+END_SRC
 * Recentf
   #+BEGIN_SRC emacs-lisp
@@ -635,8 +669,8 @@
       :ensure t
       :init
       (add-hook 'org-mode-hook
-  	      (lambda ()
-  		(org-bullets-mode t)))
+              (lambda ()
+                (org-bullets-mode t)))
       )
 
     (setq org-ellipsis "⤵")
@@ -986,7 +1020,6 @@
   #+BEGIN_SRC emacs-lisp
     ;; Compile with C-x C-m (C-m)
     (global-set-key (kbd "C-x C-m") 'compile)
-
   #+END_SRC
 * Systemd
   #+BEGIN_SRC emacs-lisp
@@ -1062,8 +1095,8 @@
   #+BEGIN_SRC emacs-lisp
     (setq use-exwm t)
 
-    (add-to-list 'load-path "/home/sbozzolo/.emacs.d/lisp/xelb/")
-    (add-to-list 'load-path "/home/sbozzolo/.emacs.d/lisp/exwm/")
+    ;; (add-to-list 'load-path "/home/sbozzolo/.emacs.d/lisp/xelb/")
+    ;; (add-to-list 'load-path "/home/sbozzolo/.emacs.d/lisp/exwm/")
 
     (require 'exwm)
 
@@ -1192,11 +1225,11 @@
     (add-hook 'exwm-randr-screen-change-hook
               (lambda ()
                 (start-process-shell-command
-                 "xrandr" nil "xrandr --output VGA1 --same-as LVDS1 --auto")))
+                 "xrandr" nil "xrandr --output VGA-1 --same-as LVDS-1 --auto")))
     (setq exwm-randr-clone t)
 
-    (setq exwm-randr-workspace-output-plist '(0 "LVDS1"))
-    (setq exwm-randr-workspace-output-plist '(1 "VGA1"))
+    (setq exwm-randr-workspace-output-plist '(0 "LVDS-1"))
+    (setq exwm-randr-workspace-output-plist '(1 "VGA-1"))
 
 
     (defun toggle-exwm-randr ()
@@ -1206,24 +1239,24 @@
            (remove-hook 'exwm-randr-screen-change-hook
                         (lambda ()
                           (start-process-shell-command
-                           "xrandr" nil "xrandr --output VGA1 --same-as LVDS1")))
+                           "xrandr" nil "xrandr --output VGA-1 --same-as LVDS-1 --auto")))
            (add-hook 'exwm-randr-screen-change-hook
                      (lambda ()
                        (start-process-shell-command
-                        "xrandr" nil "xrandr --output VGA1 --right-of LVDS1 --auto")))
-           (setq exwm-randr-clone nil)
-           (message "VGA1 on the lefte")
-           a(redraw-display)
+                        "xrandr" nil "xrandr --output VGA-1 --right-of LVDS-1 --auto")))
+           (setq exwm-randrp-clone nil)
+           (message "VGA1 on the right")
+           (redraw-display)
            )
         (progn
          (remove-hook 'exwm-randr-screen-change-hook
                       (lambda ()
                         (start-process-shell-command
-                         "xrandr" nil "xrandr --output VGA1 --right-of LVDS1 --auto")))
+                         "xrandr" nil "xrandr --output VGA-1 --right-of LVDS-1 --auto")))
          (add-hook 'exwm-randr-screen-change-hook
                    (lambda ()
                      (start-process-shell-command
-                      "xrandr" nil "xrandr --output VGA1 --same-as LVDS1")))
+                      "xrandr" nil "xrandr --output VGA-1 --same-as LVDS-1 --auto")))
          (setq exwm-randr-clone t)
          (message "VGA1 is cloning, remove VGA cable, wait 1 s, insert VGA cable")
          (redraw-display)
@@ -1238,6 +1271,60 @@
     ;; Do not forget to enable EXWM. It will start by itself when things are ready.
     (exwm-enable)
     ;; )
+    )
+  #+END_SRC
+* Function-keys-binding
+  #+BEGIN_SRC emacs-lisp
+    (exwm-input-set-key (kbd "<f1>") #'delete-other-windows)
+    (exwm-input-set-key (kbd "<f2>") #'kill-this-buffer)
+    ;; (exwm-input-set-key (kbd "<f3>") #')
+    ;; (exwm-input-set-key (kbd "<f4>") #')
+    ;; (exwm-input-set-key (kbd "<f5>") #'revert-buffer)
+    ;; I don't use exwm-input so I can use F5 in X apps
+    (global-set-key (kbd "<f5>") 'revert-buffer)
+    ;; (exwm-input-set-key (kbd "<f6>") #')
+    ;; (exwm-input-set-key (kbd "<f7>") #')
+    ;; (exwm-input-set-key (kbd "<f8>") #')
+    ;; (exwm-input-set-key (kbd "<f9>") #')
+    ;; (exwm-input-set-key (kbd "<f10>") #')
+    (exwm-input-set-key (kbd "<f11>") #'toggle-menu-bar-mode-from-frame)
+    (exwm-input-set-key (kbd "<f12>") #'org-capture)
+  #+END_SRC
+* Screenshot
+  #+BEGIN_SRC emacs-lisp
+    (exwm-input-set-key (kbd "<print>")
+                        #'(lambda () (interactive)
+                            (progn
+                              (shell-command "import -window root ~/screenshot/$(date +%Y-%m-%d:%H:%M:%S).png")
+                              (message "Screenshot taken! Saved in ~/screenshot")
+                              )
+                            )
+                        )
+
+    (exwm-input-set-key (kbd "<s-print>")
+                        #'(lambda () (interactive)
+                            (progn
+                              (shell-command "import ~/screenshot/$(date +%Y-%m-%d:%H:%M:%S).png")
+                              (message "Screenshot taken! Saved in ~/screenshot")
+                              )
+                            )
+                        )
+
+  #+END_SRC
+* Autoupdate
+  #+BEGIN_SRC emacs-lisp
+    (use-package auto-package-update
+      :ensure t
+      :init
+      ;; Update every week
+      (setq auto-package-update-interval 7)
+      ;; Delete old versions
+      (setq auto-package-update-delete-old-versions t)
+      ;; Send a message saying that there will be an update
+      (add-hook 'auto-package-update-before-hook
+              (lambda () (message "I will update packages now")))
+      ;; Update at startup
+      (auto-package-update-maybe)
     )
   #+END_SRC
 * Shutdown
@@ -1286,56 +1373,4 @@
     ;;        (funcall confirm-kill-emacs "Really Shutdown? "))
     ;;        (add-hook 'kill-emacs-hook '(shell-command "systemctl poweroff"))
     ;;        (kill-emacs)))
-  #+END_SRC
-* Function-keys-binding
-  #+BEGIN_SRC emacs-lisp
-    (exwm-input-set-key (kbd "<f1>") #'delete-other-windows)
-    ;; (exwm-input-set-key (kbd "<f2>") #')
-    ;; (exwm-input-set-key (kbd "<f3>") #')
-    ;; (exwm-input-set-key (kbd "<f4>") #')
-    (exwm-input-set-key (kbd "<f5>") #'revert-buffer)
-    ;; (exwm-input-set-key (kbd "<f6>") #')
-    ;; (exwm-input-set-key (kbd "<f7>") #')
-    ;; (exwm-input-set-key (kbd "<f8>") #')
-    ;; (exwm-input-set-key (kbd "<f9>") #')
-    ;; (exwm-input-set-key (kbd "<f10>") #')
-    (exwm-input-set-key (kbd "<f11>") #'toggle-menu-bar-mode-from-frame)
-    (exwm-input-set-key (kbd "<f12>") #'org-capture)
-  #+END_SRC
-* Screenshot
-  #+BEGIN_SRC emacs-lisp
-    (exwm-input-set-key (kbd "<s-print>")
-                        #'(lambda () (interactive)
-                            (progn
-                              (shell-command "import -window root ~/screenshot/$(date +%Y-%m-%d:%H:%M:%S).png")
-                              (message "Screenshot taken! Saved in ~/screenshot")
-                              )
-                            )
-                        )
-
-    (exwm-input-set-key (kbd "<s-M-print>")
-                        #'(lambda () (interactive)
-                            (progn
-                              (shell-command "import ~/screenshot/$(date +%Y-%m-%d:%H:%M:%S).png")
-                              (message "Screenshot taken! Saved in ~/screenshot")
-                              )
-                            )
-                        )
-
-  #+END_SRC
-* Autoupdate
-  #+BEGIN_SRC emacs-lisp
-    (use-package auto-package-update
-      :ensure t
-      :init
-      ;; Update every week
-      (setq auto-package-update-interval 7)
-      ;; Delete old versions
-      (setq auto-package-update-delete-old-versions t)
-      ;; Send a message saying that there will be an update
-      (add-hook 'auto-package-update-before-hook
-              (lambda () (message "I will update packages now")))
-      ;; Update at startup
-      (auto-package-update-maybe)
-    )
   #+END_SRC

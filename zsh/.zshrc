@@ -95,6 +95,7 @@ source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zs
 
 alias lcm="ssh lcm"
 alias e='emacsclient -nw'
+alias fe='a -e emacsclient -nw'
 alias pg='ping 8.8.8.8'
 
 # If X is running run dailyupdater

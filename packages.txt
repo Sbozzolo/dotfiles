@@ -3,12 +3,16 @@
 git
 stow
 emacs
+networkmanager
+base-deve
 xorg-server
 xorg-utils
 xorg-apps
 xorg-xfd
+xorg-xinit
+xbindkeys
 zsh
-zsh-syntax-highlitning
+zsh-syntax-highlighting
 # ttf-ubuntu-fonts (not ready... missing important symbols!)
 ttf-dejavu
 chromium
@@ -17,7 +21,7 @@ openssh
 pacaur
 # megatools (not ready... waiting for v 2.00 for force upload)
 megasync
-powertop
+# powertop
 # tlp
 # acpi_call (for tlp)
 # tlp_rdw
@@ -32,9 +36,11 @@ hunspell-en
 hunspell-it
 imagemagick
 poppler-glib
-ledger
-telegram-desktop
+ledger (AUR)
+telegram-desktop (AUR)
 pepper-flash (for spotify...)
+alsa-utils
 vlc
 calibre
+zip
 unzip

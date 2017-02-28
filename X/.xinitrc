@@ -2,7 +2,7 @@
 #xhost +
 
 # Set themes, etc
-/usr/lib/gnome-settings-daemon/gnome-settings-daemon &
+#/usr/lib/gnome-settings-daemon/gnome-settings-daemon &
 
 # Set fallback cursor
 xsetroot -cursor_name left_ptr
@@ -11,7 +11,11 @@ xsetroot -cursor_name left_ptr
 xset r rate 200 60
 
 # Xresources configurations
-[[ -f ~/.Xresources ]] && xrdb -merge -I $HOME ~/.Xresources
+if [ -f ~/.Xresources ]; then
+    xrdb -merge  ~/.Xresources
+fi
+
+# [[ -f ~/.Xresources ]] && xrdb -merge -I $HOME ~/.Xresources
 
 # Hardware dependant
 if [ -f ~/.Xhardware ]; then
@@ -24,14 +28,10 @@ export VISUAL=emacsclient
 export EDITOR="$VISUAL"
 
 # Bind brightness keys
-xbindkeys
+xbindkeys &
 
 # Redshift
 redshift -c ~/.redshiftrc &
 
 # Finally launch emacs
 exec dbus-launch --exit-with-session emacs --debug-init
-echo $?
-if [ $? -ne 1993 ]; then
-    echo "Lanciato shutdown!"
-fi
