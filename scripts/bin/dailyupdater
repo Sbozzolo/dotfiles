@@ -24,7 +24,7 @@ newdateorgs=$(($lastorgs + $N*86400))
 if [ "$now" -gt "$newdateorgs" ]; then
     if ping -c 1 8.8.8.8 >> /dev/null 2>&1; then
         echo "Comminting orgs"
-        commitorgs >> /dev/null &
+        commitorgs >> /dev/null 2>&1 &
     else
         exit
     fi

@@ -3,9 +3,30 @@
 * Config Info
   #+AUTHOR: Gabriele Bozzola (sbozzolo)
   #+EMAIL: sbozzolator@gmail.com
-  Latest Version: 1.0.3.1
-  Latest Edit: [2017-02-27 Mon 10:30]
+  Latest Version: 1.0.5.2
+  Latest Edit: [2017-03-23 Thu 22:01]
 ** Changelog
+*** 1.0.5.2 ([2017-03-23 Thu])
+    - Make TRAMP use controlmaster
+*** 1.0.5.1 ([2017-03-16 Thu])
+    - Added split screen (f3)
+    - Enable disabled command
+*** 1.0.5 ([2017-03-14 Tue])
+    - Added swap buffer in windows (f4)
+    - Added instant save word for ispell
+*** 1.0.4.2 ([2017-03-10 Fri])
+    - Edited .zshrc to make term mode
+      track the pwd ([[http://stackoverflow.com/questions/3508387/how-can-i-have-term-el-ansi-term-track-directories-if-using-anyhting-other-tha][StackExchange]])
+    - Fixed path in org-capture
+    - Decreased sub/superscript raise
+*** 1.0.4.1 ([2017-03-04 Sat])
+    - Added Ledger to org-babel
+*** 1.0.4 ([2017-03-02 Thu])
+    - Reduced fringe to 1
+    - Dired size human readable
+    - Tabs stops
+*** 1.0.3.2 ([2017-03-02 Thu])
+    - Added Pass package (Password-store interface)
 *** 1.0.3.1 ([2017-02-27 Mon])
     - Bind kill-this-buffer to <f2>
 *** 1.0.3 ([2017-02-26 Sun])
@@ -28,6 +49,9 @@
      Fixed in version 1.0.3 ([2017-02-26 Sun])
    - [ ] Terminal won't open if there is no internet (not related to emacs)
    - [ ] Keyfreq doesn't work well with EXWM (If it is enabled Emacs won't close properly)
+   - [ ] Pdftools flickering
+   - [ ] Org babel does not work
+   - [ ] RefTex is not working
 
 ** Wishlist
    - [ ] Use fasd-emacs. Fasd in multiterm open a buffer.
@@ -35,14 +59,16 @@
    - [ ] Migrate /etc confs in dotfiles folder
    - [ ] Imporve autoupdater. It shouldn't prevent me
          from using the terminal
+   - [ ] Backup with rsnapshot
+   - [X] Find file traks with multi term
 
 * Personal info
   #+BEGIN_SRC emacs-lisp
   (setq user-full-name "Gabriele Bozzola"
         user-mail-address "sbozzolator@gmail.com"
-        calendar-latitude 45.63
-        calendar-longitude 9.04
-        calendar-location-name "Milan, Italy")
+        calendar-latitude 40.63
+        calendar-longitude 22.94
+        calendar-location-name "Thessaloniki, Greece")
    #+END_SRC
 * Setup package manager
   #+BEGIN_SRC emacs-lisp
@@ -110,6 +136,9 @@
     ;; 80 columns
     (setq-default fill-column 80)
 
+    ;; Enable all disabled commands
+    (setq disabled-command-function nil)
+
     ;; Theme
     (use-package color-theme-sanityinc-solarized
       :ensure t
@@ -151,6 +180,25 @@
 
     ;; Clear the scratch buffer
     (setq initial-scratch-message nil)
+
+    ;; Tab align every 4 chars
+    (setq-default tab-stop-list (number-sequence 4 200 4))
+
+    ;; Human readable size in dired
+    (setq dired-listing-switches "-alh")
+
+    ;; Swap buffer in window
+    (defun swap-buffers-in-windows ()
+      "Put the buffer from the selected window in next window, and vice versa"
+      (interactive)
+      (let* ((this (selected-window))
+         (other (next-window))
+         (this-buffer (window-buffer this))
+         (other-buffer (window-buffer other)))
+        (set-window-buffer other this-buffer)
+        (set-window-buffer this other-buffer)
+        )
+      )
 
   #+END_SRC
 * Misc configurations
@@ -601,11 +649,17 @@
                 (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
                            (cons "$" "$"))))
 
+      (setq reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
+
+
       ;;   (add-hook 'LaTeX-mode-hook 'prettify-symbols-mode)
       ;; (with-eval-after-load 'LaTeX-mode
       ;;   (prettify-symbols-mode))
 
       :config
+
+      (setq font-latex-script-display (quote ((raise -0.2) raise 0.2)))
+
       ;;   (prettify-symbols-mode)
 
       ;; Personal bindings
@@ -684,11 +738,15 @@
 
   Org babel languages
   #+BEGIN_SRC emacs-lisp
+    ;; Don't ask for confirmation
+    (setq org-confirm-babel-evaluate nil)
     ;; active Babel languages
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((emacs-lisp . t)
        (latex . t)
+       (python . t)
+       (ledger . t)
        ))
   #+END_SRC
 
@@ -717,81 +775,84 @@
   Org capture
   #+BEGIN_SRC emacs-lisp
 
-    (setq org-directory (expand-file-name "~/orgs"))
-    (setq org-todo-file (concat org-directory "/todo.org")
-          org-links-file (concat org-directory "/links.org")
-          org-goals-file (concat org-directory "/goals.org")
-          org-ideas-file (concat org-directory "/ideas.org")
-          org-money-file (concat org-directory "/money.dat")
-          org-books-file (concat org-directory "/books.org")
-          org-films-file (concat org-directory "/films.org")
-          org-wishlists-file (concat org-directory "/wishlists.org")
-          org-workout-file (concat org-directory "/workout.org")
-          )
+       (setq org-directory (expand-file-name "~/orgs"))
+       (setq org-todo-file (concat org-directory "/todo.org")
+             org-links-file (concat org-directory "/links.org")
+             org-goals-file (concat org-directory "/goals.org")
+             org-ideas-file (concat org-directory "/ideas.org")
+             org-money-file (concat org-directory "/money.dat")
+             org-books-file (concat org-directory "/books.org")
+             org-films-file (concat org-directory "/films.org")
+             org-wishlists-file (concat org-directory "/wishlists.org")
+             org-workout-file (concat org-directory "/workout.org")
+             )
 
-    (setq org-capture-templates
-          '(
-            ("o" "Ordinary Life")
-            ("ot" "TODO" entry (file+headline org-todo-file "PROJECT ORDINARY LIFE")
-             "** TODO %^{TODO} \n   Entered on %U"
-             :immediate-finish t)
-            ("oa" "Arch TODO" entry (file+headline org-todo-file "PROJECT ArchT430")
-             "** TODO %^{TODO} \n   Entered on %U"
-             :immediate-finish t)
-            ("l" "Links" entry (file org-links-file)
-             "* %? [[%x][%^{Description}]] %^g"
-             :immediate-finish t)
-            ("w" "Whishlist")
-            ("wi" "Whishlist Items" entry (file+headline org-wishlists-file "Items")
-             "** TODO %^{Item} %?  \n   Entered on %U"
-             :immediate-finish t)
-            ("wb" "Whishlist Books" entry (file+headline org-wishlists-file "Books")
-             "** TODO %^{Book} %?  \n   Entered on %U"
-             :immediate-finish t)
-            ("wf" "Whishlist Films" entry (file+headline org-wishlists-file "Films")
-             "** TODO %^{Film} %? \n   Entered on %U"
-             :immediate-finish t)
-            ("W" "Workout")
-            ("Wr" "Workout Rest" entry (file org-workout-file)
-             "* %u\n** Rest\n   %?")
-            ("Wg" "Workout Gym" entry (file org-workout-file)
-             "* %u\n** Running\n   *Time*: %^{Running Time} min\n   *Velocity*: %^{Running Velocity} km/h\n   *Length*: %^{Running Length} km\n   %?")
-            ("i" "Idea" entry (file+headline org-ideas-file "Misc")
-             "* TODO %^{Idea} %?\n   Entered on %U")
-            ("b" "Book" plain (file org-books-file)
-             "| %^{Title} | %^{Author} | %^{Language|IT|EN} | %^{Year} | %^{Pages} | %^{Genre} | %^{Started}u | %^{Finished}u | %^{Rating|+|-|0}")
-            ("f" "Film" plain (file org-films-file)
-             "| %^{Title} | %^{Language|IT|EN} | %^{Year}  | %^{Genre} | %^{Wathced}u | %^{Rating|+|-|0}")
-            ("t" "Thesis")
-            ("ta" "Article" entry (file+headline "~/MEGA/orgs/master_thesis.org" "Articles")
-             "* %^{Title}\n   %^{Authors} %^{Year}\n   [[%^{ArXiv Link}][ArXiv]]\n** Description\n   %^{Description}\n** BibTex Entry\n   %^{BibTex Entry}  %?\n")
-            ("tt" "Thesis Links" entry (file+headline "~/MEGA/orgs/master_thesis.org" "Links")
-             "* %? [[%x][%^{Description}]] \n":immediate-finish t)
-            )
-          )
+       (setq org-capture-templates
+             '(
+               ("o" "Ordinary Life")
+               ("ot" "TODO" entry (file+headline org-todo-file "PROJECT ORDINARY LIFE")
+                "** TODO %^{TODO} \n   Entered on %U"
+                :immediate-finish t)
+               ("oa" "Arch TODO" entry (file+headline org-todo-file "PROJECT ArchT430")
+                "** TODO %^{TODO} \n   Entered on %U"
+                :immediate-finish t)
+               ("l" "Links" entry (file org-links-file)
+                "* %? [[%x][%^{Description}]] %^g"
+                :immediate-finish t)
+               ("w" "Whishlist")
+               ("wi" "Whishlist Items" entry (file+headline org-wishlists-file "Items")
+                "** TODO %^{Item} %?  \n   Entered on %U"
+                :immediate-finish t)
+               ("wb" "Whishlist Books" entry (file+headline org-wishlists-file "Books")
+                "** TODO %^{Book} %?  \n   Entered on %U"
+                :immediate-finish t)
+               ("wf" "Whishlist Films" entry (file+headline org-wishlists-file "Films")
+                "** TODO %^{Film} %? \n   Entered on %U"
+                :immediate-finish t)
+               ("W" "Workout")
+               ("Wr" "Workout Rest" entry (file org-workout-file)
+                "* %u\n** Rest\n   %?")
+               ("Wg" "Workout Gym" entry (file org-workout-file)
+                "* %u\n** Running\n   *Time*: %^{Running Time} min\n   *Velocity*: %^{Running Velocity} km/h\n   *Length*: %^{Running Length} km\n   %?")
+               ("i" "Idea" entry (file+headline org-ideas-file "Misc")
+                "* TODO %^{Idea} %?\n   Entered on %U")
+               ("b" "Book" plain (file org-books-file)
+                "| %^{Title} | %^{Author} | %^{Language|IT|EN} | %^{Year} | %^{Pages} | %^{Genre} | %^{Started}u | %^{Finished}u | %^{Rating|+|-|0}")
+               ("f" "Film" plain (file org-films-file)
+                "| %^{Title} | %^{Language|IT|EN} | %^{Year}  | %^{Genre} | %^{Wathced}u | %^{Rating|+|-|0}")
+               ("t" "Thesis")
+               ("ta" "Paper" entry (file+headline "~/orgs/master_thesis.org" "Articles")
+                "* %^{Title}\n   %^{Authors} %^{Year}\n   [[%^{ArXiv Link}][ArXiv]]\n** Description\n   %^{Description}\n** BibTex Entry\n   %^{BibTex Entry}  %?\n")
+               ("tt" "Thesis Links" entry (file+headline "~/orgs/master_thesis.org" "Links")
+                "* %? [[%x][%^{Description}]] \n":immediate-finish t)
+               ("td" "Thesis Todo" entry (file+headline "~/orgs/master_thesis.org" "Todo")
+                "** TODO %^{Item} %?  \n   Entered on %U" :immediate-finish t)
+               ("tb" "BibLaTeX" plain (file "~/master_thesis/thesis/biblio.bib" "%x"))
+               )
+             )
 
-    ;;( defadvice org-capture-finalize
-    ;;     (after delete-capture-frame activate)
-    ;;   "Advise capture-finalize to close the frame"
-    ;;   (if (equal "capture" (frame-parameter nil 'name))
-    ;;       (delete-frame)))
+       ;;( defadvice org-capture-finalize
+       ;;     (after delete-capture-frame activate)
+       ;;   "Advise capture-finalize to close the frame"
+       ;;   (if (equal "capture" (frame-parameter nil 'name))
+       ;;       (delete-frame)))
 
-    ;; (defadvice org-capture-destroy
-    ;;     (after delete-capture-frame activate)
-    ;;   "Advise capture-destroy to close the frame"
-    ;;   (if (equal "capture" (frame-parameter nil 'name))
-    ;;       (delete-frame)))
+       ;; (defadvice org-capture-destroy
+       ;;     (after delete-capture-frame activate)
+       ;;   "Advise capture-destroy to close the frame"
+       ;;   (if (equal "capture" (frame-parameter nil 'name))
+       ;;       (delete-frame)))
 
-    ;; (use-package noflet
-    ;;   :ensure t )
-    ;; (defun make-capture-frame ()
-    ;;   "Create a new frame and run org-capture."
-    ;;   (interactive)
-    ;;   (make-frame '((name . "capture")))
-    ;;   (select-frame-by-name "capture")
-    ;;   (delete-other-windows)
-    ;;   (noflet ((switch-to-buffer-other-window (buf) (switch-to-buffer buf)))
-    ;;     (org-capture)))
+       ;; (use-package noflet
+       ;;   :ensure t )
+       ;; (defun make-capture-frame ()
+       ;;   "Create a new frame and run org-capture."
+       ;;   (interactive)
+       ;;   (make-frame '((name . "capture")))
+       ;;   (select-frame-by-name "capture")
+       ;;   (delete-other-windows)
+       ;;   (noflet ((switch-to-buffer-other-window (buf) (switch-to-buffer buf)))
+       ;;     (org-capture)))
   #+END_SRC
 * Delete and rename buffer and file
   Functions (interactive) to delete and or rename a file
@@ -1021,6 +1082,12 @@
     ;; Compile with C-x C-m (C-m)
     (global-set-key (kbd "C-x C-m") 'compile)
   #+END_SRC
+* Paredit
+  #+BEGIN_SRC emacs-lisp
+    (use-package paredit
+      :ensure t
+      )
+  #+END_SRC
 * Systemd
   #+BEGIN_SRC emacs-lisp
     (use-package systemd
@@ -1074,16 +1141,27 @@
     (setq ispell-program-name "hunspell")
     ;; (setq ispell-local-dictionary "en_US")
     ; Automatically detect language for Flyspell
+
+    (defun instant-save-word ()
+      (interactive)
+      (let ((current-location (point))
+             (word (flyspell-get-word)))
+        (when (consp word)
+          (flyspell-do-correct 'save nil (car word) current-location (cadr word) (caddr word) current-location))))
+
     (use-package guess-language
       :ensure t
       :defer t
       :init (add-hook 'text-mode-hook #'guess-language-mode)
       :config
-      (setq guess-language-langcodes '((en . ("en_GB" "English"))
+      (setq guess-language-langcodes '((en . ("en_US" "English"))
                                        (it . ("it_IT" "Italian")))
             guess-language-languages '(en it)
             guess-language-min-paragraph-length 45)
       :diminish guess-language-mode)
+
+    (global-set-key (kbd "C-c $") 'instant-save-word)
+
   #+END_SRC
 * Ledger
   #+BEGIN_SRC emacs-lisp
@@ -1091,9 +1169,22 @@
       :ensure t
       )
   #+END_SRC
+* TRAMP
+  Use controlmaster
+  #+BEGIN_SRC emacs-lisp
+  (setq tramp-use-ssh-controlmaster-options nil)
+  #+END_SRC
+* Pass
+  Emacs interface to GNU pass.
+  Remember, when using EXWM you should not use pinentry-curses
+  #+BEGIN_SRC emacs-lisp
+    (use-package pass
+      :ensure t
+      )
+  #+END_SRC
 * EXWM
   #+BEGIN_SRC emacs-lisp
-    (setq use-exwm t)
+    ;; (setq use-exwm t)
 
     ;; (add-to-list 'load-path "/home/sbozzolo/.emacs.d/lisp/xelb/")
     ;; (add-to-list 'load-path "/home/sbozzolo/.emacs.d/lisp/exwm/")
@@ -1115,7 +1206,7 @@
                                             ; (menu-bar-mode -1)
 
     ;; Shrink fringes to 1 pixel
-    (fringe-mode 10)
+    (fringe-mode 1)
 
     ;; Set the initial number of workspaces.
     ;; (setq exwm-workspace-number 4)
@@ -1277,8 +1368,8 @@
   #+BEGIN_SRC emacs-lisp
     (exwm-input-set-key (kbd "<f1>") #'delete-other-windows)
     (exwm-input-set-key (kbd "<f2>") #'kill-this-buffer)
-    ;; (exwm-input-set-key (kbd "<f3>") #')
-    ;; (exwm-input-set-key (kbd "<f4>") #')
+    (exwm-input-set-key (kbd "<f3>") #'split-window-right)
+    (exwm-input-set-key (kbd "<f4>") #'swap-buffers-in-windows)
     ;; (exwm-input-set-key (kbd "<f5>") #'revert-buffer)
     ;; I don't use exwm-input so I can use F5 in X apps
     (global-set-key (kbd "<f5>") 'revert-buffer)

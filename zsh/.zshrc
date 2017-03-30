@@ -49,7 +49,11 @@ ZSH_THEME="philips"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git common-aliases pip python sudo zsh-autosuggestions zsh-syntax-highlighting fasd)
+plugins=(git common-aliases pip python sudo zsh-autosuggestions zsh-syntax-highlighting fasd globalias)
+
+# gloablias expand aliases with 'space'
+# sudo add sudo to the current command with ESC-ESC
+# zsh-autosuggestions zsh-syntax-highlighting are autoexplicative
 
 # User configuration
 
@@ -57,6 +61,10 @@ export PATH="/home/sbozzolo/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
+
+# GNU pass
+PASSWORD_STORE_DIR=/home/sbozzolo/dotfiles/private/.password-store
+
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -70,7 +78,6 @@ source $ZSH/oh-my-zsh.sh
 
 # Disable fucking annoying autocorrection
 DISABLE_CORRECTION="true"
-
 
 export VISUAL="emacsclient -nw"
 export EDITOR="emacsclient -nw"
@@ -97,6 +104,12 @@ alias lcm="ssh lcm"
 alias e='emacsclient -nw'
 alias fe='a -e emacsclient -nw'
 alias pg='ping 8.8.8.8'
+
+# Snippet to make term mode track the directory
+chpwd() { print -P "\033AnSiTc %d" }
+
+print -P "\033AnSiTu %n"
+print -P "\033AnSiTc %d"
 
 # If X is running run dailyupdater
 if [[ ! -z $DISPLAY ]] ; then source dailyupdater; fi

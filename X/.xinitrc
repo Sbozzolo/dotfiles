@@ -17,6 +17,9 @@ fi
 
 # [[ -f ~/.Xresources ]] && xrdb -merge -I $HOME ~/.Xresources
 
+# Xmodmap to change CAPS LOCK to Return
+[[ -f ~/.Xmodmap ]] && xmodmap ~/.Xmodmap
+
 # Hardware dependant
 if [ -f ~/.Xhardware ]; then
     source ~/.Xhardware

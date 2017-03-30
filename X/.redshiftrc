@@ -28,8 +28,8 @@ adjustment-method=randr
 ; Configuration of the location-provider:
 ; ex: 'redshift -l manual:help'
 [manual]
-lat=45.46
-lon=9.1
+lat=40.64
+lon=22.9
 
 ; Configuration of the adjustment-method
 ; type 'redshift -m METHOD:help' to see the settings.
