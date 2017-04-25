@@ -54,13 +54,16 @@
    - [ ] RefTex is not working
 
 ** Wishlist
+   - [ ] Make emacs update Arch
+   - [ ] Use Controlmaster
+   - [ ] Develop a remote emacs config
    - [ ] Use fasd-emacs. Fasd in multiterm open a buffer.
    - [ ] Polish config
    - [ ] Migrate /etc confs in dotfiles folder
    - [ ] Imporve autoupdater. It shouldn't prevent me
          from using the terminal
    - [ ] Backup with rsnapshot
-   - [X] Find file traks with multi term
+   - [X] Find file tracks with multi term
 
 * Personal info
   #+BEGIN_SRC emacs-lisp
@@ -631,6 +634,10 @@
   #+END_SRC
 * AucTeX
   #+BEGIN_SRC emacs-lisp
+    ;; Open tikz files with AucTeX
+
+    (add-to-list 'auto-mode-alist '("\\.tikz\\'" . tex-mode))
+
     (use-package tex
       :defer t
       :ensure auctex
@@ -770,6 +777,15 @@
 
     (use-package htmlize
       :ensure t)
+  #+END_SRC
+
+  Org-tree-slide for presentations within emacs
+  #+BEGIN_SRC emacs-lisp
+    (use-package org-tree-slide
+      :ensure t
+      :init
+      (define-key org-mode-map (kbd "<f8>") 'org-tree-slide-mode)
+      )
   #+END_SRC
 
   Org capture
@@ -1172,7 +1188,11 @@
 * TRAMP
   Use controlmaster
   #+BEGIN_SRC emacs-lisp
-  (setq tramp-use-ssh-controlmaster-options nil)
+    (setq tramp-ssh-controlmaster-options
+          (substitute-in-file-name (concat
+            "-o ControlPath=$HOME/.ssh/ssh-%%r@%%h:%%p "
+            "-o ControlMaster=auto -o ControlPersist=yes")))
+    (setq tramp-default-method "ssh")
   #+END_SRC
 * Pass
   Emacs interface to GNU pass.

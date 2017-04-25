@@ -49,7 +49,7 @@ ZSH_THEME="philips"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git common-aliases pip python sudo zsh-autosuggestions zsh-syntax-highlighting fasd globalias)
+plugins=(common-aliases python sudo zsh-autosuggestions zsh-syntax-highlighting fasd)
 
 # gloablias expand aliases with 'space'
 # sudo add sudo to the current command with ESC-ESC
@@ -104,6 +104,8 @@ alias lcm="ssh lcm"
 alias e='emacsclient -nw'
 alias fe='a -e emacsclient -nw'
 alias pg='ping 8.8.8.8'
+alias ctar='tar cvzf'
+alias xtar='tar xvzf'
 
 # Snippet to make term mode track the directory
 chpwd() { print -P "\033AnSiTc %d" }

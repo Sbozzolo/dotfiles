@@ -31,10 +31,10 @@ export VISUAL=emacsclient
 export EDITOR="$VISUAL"
 
 # Bind brightness keys
-xbindkeys &
+pgrep xbindkeys &> /dev/null || xbindkeys &> /dev/null &
 
 # Redshift
-redshift -c ~/.redshiftrc &
+pgrep redshift &> /dev/null || redshift -c ~/.redshiftrc &> /dev/null &
 
 # Finally launch emacs
 exec dbus-launch --exit-with-session emacs --debug-init

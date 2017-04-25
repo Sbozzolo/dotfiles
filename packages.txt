@@ -53,3 +53,8 @@ python3
 python-pip
 biber
 moreutils
+python-gobject (for matplotlib)
+ghotscript
+cups
+gtk3-print-backends
+avahi (network printing)
