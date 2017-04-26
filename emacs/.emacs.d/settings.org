@@ -3,14 +3,29 @@
 * Config Info
   #+AUTHOR: Gabriele Bozzola (sbozzolo)
   #+EMAIL: sbozzolator@gmail.com
-  Latest Version: 1.0.5.2
-  Latest Edit: [2017-03-23 Thu 22:01]
+  Latest Version: 1.0.6
+  Latest Edit: [2017-04-26 Wed 16:46]
 ** Changelog
+*** 1.0.6 ([2017-04-26 Wed])
+    *settings.org*
+    - Fixed a bug with org-capture Thesis BibTex, now
+      it copies from the clipboard
+    - Fixed part of the term graphics glitches due to killing,
+      yanking and so on
+    - Now .tikz files are opened with AucTeX
+    - Added org-tree-slide for presentation inside emacs
+    *.xinitrc*
+    - Now redshift and xbindkeys are executed only
+      if they are not running
+    *.profile*
+    - /(.profile)/ Added a .profile so that now it is possible to use
+      TRAMP with controlmaster with zsh on remote servers
+      without any problem
 *** 1.0.5.2 ([2017-03-23 Thu])
-    - Make TRAMP use controlmaster
+    - Made TRAMP use controlmaster
 *** 1.0.5.1 ([2017-03-16 Thu])
     - Added split screen (f3)
-    - Enable disabled command
+    - Enabled disabled commands
 *** 1.0.5 ([2017-03-14 Tue])
     - Added swap buffer in windows (f4)
     - Added instant save word for ispell
@@ -55,7 +70,7 @@
 
 ** Wishlist
    - [ ] Make emacs update Arch
-   - [ ] Use Controlmaster
+   - [X] Use Controlmaster
    - [ ] Develop a remote emacs config
    - [ ] Use fasd-emacs. Fasd in multiterm open a buffer.
    - [ ] Polish config
@@ -843,7 +858,7 @@
                 "* %? [[%x][%^{Description}]] \n":immediate-finish t)
                ("td" "Thesis Todo" entry (file+headline "~/orgs/master_thesis.org" "Todo")
                 "** TODO %^{Item} %?  \n   Entered on %U" :immediate-finish t)
-               ("tb" "BibLaTeX" plain (file "~/master_thesis/thesis/biblio.bib" "%x"))
+               ("tb" "BibLaTeX" plain (file "~/master_thesis/thesis/biblio.bib") "\n%x")
                )
              )
 
@@ -1071,6 +1086,8 @@
            ("C-s" . isearch-forward)
            ("M-r" . isearch-backward)
            ("C-m" . term-send-return)
+           ("C-a" . term-send-home)
+           ("C-e" . term-send-end)
            ("C-y" . term-paste)
            ("M-f" . term-send-forward-word)
            ("M-b" . term-send-backward-word)
@@ -1084,7 +1101,21 @@
            ("M-d" . term-send-delete-word)
            ("M-," . term-send-raw)
            ("M-." . comint-dynamic-complete)))))
-      )
+           (eval-after-load "term"
+             '(progn
+                ;; Disable killing and yanking in char mode (term-raw-map).
+                (mapc
+                 (lambda (func)
+                   (eval `(define-key term-raw-map [remap ,func]
+                            (lambda () (interactive) (ding)))))
+                 '(backward-kill-paragraph
+                   backward-kill-sentence backward-kill-sexp backward-kill-word
+                   bookmark-kill-line kill-backward-chars kill-backward-up-list
+                   kill-forward-chars kill-line kill-paragraph kill-rectangle
+                   kill-region kill-sentence kill-sexp kill-visual-line
+                   kill-whole-line kill-word subword-backward-kill subword-kill
+                   yank yank-pop yank-rectangle))))
+           )
   #+END_SRC
 * Undo-tree
   #+BEGIN_SRC emacs-lisp
