@@ -54,7 +54,17 @@ python-pip
 biber
 moreutils
 python-gobject (for matplotlib)
-ghotscript
+ghostscript
 cups
 gtk3-print-backends
 avahi (network printing)
+----- Einstein Toolkit ----
+svn
+openmpi
+mpich2 (AUR)
+gsl
+libjpeg
+hdf5
+patch
+numactl
+lapack

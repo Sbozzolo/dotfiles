@@ -5,7 +5,7 @@ export ZSH=/home/sbozzolo/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="philips"
+ZSH_THEME="suvash"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -58,6 +58,7 @@ plugins=(common-aliases python sudo zsh-autosuggestions zsh-syntax-highlighting 
 # User configuration
 
 export PATH="/home/sbozzolo/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
+export PATH="/home/sbozzolo/master_thesis/bin:$PATH"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -106,6 +107,13 @@ alias fe='a -e emacsclient -nw'
 alias pg='ping 8.8.8.8'
 alias ctar='tar cvzf'
 alias xtar='tar xvzf'
+
+alias sim='simfactory/bin/sim'
+
+# Autocompletion for simfactory
+# autoload bashcompinit
+# bashcompinit
+# source /home/sbozzolo/master_thesis/einstein_toolkit/CaParma/simfactory/etc/bash_completion.d/sim
 
 # Snippet to make term mode track the directory
 chpwd() { print -P "\033AnSiTc %d" }

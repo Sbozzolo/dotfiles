@@ -18,3 +18,7 @@ while getopts "bg" opt; do
             exit;;
     esac
 done
+
+# If no argoments is provided print current value
+now=$(readlink -f .git | cut -d"/" -f5 | sed 's/.//')
+echo "Currently using $now"

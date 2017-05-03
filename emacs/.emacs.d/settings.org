@@ -1,85 +1,5 @@
 #+TITLE: Emacs configuration
 
-* Config Info
-  #+AUTHOR: Gabriele Bozzola (sbozzolo)
-  #+EMAIL: sbozzolator@gmail.com
-  Latest Version: 1.0.6
-  Latest Edit: [2017-04-26 Wed 16:46]
-** Changelog
-*** 1.0.6 ([2017-04-26 Wed])
-    *settings.org*
-    - Fixed a bug with org-capture Thesis BibTex, now
-      it copies from the clipboard
-    - Fixed part of the term graphics glitches due to killing,
-      yanking and so on
-    - Now .tikz files are opened with AucTeX
-    - Added org-tree-slide for presentation inside emacs
-    *.xinitrc*
-    - Now redshift and xbindkeys are executed only
-      if they are not running
-    *.profile*
-    - /(.profile)/ Added a .profile so that now it is possible to use
-      TRAMP with controlmaster with zsh on remote servers
-      without any problem
-*** 1.0.5.2 ([2017-03-23 Thu])
-    - Made TRAMP use controlmaster
-*** 1.0.5.1 ([2017-03-16 Thu])
-    - Added split screen (f3)
-    - Enabled disabled commands
-*** 1.0.5 ([2017-03-14 Tue])
-    - Added swap buffer in windows (f4)
-    - Added instant save word for ispell
-*** 1.0.4.2 ([2017-03-10 Fri])
-    - Edited .zshrc to make term mode
-      track the pwd ([[http://stackoverflow.com/questions/3508387/how-can-i-have-term-el-ansi-term-track-directories-if-using-anyhting-other-tha][StackExchange]])
-    - Fixed path in org-capture
-    - Decreased sub/superscript raise
-*** 1.0.4.1 ([2017-03-04 Sat])
-    - Added Ledger to org-babel
-*** 1.0.4 ([2017-03-02 Thu])
-    - Reduced fringe to 1
-    - Dired size human readable
-    - Tabs stops
-*** 1.0.3.2 ([2017-03-02 Thu])
-    - Added Pass package (Password-store interface)
-*** 1.0.3.1 ([2017-02-27 Mon])
-    - Bind kill-this-buffer to <f2>
-*** 1.0.3 ([2017-02-26 Sun])
-    - Fixed xrandr hook
-    - Added visual bell
-*** 1.0.2 ([2017-02-25 Sat])
-    - Disabled keyfreq due to its incompatibility with EXWM
-      (kill-emacs hangs if keyfreq is enabled)
-*** 1.0.1 ([2017-02-24 Fri])
-    - Fixed <f5> in X apps
-    - Fixed Screenshot functions
-*** 1.0 ([2017-02-19 Sun])
-    - Almost stable release with EXWM
-    - Started to track the development
-** Fixme
-   - [X] Second screenshot function
-     Fixed in version 1.0.1 ([2017-02-24 Fri])
-   - [ ] Fontification error (seems related to the version of org-mode)
-   - [X] Projector doesn't seem to work (seems related to X)
-     Fixed in version 1.0.3 ([2017-02-26 Sun])
-   - [ ] Terminal won't open if there is no internet (not related to emacs)
-   - [ ] Keyfreq doesn't work well with EXWM (If it is enabled Emacs won't close properly)
-   - [ ] Pdftools flickering
-   - [ ] Org babel does not work
-   - [ ] RefTex is not working
-
-** Wishlist
-   - [ ] Make emacs update Arch
-   - [X] Use Controlmaster
-   - [ ] Develop a remote emacs config
-   - [ ] Use fasd-emacs. Fasd in multiterm open a buffer.
-   - [ ] Polish config
-   - [ ] Migrate /etc confs in dotfiles folder
-   - [ ] Imporve autoupdater. It shouldn't prevent me
-         from using the terminal
-   - [ ] Backup with rsnapshot
-   - [X] Find file tracks with multi term
-
 * Personal info
   #+BEGIN_SRC emacs-lisp
   (setq user-full-name "Gabriele Bozzola"
@@ -194,7 +114,7 @@
 
     ;; Increase and decrease font with C-+ and C--
     (define-key global-map (kbd "C-+") 'text-scale-increase)
-    ;(define-key global-map (kbd "C--") 'text-scale-decrease)
+    (define-key global-map (kbd "C--") 'text-scale-decrease)
 
     ;; Clear the scratch buffer
     (setq initial-scratch-message nil)
@@ -237,6 +157,9 @@
     ;; buffer in the existing Emacs frame, rather than creating a new
     ;; frame just for that file.
     (setq pop-up-frames nil)
+
+    ;; Do not print redefinitions warnings
+    (setq ad-redefinition-action 'accept)
 
     ;; Don't ask `yes/no?', ask `y/n?'.
     (fset 'yes-or-no-p 'y-or-n-p)
@@ -800,6 +723,9 @@
       :ensure t
       :init
       (define-key org-mode-map (kbd "<f8>") 'org-tree-slide-mode)
+      :config
+      (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-previous-tree)
+      (define-key org-tree-slide-mode-map (kbd "<f10>") 'org-tree-slide-move-next-tree)
       )
   #+END_SRC
 
@@ -1186,8 +1112,8 @@
 * Flyspell
   #+BEGIN_SRC emacs-lisp
     (setq ispell-program-name "hunspell")
+    (setq ispell-personal-dictionary (substitute-in-file-name "$HOME/.emacs.d/hunspell_dict.txt"))
     ;; (setq ispell-local-dictionary "en_US")
-    ; Automatically detect language for Flyspell
 
     (defun instant-save-word ()
       (interactive)
@@ -1196,6 +1122,9 @@
         (when (consp word)
           (flyspell-do-correct 'save nil (car word) current-location (cadr word) (caddr word) current-location))))
 
+    (global-set-key (kbd "C-c $") 'instant-save-word)
+
+    ; Automatically detect language for Flyspell
     (use-package guess-language
       :ensure t
       :defer t
@@ -1205,9 +1134,8 @@
                                        (it . ("it_IT" "Italian")))
             guess-language-languages '(en it)
             guess-language-min-paragraph-length 45)
-      :diminish guess-language-mode)
-
-    (global-set-key (kbd "C-c $") 'instant-save-word)
+      :diminish guess-language-mode
+      )
 
   #+END_SRC
 * Ledger
