@@ -4,7 +4,7 @@
 
 * Config Info
 Latest Version: 1.1.3
-Latest Edit: [2017-05-17 Wed 09:24]
+Latest Edit: [2017-05-17 Wed 10:25]
 
 Set of configuration files for a Arch Linux + EXWM + zsh setup. Emacs plays the
 central role of the whole configuration as it is my window manager (through
@@ -24,6 +24,10 @@ wherever I want.
    *prepare_env.sh*
    - Install a linuxbrew and a minimum working environment to
      set up dotfiles in a remote server
+   *install_omz.sh*
+   - Install oh-my-zsh
+   *hunspell_dict.txt*
+   - Start tracking personal dictionary
 ** 1.1.2 ([2017-05-04 Thu])
    *settings.org*
    - Enable winner-mode
