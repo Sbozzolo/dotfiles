@@ -77,6 +77,12 @@
     ;; Enable all disabled commands
     (setq disabled-command-function nil)
 
+    ;; Winner mode for preserving my windows structure
+    (winner-mode t)
+
+    ;; Windmode for easier moving between windows
+    (windmove-default-keybindings 'meta)
+
     ;; Theme
     (use-package color-theme-sanityinc-solarized
       :ensure t
@@ -114,7 +120,7 @@
 
     ;; Increase and decrease font with C-+ and C--
     (define-key global-map (kbd "C-+") 'text-scale-increase)
-    (define-key global-map (kbd "C--") 'text-scale-decrease)
+    ;; (define-key global-map (kbd "C--") 'text-scale-decrease)
 
     ;; Clear the scratch buffer
     (setq initial-scratch-message nil)
@@ -302,12 +308,14 @@
           backup-by-copying t) ;; Copy all files, don't rename them.
   #+END_SRC
 * Guru-mode
+  I don't need anymore a guru mode
   #+BEGIN_SRC emacs-lisp
-    (use-package guru-mode
-      :diminish guru-mode
-      :ensure t
-      :init
-      (guru-global-mode +1))
+    ;; (use-package guru-mode
+    ;;   :diminish guru-mode
+    ;;   :ensure t
+    ;;   :init
+    ;;   (guru-global-mode t)
+    ;;   )
   #+END_SRC
 * Which-key-mode
   Show help when typing a command. Switch to Guide key?
@@ -620,6 +628,9 @@
 
       ;; Activate nice interface between RefTeX and AUCTeX
       (setq reftex-plug-into-AUCTeX t)
+
+      ;; Disable prompt for reference format
+      (setq reftex-ref-macro-prompt nil)
 
       ;;Enable SyncTex
       (setq TeX-source-correlate-mode t)
@@ -1116,12 +1127,16 @@
     ;; (setq ispell-local-dictionary "en_US")
 
     (defun instant-save-word ()
+      "Add the word around the point to the personal dictionary
+    defined in ispell-personal-dictionary without asking"
       (interactive)
       (let ((current-location (point))
              (word (flyspell-get-word)))
         (when (consp word)
           (flyspell-do-correct 'save nil (car word) current-location (cadr word) (caddr word) current-location))))
 
+    (add-hook 'flyspell-mode-hook (lambda () (define-key
+    flyspell-mode-map (kbd "C-c $") nil)))
     (global-set-key (kbd "C-c $") 'instant-save-word)
 
     ; Automatically detect language for Flyspell

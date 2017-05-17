@@ -64,7 +64,7 @@ export PATH="/home/sbozzolo/master_thesis/bin:$PATH"
 source $ZSH/oh-my-zsh.sh
 
 # GNU pass
-PASSWORD_STORE_DIR=/home/sbozzolo/dotfiles/private/.password-store
+PASSWORD_STORE_DIR=$HOME/dotfiles/private/.password-store
 
 
 # You may need to manually set your language environment
@@ -99,7 +99,15 @@ export ALTERNATE_EDITOR=""
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# Fix for some GTK errors
+export NO_AT_BRIDGE=1
+
+# Syntax highlight
+if [-d "~/.linuxbrew"]; then
+    export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=$HOME/.linuxbrew/share/zsh-syntax-highlighting/highlighters
+    source $HOME/.linuxbrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+else
+    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 alias lcm="ssh lcm"
 alias e='emacsclient -nw'
