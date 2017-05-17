@@ -103,11 +103,12 @@ export ALTERNATE_EDITOR=""
 export NO_AT_BRIDGE=1
 
 # Syntax highlight
-if [-d "~/.linuxbrew"]; then
+if [ -d "~/.linuxbrew" ]; then
     export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=$HOME/.linuxbrew/share/zsh-syntax-highlighting/highlighters
     source $HOME/.linuxbrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 else
     source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
 
 alias lcm="ssh lcm"
 alias e='emacsclient -nw'

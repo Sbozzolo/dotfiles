@@ -42,13 +42,13 @@ hash stow 2>/dev/null || {
 }
 
 # zsh-syntax-highlightning
-if [-d  "~/.linuxbrew/share/zsh-syntax-highlighting"]; then
+if [ -d  "~/.linuxbrew/share/zsh-syntax-highlighting"]; then
     echo >&2 "Installing zsh-syntax-highlightning";
     brew install zsh-syntax-highlightning
 fi
 
 # oh my zsh
-if [-d "~/.oh-my-zsh/"]; then
+if [ -d "~/.oh-my-zsh/"]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 fi
 
