@@ -53,4 +53,10 @@ hash htop 2>/dev/null || {
     brew install htop
 }
 
+# htop
+hash fasd 2>/dev/null || {
+    echo >&2 "Installing fasd";
+    brew install fasd
+}
+
 echo "Now you can install the dotfiles with ./installer.sh"

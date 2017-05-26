@@ -13,7 +13,8 @@
     (org-tree-slide paredit company-c-headers guess-language auto-package-update whole-line-or-region whitespace-cleanup-mode which-key use-package undo-tree systemd synonyms smex smart-mode-line-powerline-theme session pdf-tools org-bullets noflet multi-term magit ledger-mode iflipb htmlize guru-mode google-translate flycheck-pos-tip exwm expand-region engine-mode counsel company color-theme-sanityinc-solarized auctex)))
  '(safe-local-variable-values
    (quote
-    ((reftex-default-bibliography "/home/sbozzolo/master_thesis/thesis/biblio.bib")
+    ((eval ispell-change-dictionary "en_GB")
+     (reftex-default-bibliography "/home/sbozzolo/master_thesis/thesis/biblio.bib")
      (reftex-default-bibliography "biblio.bib")
      (eval ispell-change-dictionary "en_US"))))
  '(session-use-package t nil (session))
@@ -26,6 +27,8 @@
      ("C-s" . isearch-forward)
      ("M-r" . isearch-backward)
      ("C-m" . term-send-return)
+     ("C-a" . term-send-home)
+     ("C-e" . term-send-end)
      ("C-y" . term-paste)
      ("M-f" . term-send-forward-word)
      ("M-b" . term-send-backward-word)

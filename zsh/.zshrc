@@ -1,10 +1,7 @@
 # Path to your oh-my-zsh installation.
 export ZSH=/home/sbozzolo/.oh-my-zsh
 
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
+# Two lined theme
 ZSH_THEME="suvash"
 
 # Uncomment the following line to use case-sensitive completion.
@@ -84,33 +81,17 @@ export VISUAL="emacsclient -nw"
 export EDITOR="emacsclient -nw"
 export ALTERNATE_EDITOR=""
 
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
 # Fix for some GTK errors
 export NO_AT_BRIDGE=1
 
 # Syntax highlight
-if [ -d "~/.linuxbrew" ]; then
+if [ -d "$HOME/.linuxbrew" ]; then
     export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=$HOME/.linuxbrew/share/zsh-syntax-highlighting/highlighters
     source $HOME/.linuxbrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 else
     source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 
-alias lcm="ssh lcm"
 alias e='emacsclient -nw'
 alias fe='a -e emacsclient -nw'
 alias pg='ping 8.8.8.8'
@@ -118,6 +99,11 @@ alias ctar='tar cvzf'
 alias xtar='tar xvzf'
 
 alias sim='simfactory/bin/sim'
+
+if [ -f "$HOME/.my_remote_aliases" ]; then
+    source ~/.my_remote_aliases
+fi
+
 
 # Autocompletion for simfactory
 # autoload bashcompinit

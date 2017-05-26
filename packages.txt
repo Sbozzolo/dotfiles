@@ -68,3 +68,4 @@ hdf5
 patch
 numactl
 lapack
+cvs

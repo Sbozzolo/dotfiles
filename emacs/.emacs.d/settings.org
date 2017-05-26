@@ -1,5 +1,16 @@
 #+TITLE: Emacs configuration
 
+* Preamble
+  I don't want the setting.el to be manually modified, and as all the emacs
+  packages I add a commentary section.
+  #+BEGIN_SRC emacs-lisp
+  ;;; settings.el --- personal emacs config file  -*- lexical-binding: t ; eval: (read-only-mode 1)-*-
+  ;;; Commentary:
+
+  ;; THIS FILE HAS BEEN GENERATED.
+
+  ;;; Code:
+  #+END_SRC
 * Personal info
   #+BEGIN_SRC emacs-lisp
   (setq user-full-name "Gabriele Bozzola"
@@ -295,6 +306,11 @@
     ;; remap C-a to `smarter-move-beginning-of-line'
     (global-set-key [remap move-beginning-of-line]
                     'smarter-move-beginning-of-line)
+  #+END_SRC
+
+  Load only updated code
+  #+BEGIN_SRC emacs-lisp
+  (setq load-prefer-newer t)
   #+END_SRC
 
 * Backups
@@ -853,8 +869,26 @@
             (rename-file filename new-name 1))
           (set-visited-file-name new-name)
           (rename-buffer new-name))))
-
   #+END_SRC
+
+  Save-as function (Taken form [[https://stackoverflow.com/questions/18770669/how-can-i-save-as-in-emacs-without-visiting-the-new-file][StackExchange]])
+  #+BEGIN_SRC emacs-lisp
+    (defun save-as-file ()
+      "Write a copy of the current buffer or region to a file."
+      (interactive)
+      (let* ((curr (buffer-file-name))
+             (new (read-file-name
+                   "Copy to file: " nil nil nil
+                   (and curr (file-name-nondirectory curr))))
+             (mustbenew (if (and curr (file-equal-p new curr)) 'excl t)))
+        (if (use-region-p)
+            (write-region (region-beginning) (region-end) new nil nil nil mustbenew)
+          (save-restriction
+            (widen)
+            (write-region (point-min) (point-max) new nil nil nil mustbenew))))
+            )
+  #+END_SRC
+
 * Swiper for searching
   #+BEGIN_SRC emacs-lisp
   (global-set-key "\C-s" 'swiper)

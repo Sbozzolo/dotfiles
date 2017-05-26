@@ -7,7 +7,7 @@ if [ -d "$HOME/bin" ] ; then
 fi
 
 # HomeBrew / LinuxBrew, if it's there
-if [ -d "$HOME/.linuxbrew"]; then
+if [ -d "$HOME/.linuxbrew" ]; then
     export HOMEBREW_PREFIX="$HOME/.linuxbrew"
     export PATH="$HOMEBREW_PREFIX/bin:$PATH"
     export LIBRARY_PATH="$HOMEBREW_PREFIX/lib:$LIBRARY_PATH"
