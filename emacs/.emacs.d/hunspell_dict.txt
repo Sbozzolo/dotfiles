@@ -62,3 +62,7 @@ polytropic
 testbench
 Mathematica
 McLachlan
+hydrostatic
+piecewise
+polytrope
+massless

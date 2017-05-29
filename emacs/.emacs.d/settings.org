@@ -156,6 +156,15 @@
       )
 
   #+END_SRC
+
+  Rainbow-delimiters to have colored parantheses depending on the depth level
+  #+BEGIN_SRC emacs-lisp
+    (use-package rainbow-delimiters
+      :ensure t
+      :init
+      (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+      )
+  #+END_SRC
 * Misc configurations
   Mostly taken form Harry Schwartz's dotfiles
   #+BEGIN_SRC emacs-lisp
@@ -871,9 +880,9 @@
           (rename-buffer new-name))))
   #+END_SRC
 
-  Save-as function (Taken form [[https://stackoverflow.com/questions/18770669/how-can-i-save-as-in-emacs-without-visiting-the-new-file][StackExchange]])
+  Save-as function (Taken form [[https://stackoverflow.com/questions/18770669/how-can-i-save-as-in-emacs-without-visiting-the-new-file][StackExchange]] and extended)
   #+BEGIN_SRC emacs-lisp
-    (defun save-as-file ()
+    (defun save-buffer-as ()
       "Write a copy of the current buffer or region to a file."
       (interactive)
       (let* ((curr (buffer-file-name))
@@ -885,7 +894,11 @@
             (write-region (region-beginning) (region-end) new nil nil nil mustbenew)
           (save-restriction
             (widen)
-            (write-region (point-min) (point-max) new nil nil nil mustbenew))))
+            (write-region (point-min) (point-max) new nil nil nil mustbenew)
+            ))
+            (message (concat "Now editing " new))
+            (find-file new)
+            )
             )
   #+END_SRC
 

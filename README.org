@@ -3,8 +3,8 @@
 #+EMAIL: sbozzolator@gmail.com
 
 * Config Info
-Latest Version: 1.1.4
-Latest Edit: [2017-05-25 Thu 22:20]
+Latest Version: 1.1.4.1
+Latest Edit: [2017-05-29 Mon 11:36]
 
 Set of configuration files for a Arch Linux + EXWM + zsh setup. Emacs plays the
 central role of the whole configuration as it is my window manager (through
@@ -14,6 +14,10 @@ An insteller (installer.sh) that uses GNU stow can be used to install the dotfil
 wherever I want.
 
 * Changelog
+** 1.1.4.1 ([2017-05-29 Mon])
+   *settings.org*
+   - Add rainbow delimiter for coloring parentheses
+   - Improved save-buffer-as, now it finds the new file
 ** 1.1.4 ([2017-05-25 Thu])
    *settings.org*
    - The generated tangle file is now read only
@@ -110,13 +114,15 @@ wherever I want.
   - [ ] Terminal won't open if there is no internet (not related to emacs)
   - [ ] Keyfreq doesn't work well with EXWM (If it is enabled Emacs won't close properly)
   - [ ] Pdftools flickering
-  - [ ] Org babel does not work
+  - [X] Org babel does not work
+    Fixed with org-update
   - [ ] RefTex is not working
   - [ ] Counsel-yank-pop point goes above the screen
   - [ ] Bad behavior of term with C-r
 * Wishlist
   - [ ] Make emacs update Arch
   - [X] Use Controlmaster
+  - [ ] Create a lab section
   - [ ] Develop a remote emacs config
   - [ ] Use fasd-emacs. Fasd in multiterm open a buffer.
   - [ ] Polish config

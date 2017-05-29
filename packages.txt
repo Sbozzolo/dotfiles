@@ -58,6 +58,8 @@ ghostscript
 cups
 gtk3-print-backends
 avahi (network printing)
+bluez (bluetooth)
+bluez-utils
 ----- Einstein Toolkit ----
 svn
 openmpi
