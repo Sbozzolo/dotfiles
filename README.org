@@ -3,8 +3,8 @@
 #+EMAIL: sbozzolator@gmail.com
 
 * Config Info
-Latest Version: 1.1.4.1
-Latest Edit: [2017-05-29 Mon 11:36]
+Latest Version: 1.2
+Latest Edit: [2017-06-08 Thu 10:03]
 
 Set of configuration files for a Arch Linux + EXWM + zsh setup. Emacs plays the
 central role of the whole configuration as it is my window manager (through
@@ -14,10 +14,33 @@ An insteller (installer.sh) that uses GNU stow can be used to install the dotfil
 wherever I want.
 
 * Changelog
+** 1.2 ([2017-06-08 Thu])
+   *settings.org*
+   - Add /lab/ section
+   - Remove GNUs support
+   - Add experimental mu4e support
+   - Add basic framework for a new mode for einstein-toolkit
+   - Add cancer function to run windows
+   - Start calendar on Monday
+   - Warning when opening files bigger than 50MB
+   - Flat modeline
+   - Improved support for utf8
+   - Spell checking in comments and strings
+   - Introduced highlight words with C-c h
+   *offlineimap.rc*
+   - Add public account sbozzolator@gmail.com
+   *offlineimap.py*
+   - Add function to read gpg passphrases
+** 1.1.5 ([2017-05-31 Wed])
+   *.zshrc*
+   - Fix emacsterminal not opening file in existing frame
+   *.gnupg-agent*
+   - Switch to pinentry-emacs
 ** 1.1.4.1 ([2017-05-29 Mon])
    *settings.org*
    - Add rainbow delimiter for coloring parentheses
    - Improved save-buffer-as, now it finds the new file
+   - Binded winner mode to C-<left>, C-<right>
 ** 1.1.4 ([2017-05-25 Thu])
    *settings.org*
    - The generated tangle file is now read only
@@ -106,19 +129,23 @@ wherever I want.
    - Almost stable release with EXWM
    - Started to track the development
 * Fixme
-  - [X] Second screenshot function
-    Fixed in version 1.0.1 ([2017-02-24 Fri])
   - [ ] Fontification error (seems related to the version of org-mode)
-  - [X] Projector doesn't seem to work (seems related to X)
-    Fixed in version 1.0.3 ([2017-02-26 Sun])
   - [ ] Terminal won't open if there is no internet (not related to emacs)
   - [ ] Keyfreq doesn't work well with EXWM (If it is enabled Emacs won't close properly)
   - [ ] Pdftools flickering
-  - [X] Org babel does not work
-    Fixed with org-update
-  - [ ] RefTex is not working
+  - [ ] RefTex is not working always
   - [ ] Counsel-yank-pop point goes above the screen
   - [ ] Bad behavior of term with C-r
+  - [ ] If file already exist it is not possible to open buffer with similar name
+--------------------------------------------------------------------------
+  - [X] Second screenshot function
+    Fixed in version 1.0.1 ([2017-02-24 Fri])
+  - [X] Projector doesn't seem to work (seems related to X)
+    Fixed in version 1.0.3 ([2017-02-26 Sun])
+  - [X] Org babel does not work
+    Fixed with org-update
+  - [X] When a terminal requires $EDITOR open a new buffer
+    Fixed in version 1.1.5 ([2017-05-31 Wed])
 * Wishlist
   - [ ] Make emacs update Arch
   - [X] Use Controlmaster
@@ -133,3 +160,4 @@ wherever I want.
   - [X] Find file tracks with multi term
   - [ ] Switch to a sourcebase usage of Arch via ABS
   - [X] Function to save-as buffers
+  - [ ] Launch redshift with systemd

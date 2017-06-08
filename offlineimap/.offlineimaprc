@@ -1,0 +1,44 @@
+[general]
+accounts = sbozzolator
+pythonfile = ~/.offlineimap.py
+fsync = false
+# This helps prevent offlineimap hanging when network connection is lost.
+socktimeout = 60
+
+[Account sbozzolator]
+localrepository = Localsbozzolator
+remoterepository = Remotesbozzolator
+# This enables syncing the labels on the emails: \Inbox, \Flagged, \Trashed, etc.
+synclabels = yes
+# This is the header name that the labels are stored at, gmail uses X-Keywords.
+labelsheader = X-Keywords
+postsynchook = mu index --maildir ~/.mail
+# autorefresh = 5
+quick = 10
+
+# [Account bozzolagabriele]
+# localrepository = Localbozzolagabriele
+# remoterepository = Remotebozzolagabriele
+# # This enables syncing the labels on the emails: \Inbox, \Flagged, \Trashed, etc.
+# synclabels = yes
+# # This is the header name that the labels are stored at, gmail uses X-Keywords.
+# labelsheader = X-Keywords
+# postsynchook = mu index --maildir ~/Maildir
+# # autorefresh = 5
+# quick = 10
+
+[Repository Localsbozzolator]
+type = GmailMaildir
+localfolders = ~/.mail/sbozzolator
+
+[Repository Remotesbozzolator]
+type = Gmail
+remoteuser = sbozzolator@gmail.com
+remotepasseval = get_password_emacs("imap.gmail.com", "sbozzolator@gmail.com", "993")
+realdelete = no
+folderfilter = lambda folder: folder.startswith('[Gmail]/') and \
+    folder[8:] in ['All Mail', 'Trash', 'Drafts', 'Spam']
+trashfolder = [Gmail]/Trash
+# holdconnectionopen = true
+# keepalive = 60
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt

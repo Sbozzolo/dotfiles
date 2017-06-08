@@ -66,3 +66,8 @@ hydrostatic
 piecewise
 polytrope
 massless
+Schwartzschild
+checkpointing
+parametrized
+inhomogeneities
+meridional

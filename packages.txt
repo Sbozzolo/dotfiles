@@ -60,6 +60,8 @@ gtk3-print-backends
 avahi (network printing)
 bluez (bluetooth)
 bluez-utils
+mu (AUR)
+offlineimpag
 ----- Einstein Toolkit ----
 svn
 openmpi

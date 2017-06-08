@@ -17,18 +17,6 @@ ZSH_THEME="suvash"
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
 
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
-
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
@@ -42,10 +30,6 @@ ZSH_THEME="suvash"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
 plugins=(common-aliases python sudo zsh-autosuggestions zsh-syntax-highlighting fasd)
 
 # gloablias expand aliases with 'space'
@@ -63,23 +47,22 @@ source $ZSH/oh-my-zsh.sh
 # GNU pass
 PASSWORD_STORE_DIR=$HOME/dotfiles/private/.password-store
 
-
 # You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+if [[ -n $SSH_CONNECTION ]]; then
+    export VISUAL="emacsclient -nw"
+    export EDITOR="emacsclient -nw"
+    export ALTERNATE_EDITOR=""
+else
+    export VISUAL="emacsclient"
+    export EDITOR="emacsclient"
+    export ALTERNATE_EDITOR=""
+fi
 
 # Disable fucking annoying autocorrection
 DISABLE_CORRECTION="true"
-
-export VISUAL="emacsclient -nw"
-export EDITOR="emacsclient -nw"
-export ALTERNATE_EDITOR=""
 
 # Fix for some GTK errors
 export NO_AT_BRIDGE=1
@@ -92,8 +75,8 @@ else
     source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 
-alias e='emacsclient -nw'
-alias fe='a -e emacsclient -nw'
+alias e='emacsclient'
+alias fe='a -e emacsclient'
 alias pg='ping 8.8.8.8'
 alias ctar='tar cvzf'
 alias xtar='tar xvzf'
