@@ -3,8 +3,8 @@
 #+EMAIL: sbozzolator@gmail.com
 
 * Config Info
-Latest Version: 1.2
-Latest Edit: [2017-06-08 Thu 10:03]
+Latest Version: 1.2.1.5
+Latest Edit: [2017-06-29 Thu 11:11]
 
 Set of configuration files for a Arch Linux + EXWM + zsh setup. Emacs plays the
 central role of the whole configuration as it is my window manager (through
@@ -14,6 +14,40 @@ An insteller (installer.sh) that uses GNU stow can be used to install the dotfil
 wherever I want.
 
 * Changelog
+** 1.2.1.5 ([2017-06-29 Thu])
+   *settings.org*
+   - Added theme-changer, now I have a light theme when the sun is
+     up and a dark one when it is below the horizon
+   *xbindkeys.rc*
+   - Added a key to send the killall -CONT emacs command
+** 1.2.1.4 ([2017-06-26 Mon])
+   *settings.org*
+   - Fixed language in calendar
+** 1.2.1.3 ([2017-06-17 sab])
+   *settings.org*
+   - Eliminated wikipedia from search engines
+   - Added Merriam Webster to search engines
+   - Now enigine-mode search on HTTPS google
+** 1.2.1.2 ([2017-06-15 Thu])
+   *.Xhardware*
+   - Fix minor bug with pointer speed
+   *find_xinput_thinkpad.sh*
+   - New script to find the value of the property to increase the speed
+   *settings.org*
+   - Start fixing mu4e
+** 1.2.1.1 ([2017-06-13 Tue])
+   *settings.org*
+   - Add company-auctex
+   - Deprecated synonms
+   - Deprecated iflipb
+** 1.2.1 ([2017-06-09 Fri])
+   *settings.org*
+   - New section: OLD UNUSED CODE
+   - Reactivated which-key in lab section
+   - Now et-par mode is tanlged and loaded
+   - Removed cancer
+   *.zshrc*
+   - Setting maildir
 ** 1.2 ([2017-06-08 Thu])
    *settings.org*
    - Add /lab/ section
@@ -137,6 +171,7 @@ wherever I want.
   - [ ] Counsel-yank-pop point goes above the screen
   - [ ] Bad behavior of term with C-r
   - [ ] If file already exist it is not possible to open buffer with similar name
+  - [ ] Prettification not working anymore in AucTeX mode
 --------------------------------------------------------------------------
   - [X] Second screenshot function
     Fixed in version 1.0.1 ([2017-02-24 Fri])

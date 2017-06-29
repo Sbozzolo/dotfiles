@@ -97,13 +97,25 @@
     (global-set-key (kbd "C-<right>") 'winner-redo)
 
     ;; Windmode for easier moving between windows
-    (windmove-default-keybindings 'meta)
+    (windmove-default-keybindings 'super)
 
     ;; Theme
     (use-package color-theme-sanityinc-solarized
       :ensure t
       :init
       (load-theme 'sanityinc-solarized-dark t)
+      (load-theme 'sanityinc-solarized-light t)
+      )
+
+    (use-package theme-changer
+      :ensure t
+      :init
+      (change-theme 'sanityinc-solarized-light 'sanityinc-solarized-dark)
+      (defvar after-load-theme-hook 'set-flat-modeline
+      "Hook run after a color theme is loaded using `load-theme'.")
+      (defadvice load-theme (after run-after-load-theme-hook activate)
+      "Run `after-load-theme-hook'."
+      (run-hooks 'after-load-theme-hook))
       )
 
     ;; Enable prettification everywhere
@@ -337,27 +349,6 @@
           delete-old-versions t ;; Don't ask to delete excess backup versions.
           backup-by-copying t) ;; Copy all files, don't rename them.
   #+END_SRC
-* Guru-mode
-  I don't need anymore a guru mode
-  #+BEGIN_SRC emacs-lisp
-    ;; (use-package guru-mode
-    ;;   :diminish guru-mode
-    ;;   :ensure t
-    ;;   :init
-    ;;   (guru-global-mode t)
-    ;;   )
-  #+END_SRC
-* Which-key-mode
-  Show help when typing a command. Switch to Guide key?
-  #+BEGIN_SRC emacs-lisp
-    ;; (use-package which-key
-    ;;      :diminish which-key-mode
-    ;;      :ensure t
-    ;;      :config
-    ;;      (which-key-setup-side-window-right)
-    ;;      ;(which-key-mode)
-    ;;      )
-  #+END_SRC
 * Whitespaces
   #+BEGIN_SRC emacs-lisp
     (use-package whitespace-cleanup-mode
@@ -410,6 +401,13 @@
       :ensure t
       :config
       (add-to-list 'company-backends 'company-c-headers)
+      )
+
+    (use-package company-auctex
+      :diminish company-auctex
+      :ensure t
+      :config
+      (add-to-list 'company-backends 'company-auctex)
       )
   #+END_SRC
 * Ivy
@@ -501,7 +499,7 @@
             desktop-restore-frames nil)
 
           ;;(setq desktop-restore-eager 1)
-      (desktop-save-mode 1)
+      ;; (desktop-save-mode 1)
 
       ;; (defadvice desktop-read (around time-restore activate)
       ;;   (let ((start-time (current-time)))
@@ -940,15 +938,19 @@
       :ensure t
       :config
       (defengine google
-        "http://www.google.com/search?ie=utf-8&oe=utf-8&q=%s"
+        "https://www.google.com/search?ie=utf-8&oe=utf-8&q=%s"
         :keybinding "g"  )
 
-      (defengine wikipedia
-        "http://www.wikipedia.org/search-redirect.php?language=en&go=Go&search=%s"
-        :keybinding "w")
+      (defengine merriam-webster
+        "https://www.merriam-webster.com/dictionary/%s"
+        :keybinding "m")
       )
    (engine-mode t)
   #+END_SRC
+
+  #+RESULTS:
+  : t
+
 * Magit
   #+BEGIN_SRC emacs-lisp
   (use-package magit
@@ -956,18 +958,6 @@
   :bind
   (("\C-x g" . magit-status))
   )
-  #+END_SRC
-* Synonyms
-  #+BEGIN_SRC emacs-lisp
-    (use-package synonyms
-      :ensure t
-      :config
-      (if (file-exists-p (substitute-in-file-name "$HOME/.emacs.d/mthesaur.txt"))
-          nil (url-copy-file "https://archive.org/download/mobythesauruslis03202gut/mthesaur.txt" (substitute-in-file-name "$HOME/.emacs.d/mthesaur.txt")))
-      (setq synonyms-file (substitute-in-file-name "$HOME/.emacs.d/mthesaur.txt"))
-      (setq synonyms-cache-file (substitute-in-file-name "$HOME/.emacs.d/syn.cache"))
-      (setq synonyms-match-more-flag nil)
-      )
   #+END_SRC
 * Ibuffer
   #+BEGIN_SRC emacs-lisp
@@ -1038,10 +1028,27 @@
     (pinentry-start t)
   #+END_SRC
 
-  Start calendar on Monday
+  Start calendar on Monday, set in in English
   #+BEGIN_SRC emacs-lisp
-  (setq calendar-week-start-day 1)
+    (setq calendar-week-start-day 1)
+    (setq system-time-locale "C")
+    ;; I am sure there is a better method
+    ;; (setq calendar-day-name-array ["Sunday" "Monday" "Tuesday" "Wednsday"
+    ;;                                  "Thursday" "Friday" "Saturday"]
+    ;;         calendar-month-name-array ["January" "February" "March" "April" "May"
+    ;;                                    "June" "July" "August" "September"
+    ;;                                    "October" "November" "December"])
   #+END_SRC
+
+   Flat modeline
+   #+BEGIN_SRC emacs-lisp
+   (defun set-flat-modeline ()
+   "Make the modeline flatter"
+   (interactive)
+     (set-face-attribute 'mode-line nil :box nil)
+     (set-face-attribute 'mode-line-inactive nil :box nil)
+     )
+   #+END_SRC
 
   Warning when opening files bigger than 50MB
   #+BEGIN_SRC emacs-lisp
@@ -1164,11 +1171,17 @@
                 #'th/pdf-view-revert-buffer-maybe)
       )
   #+END_SRC
-* Flyspell
+* Spelling
   #+BEGIN_SRC emacs-lisp
     (setq ispell-program-name "hunspell")
     (setq ispell-personal-dictionary (substitute-in-file-name "$HOME/.emacs.d/hunspell_dict.txt"))
     ;; (setq ispell-local-dictionary "en_US")
+
+    ;; Define a word with
+    ;; (use-package define-word
+    ;;   :ensure t
+    ;;   :bind  (("M-#" . define-word-at-point))
+    ;; )
 
     (defun instant-save-word ()
       "Add the word around the point to the personal dictionary
@@ -1206,6 +1219,18 @@
     (add-hook   'makefile-mode-hook 'flyspell-prog-mode)
     (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode)
   #+END_SRC
+* Which-key-mode
+  Show help when typing a command. Switch to Guide key?
+  #+BEGIN_SRC emacs-lisp
+    (use-package which-key
+         :diminish which-key-mode
+         :ensure t
+         :config
+         (which-key-setup-side-window-right)
+         (which-key-mode)
+         )
+  #+END_SRC
+
 * Ledger
   #+BEGIN_SRC emacs-lisp
     (use-package ledger-mode
@@ -1288,12 +1313,9 @@
     (push ?\C-q exwm-input-prefix-keys)
     (define-key exwm-mode-map [?\C-q] #'exwm-input-send-next-key)
 
-    (exwm-input-set-key (kbd "M-<tab>") #'iflipb-next-buffer)
-    (exwm-input-set-key (kbd "s-<tab>") #'iflipb-next-buffer)
-    (exwm-input-set-key (kbd "s-<iso-lefttab>") #'iflipb-next-buffer)
 
 
-    ;; The following example demonstrates how to use simulation keys to mimic the
+    ;;  The  following example demonstrates how to use simulation keys to mimic the
     ;; behavior of Emacs. The argument to `exwm-input-set-simulation-keys' is a
     ;; list of cons cells (SRC . DEST), where SRC is the key sequence you press and
     ;; DEST is what EXWM actually sends to application. Note that SRC must be a key
@@ -1513,15 +1535,235 @@
     ;;        (kill-emacs)))
   #+END_SRC
 * Lab
-  #+BEGIN_SRC emacs-lisp
-    (defun cancer ()
-          "Spread cancer"
-          (interactive)
-          (start-process-shell-command "/home/sbozzolo/vm.sh" nil "/home/sbozzolo/vm.sh")
-          (shell-command "sleep 2" nil "sleep 2")
-          (start-process-shell-command "vncviewer localhost::5900" nil  "vncviewer localhost::5900")
-          )
-  #+END_SRC
+** mu4e
+   https://notanumber.io/2016-10-03/better-email-with-mu4e/
+   #+BEGIN_SRC emacs-lisp
+        ;;; mu.el --- mu email config
+     (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
+     (require 'mu4e)
+     (use-package mu4e
+       ;;:ensure t
+       :config
+       ;; This is a helper to help determine which account context I am in based
+       ;; on the folder in my maildir the email (eg. ~/.mail/sbozzolator) is located in.
+       (defun mu4e-message-maildir-matches (msg rx)
+         (when rx
+           (if (listp rx)
+               ;; If rx is a list, try each one for a match
+               (or (mu4e-message-maildir-matches msg (car rx))
+                   (mu4e-message-maildir-matches msg (cdr rx)))
+             ;; Not a list, check rx
+             (string-match rx (mu4e-message-field msg :maildir)))))
+
+       (setq mail-user-agent 'mu4e-user-agent)
+       (setq mu4e-mu-binary "/usr/bin/mu")
+       (setq mu4e-maildir "~/.mail")
+       (setq mu4e-get-mail-command "offlineimap -o")
+       (setq mu4e-update-interval 300)
+       (setq mu4e-view-show-images t)
+       ;; Don't prompt for applying of marks, just apply
+       (setq mu4e-headers-leave-behavior 'apply)
+       (setq mu4e-html2text-command "w3m -dump -T text/html")
+       ;; This enables unicode chars to be used for things like flags in the message index screens.
+       (setq mu4e-use-fancy-chars t)
+       ;; This enabled the thread like viewing of email similar to gmail's UI.
+       (setq mu4e-headers-include-related t)
+       (setq mu4e-attachment-dir  "~/Downloads")
+       ;; This prevents saving the email to the Sent folder since gmail will do this for us on their end.
+       (setq mu4e-sent-messages-behavior 'delete)
+       (setq message-kill-buffer-on-exit t)
+       ;; Enable inline images.
+       (setq mu4e-view-show-images t)
+       ;; Use imagemagick, if available.
+       (when (fboundp 'imagemagick-register-types)
+         (imagemagick-register-types))
+
+     ;; This allows me to use 'helm' to select mailboxes
+     (setq mu4e-completing-read-function 'completing-read)
+     ;; Why would I want to leave my message open after I've sent it?
+     (setq message-kill-buffer-on-exit t)
+     ;; Don't ask for a 'context' upon opening mu4e
+     (setq mu4e-context-policy 'pick-first)
+     ;; Don't ask to quit... why is this the default?
+     (setq mu4e-confirm-quit nil)
+
+       ;; Sometimes html email is just not readable in a text based client, this lets me open the
+       ;; email in my browser.
+       (add-to-list 'mu4e-view-actions '("View in browser" . mu4e-action-view-in-browser) t)
+
+       ;; Spell checking ftw.
+       (add-hook 'mu4e-compose-mode-hook 'flyspell-mode)
+       ;; This hook correctly modifies the \Inbox and \Starred flags on email when they are marked.
+       ;; Without it refiling (archiving) and flagging (starring) email won't properly result in
+       ;; the corresponding gmail action.
+       (add-hook 'mu4e-mark-execute-pre-hook
+                 (lambda (mark msg)
+                   (cond ((member mark '(refile trash)) (mu4e-action-retag-message msg "-\\Inbox"))
+                         ((equal mark 'flag) (mu4e-action-retag-message msg "\\Starred"))
+                         ((equal mark 'unflag) (mu4e-action-retag-message msg "-\\Starred")))))
+
+
+       ;; Bookmarks for common searches that I use.
+       (setq mu4e-bookmarks '(("\\\\Inbox" "Inbox" ?i)
+                              ("flag:unread" "Unread messages" ?u)
+                              ("date:today..now" "Today's messages" ?t)
+                              ("flag:flagged"       "Flagged Messages"     ?f)
+                              ))
+
+
+       (require 'smtpmail)
+
+       (setq message-send-mail-function 'smtpmail-send-it
+             starttls-use-gnutls t
+             mu4e-sent-folder "/sbozzolator/[Gmail].Sent Mail"
+             mu4e-trash-folder "/sbozzolator/[Gmail].Trash"
+             mu4e-drafts-folder "/sbozzolator/[Gmail].Drafts"
+             mu4e-refile-folder "/sbozzolator/[Gmail].All Mail"
+             mu4e-sent-messages-behavior 'delete
+             smtpmail-starttls-credentials
+             '(("smtp.gmail.com" 587 nil nil))
+             smtpmail-auth-credentials
+             (expand-file-name "~/.authinfo.gpg")
+             smtpmail-default-smtp-server "smtp.gmail.com"
+             smtpmail-smtp-server "smtp.gmail.com"
+             smtpmail-smtp-service 587
+             smtpmail-debug-info t)
+
+       ;;p Now I set a list of
+       (defvar my-mu4e-account-alist
+         '(("sbozzolator"
+       (setq message-send-mail-function 'smtpmail-send-it
+             starttls-use-gnutls t
+             mu4e-sent-folder "/sbozzolator/[Gmail].Sent Mail"
+             mu4e-trash-folder "/sbozzolator/[Gmail].Trash"
+             mu4e-drafts-folder "/sbozzolator/[Gmail].Drafts"
+             mu4e-refile-folder "/sbozzolator/[Gmail].All Mail"
+             mu4e-sent-messages-behavior 'delete
+             smtpmail-starttls-credentials
+             '(("smtp.gmail.com" 587 nil nil))
+             smtpmail-auth-credentials
+             (expand-file-name "~/.authinfo.gpg")
+             smtpmail-default-smtp-server "smtp.gmail.com"
+             smtpmail-smtp-server "smtp.gmail.com"
+             smtpmail-smtp-service 587
+             smtpmail-debug-info t)
+            )
+           ;; Include any other accounts here ...
+           ))
+
+       (defun my-mu4e-set-account ()
+         "Set the account for composing a message.
+        This function is taken from:
+          https://www.djcbsoftware.nl/code/mu/mu4e/Multiple-accounts.html"
+         (let* ((account
+                 (if mu4e-compose-parent-message
+                     (let ((maildir (mu4e-message-field mu4e-compose-parent-message :maildir)))
+                       (string-match "/\\(.*?\\)/" maildir)
+                       (match-string 1 maildir))
+                   (completing-read (format "Compose with account: (%s) "
+                                            (mapconcat #'(lambda (var) (car var))
+                                                       my-mu4e-account-alist "/"))
+                                    (mapcar #'(lambda (var) (car var)) my-mu4e-account-alist)
+                                    nil t nil nil (caar my-mu4e-account-alist))))
+                (account-vars (cdr (assoc account my-mu4e-account-alist))))
+           (if account-vars
+               (mapc #'(lambda (var)
+                         (set (car var) (cadr var)))
+                     account-vars)
+             (error "No email account found"))))
+       (add-hook 'mu4e-compose-pre-hook 'my-mu4e-set-account)
+      )
+
+     (use-package mu4e-alert
+       :ensure t
+       :after mu4e
+       :init
+       (setq mu4e-alert-interesting-mail-query
+      (concat
+       "flag:unread"    ))
+       (mu4e-alert-enable-mode-line-display)
+       (mu4e-alert-set-default-style 'notifications)
+       (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display)
+       ;; (defun gjstein-refresh-mu4e-alert-mode-line ()
+       ;;   (interactive)
+       ;;   (mu4e~proc-kill)
+       ;;   (mu4e-alert-enable-mode-line-display)
+       ;;   )
+       ;; (run-with-timer 0 60 'gjstein-refresh-mu4e-alert-mode-line)
+       )
+   #+END_SRC
+** et-par
+   #+BEGIN_SRC emacs-lisp     :tangle lisp/et-par/et-par.el
+       ;;; et-par.el --- Einstein Toolkit Parameter major mode
+
+       ;; Copyright (C) 2001  Free Software Foundation, Inc.
+
+       ;; Author: Gabriele Bozzola
+       ;; Keywords: extensions
+
+       ;; This file is free software; you can redistribute it and/or modify
+       ;; it under the terms of the GNU General Public License as published by
+       ;; the Free Software Foundation; either version 2, or (at your option)
+       ;; any later version.
+
+       ;; This file is distributed in the hope that it will be useful,
+       ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+       ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+       ;; GNU General Public License for more details.
+
+       ;; You should have received a copy of the GNU General Public License
+       ;; along with GNU Emacs; see the file COPYING.  If not, write to
+       ;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+       ;; Boston, MA 02111-1307, USA.
+
+       ;;; Commentary:
+
+       ;;
+
+       ;;; Code:
+
+       (defvar et-par-mode-syntax-table
+         (let ((st (make-syntax-table)))
+           (modify-syntax-entry ?# "<" st)
+           (modify-syntax-entry ?\n ">" st)
+           st)
+         "Syntax table for `et-par-mode'.")
+
+       (defvar et-par-font-lock-keywords
+         '(("ActiveThorns \\(\\sw+\\)" (1 font-lock-function-name-face)))
+         "Keyword highlighting specification for `et-par-mode'.")
+
+       ;;;###autoload
+       (define-derived-mode et-par-mode fundamental-mode "ET-par"
+         "A major mode for editing Et-Par files."
+         :syntax-table et-par-mode-syntax-table
+         (setq-local comment-start "# ")
+         (setq-local comment-start-skip "#+\\s-*")
+         (setq-local font-lock-defaults
+              '(et-par-font-lock-keywords))
+         )
+
+       (provide 'et-par)
+       ;;; et-par.el ends here
+   #+END_SRC
+
+   Load tangled file
+   #+BEGIN_SRC emacs-lisp
+     (load "~/.emacs.d/lisp/et-par/et-par.el")
+     (require 'et-par)
+     (add-to-list 'auto-mode-alist '("\\.par\\'" . et-par-mode))
+   #+END_SRC
+** Highlight symbol
+   Highlight occurences of a given word. Handy when programming.
+   #+BEGIN_SRC emacs-lisp
+   (use-package highlight-symbol
+   :ensure t
+   :defer 10
+   :bind (("\C-c h " . highlight-symbol))
+
+  )
+   #+END_SRC
+* Old unuset code
 ** GNUs
   #+BEGIN_SRC emacs-lisp
     ;; ;;;; RECEIVE
@@ -1545,239 +1787,33 @@
     ;;       smtpmail-smtp-service 587
     ;;       mail-host-address "sbozzolator@gmail.com")
   #+END_SRC
-
-** mu4e
-   https://notanumber.io/2016-10-03/better-email-with-mu4e/
+** Guru-mode
+  I don't need anymore a guru mode
+  #+BEGIN_SRC emacs-lisp
+    ;; (use-package guru-mode
+    ;;   :diminish guru-mode
+    ;;   :ensure t
+    ;;   :init
+    ;;   (guru-global-mode t)
+    ;;   )
+  #+END_SRC
+** Synonyms
+  The idea behind this package is cool, but at the end of the day it is not implemented
+  well. It's difficult to get an actual synonym.
+  #+BEGIN_SRC emacs-lisp
+    ;; (use-package synonyms
+    ;;   :ensure t
+    ;;   :config
+    ;;   (if (file-exists-p (substitute-in-file-name "$HOME/.emacs.d/mthesaur.txt"))
+    ;;       nil (url-copy-file "https://archive.org/download/mobythesauruslis03202gut/mthesaur.txt" (substitute-in-file-name "$HOME/.emacs.d/mthesaur.txt")))
+    ;;   (setq synonyms-file (substitute-in-file-name "$HOME/.emacs.d/mthesaur.txt"))
+    ;;   (setq synonyms-cache-file (substitute-in-file-name "$HOME/.emacs.d/syn.cache"))
+    ;;   (setq synonyms-match-more-flag nil)
+    ;;   )
+  #+END_SRC
+** Iflipb
    #+BEGIN_SRC emacs-lisp
-     ;;    ;;; mu.el --- mu email config
-     ;; (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu/mu4e")
-     ;; (use-package mu4e
-     ;;   ;;:ensure t
-     ;;   :config
-     ;;   ;; This is a helper to help determine which account context I am in based
-     ;;   ;; on the folder in my maildir the email (eg. ~/.mail/sbozzolator) is located in.
-     ;;   (defun mu4e-message-maildir-matches (msg rx)
-     ;;     (when rx
-     ;;       (if (listp rx)
-     ;;           ;; If rx is a list, try each one for a match
-     ;;           (or (mu4e-message-maildir-matches msg (car rx))
-     ;;               (mu4e-message-maildir-matches msg (cdr rx)))
-     ;;         ;; Not a list, check rx
-     ;;         (string-match rx (mu4e-message-field msg :maildir)))))
-
-     ;;   (setq mail-user-agent 'mu4e-user-agent)
-     ;;   (setq mu4e-mu-binary "/usr/local/bin/mu")
-     ;;   (setq mu4e-maildir "~/.mail")
-     ;;   (setq mu4e-get-mail-command "offlineimap -o")
-     ;;   (setq mu4e-update-interval 300)
-     ;;   (setq mu4e-view-show-images t)
-     ;;   (setq mu4e-html2text-command "w3m -dump -T text/html")
-     ;;   ;; This enables unicode chars to be used for things like flags in the message index screens.
-     ;;   ;; I've disabled it because the font I am using doesn't support this very well. With this
-     ;;   ;; disabled, regular ascii characters are used instead.
-     ;;   ;(setq mu4e-use-fancy-chars t)
-     ;;   ;; This enabled the thread like viewing of email similar to gmail's UI.
-     ;;   (setq mu4e-headers-include-related t)
-     ;;   (setq mu4e-attachment-dir  "~/Downloads")
-     ;;   ;; This prevents saving the email to the Sent folder since gmail will do this for us on their end.
-     ;;   (setq mu4e-sent-messages-behavior 'delete)
-     ;;   (setq message-kill-buffer-on-exit t)
-     ;;   ;; Enable inline images.
-     ;;   (setq mu4e-view-show-images t)
-     ;;   ;; Use imagemagick, if available.
-     ;;   (when (fboundp 'imagemagick-register-types)
-     ;;     (imagemagick-register-types))
-
-     ;; ;; Include a bookmark to open all of my inboxes
-     ;; (add-to-list 'mu4e-bookmarks
-     ;;        (make-mu4e-bookmark
-     ;;         :name "All Inboxes"
-     ;;         :query "maildir:/Exchange/INBOX OR maildir:/Gmail/INBOX"
-     ;;         :key ?i))
-
-     ;; ;; This allows me to use 'helm' to select mailboxes
-     ;; (setq mu4e-completing-read-function 'completing-read)
-     ;; ;; Why would I want to leave my message open after I've sent it?
-     ;; (setq message-kill-buffer-on-exit t)
-     ;; ;; Don't ask for a 'context' upon opening mu4e
-     ;; (setq mu4e-context-policy 'pick-first)
-     ;; ;; Don't ask to quit... why is this the default?
-     ;; (setq mu4e-confirm-quit nil)
-
-     ;;   ;; Sometimes html email is just not readable in a text based client, this lets me open the
-     ;;   ;; email in my browser.
-     ;;   (add-to-list 'mu4e-view-actions '("View in browser" . mu4e-action-view-in-browser) t)
-
-     ;;   ;; Spell checking ftw.
-     ;;   (add-hook 'mu4e-compose-mode-hook 'flyspell-mode)
-     ;;   ;; This hook correctly modifies the \Inbox and \Starred flags on email when they are marked.
-     ;;   ;; Without it refiling (archiving) and flagging (starring) email won't properly result in
-     ;;   ;; the corresponding gmail action.
-     ;;   (add-hook 'mu4e-mark-execute-pre-hook
-     ;;             (lambda (mark msg)
-     ;;               (cond ((member mark '(refile trash)) (mu4e-action-retag-message msg "-\\Inbox"))
-     ;;                     ((equal mark 'flag) (mu4e-action-retag-message msg "\\Starred"))
-     ;;                     ((equal mark 'unflag) (mu4e-action-retag-message msg "-\\Starred")))))
-
-
-     ;;   ;; Bookmarks for common searches that I use.
-     ;;   (setq mu4e-bookmarks '(("\\\\Inbox" "Inbox" ?i)
-     ;;                          ("flag:unread" "Unread messages" ?u)
-     ;;                          ("date:today..now" "Today's messages" ?t)
-     ;;                          ("date:7d..now" "Last 7 days" ?w)
-     ;;                          ("mime:image/*" "Messages with images" ?p)))
-
-
-     ;;   (require 'smtpmail)
-
-     ;;   (setq message-send-mail-function 'smtpmail-send-it
-     ;;         starttls-use-gnutls t
-     ;;         mu4e-sent-folder "/home/sbozzolo/.mail/sbozzolator/.sent"
-     ;;         mu4e-sent-messages-behavior 'delete ;; Unsure how this should be configured
-     ;;         mu4e-drafts-folder "/home/sbozzolo/.mail/sbozzolator/[Gmail].Drafts"
-     ;;         smtpmail-starttls-credentials
-     ;;         '(("smtp.gmail.com" 587 nil nil))
-     ;;         smtpmail-auth-credentials
-     ;;         (expand-file-name "~/.authinfo.gpg")
-     ;;         smtpmail-default-smtp-server "smtp.gmail.com"
-     ;;         smtpmail-smtp-server "smtp.gmail.com"
-     ;;         smtpmail-smtp-service 587
-     ;;         smtpmail-debug-info t)
-
-     ;;   ;;p Now I set a list of
-     ;;   (defvar my-mu4e-account-alist
-     ;;     '(("sbozzolator"
-     ;;         (setq message-send-mail-function 'smtpmail-send-it
-     ;;         starttls-use-gnutls t
-     ;;         mu4e-sent-folder "/home/sbozzolo/.mail/sbozzolator/.sent"
-     ;;         mu4e-sent-messages-behavior 'delete ;; Unsure how this should be configured
-     ;;         mu4e-drafts-folder "/home/sbozzolo/.mail/sbozzolator/[Gmail].Drafts"
-     ;;         smtpmail-starttls-credentials
-     ;;         '(("smtp.gmail.com" 587 nil nil))
-     ;;         smtpmail-auth-credentials
-     ;;         (expand-file-name "~/.authinfo.gpg")
-     ;;         smtpmail-default-smtp-server "smtp.gmail.com"
-     ;;         smtpmail-smtp-server "smtp.gmail.com"
-     ;;         smtpmail-smtp-service 587
-     ;;         smtpmail-debug-info t)
-     ;;        )
-     ;;       ;; Include any other accounts here ...
-     ;;       ))
-
-     ;;   (defun my-mu4e-set-account ()
-     ;;     "Set the account for composing a message.
-     ;;    This function is taken from:
-     ;;      https://www.djcbsoftware.nl/code/mu/mu4e/Multiple-accounts.html"
-     ;;     (let* ((account
-     ;;             (if mu4e-compose-parent-message
-     ;;                 (let ((maildir (mu4e-message-field mu4e-compose-parent-message :maildir)))
-     ;;                   (string-match "/\\(.*?\\)/" maildir)
-     ;;                   (match-string 1 maildir))
-     ;;               (completing-read (format "Compose with account: (%s) "
-     ;;                                        (mapconcat #'(lambda (var) (car var))
-     ;;                                                   my-mu4e-account-alist "/"))
-     ;;                                (mapcar #'(lambda (var) (car var)) my-mu4e-account-alist)
-     ;;                                nil t nil nil (caar my-mu4e-account-alist))))
-     ;;            (account-vars (cdr (assoc account my-mu4e-account-alist))))
-     ;;       (if account-vars
-     ;;           (mapc #'(lambda (var)
-     ;;                     (set (car var) (cadr var)))
-     ;;                 account-vars)
-     ;;         (error "No email account found"))))
-     ;;   (add-hook 'mu4e-compose-pre-hook 'my-mu4e-set-account)
-     ;;   )
-
-     ;; (use-package mu4e-alert
-     ;;   :ensure t
-     ;;   :after mu4e
-     ;;   :init
-     ;;   (setq mu4e-alert-interesting-mail-query
-     ;;     (concat
-     ;;      "flag:unread maildir:/Exchange/INBOX "
-     ;;      "OR "
-     ;;      "flag:unread maildir:/Gmail/INBOX"
-     ;;      ))
-     ;;   (mu4e-alert-enable-mode-line-display)
-     ;;   (defun gjstein-refresh-mu4e-alert-mode-line ()
-     ;;     (interactive)
-     ;;     (mu4e~proc-kill)
-     ;;     (mu4e-alert-enable-mode-line-display)
-     ;;     )
-     ;;   (run-with-timer 0 60 'gjstein-refresh-mu4e-alert-mode-line)
-     ;;   )
-   #+END_SRC
-** et-par
-   #+BEGIN_SRC emacs-lisp
-      ;;; et-par.el --- Einstein Toolkit Parameter major mode
-
-      ;; Copyright (C) 2001  Free Software Foundation, Inc.
-
-      ;; Author: Gabriele Bozzola
-      ;; Keywords: extensions
-
-      ;; This file is free software; you can redistribute it and/or modify
-      ;; it under the terms of the GNU General Public License as published by
-      ;; the Free Software Foundation; either version 2, or (at your option)
-      ;; any later version.
-
-      ;; This file is distributed in the hope that it will be useful,
-      ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-      ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-      ;; GNU General Public License for more details.
-
-      ;; You should have received a copy of the GNU General Public License
-      ;; along with GNU Emacs; see the file COPYING.  If not, write to
-      ;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-      ;; Boston, MA 02111-1307, USA.
-
-      ;;; Commentary:
-
-      ;;
-
-      ;;; Code:
-
-      (defvar et-par-mode-syntax-table
-        (let ((st (make-syntax-table)))
-          (modify-syntax-entry ?# "<" st)
-          (modify-syntax-entry ?\n ">" st)
-          st)
-        "Syntax table for `et-par-mode'.")
-
-      (defvar et-par-font-lock-keywords
-        '(("ActiveThorns \\(\\sw+\\)" (1 font-lock-function-name-face)))
-        "Keyword highlighting specification for `et-par-mode'.")
-
-      ;;;###autoload
-      (define-derived-mode et-par-mode fundamental-mode "ET-par"
-        "A major mode for editing Et-Par files."
-        :syntax-table et-par-mode-syntax-table
-        (setq-local comment-start "# ")
-        (setq-local comment-start-skip "#+\\s-*")
-        (setq-local font-lock-defaults
-             '(et-par-font-lock-keywords))
-        )
-
-      (provide 'et-par)
-      ;;; et-par.el ends here
-
-
-
-     (add-to-list 'auto-mode-alist '("\\.par\\'" . et-par-mode))
-
-   #+END_SRC
-** Modeline customisations
-   Flat modeline
-   #+BEGIN_SRC emacs-lisp
-       (set-face-attribute 'mode-line nil :box nil)
-       (set-face-attribute 'mode-line-inactive nil :box nil)
-   #+END_SRC
-** Highlight symbol
-   Highlight occurences of a given word. Handy when programming.
-   #+BEGIN_SRC emacs-lisp
-   (use-package highlight-symbol
-   :ensure t
-   :defer 10
-   :bind (("\C-c h " . highlight-symbol))
-
-  )
+       ;; (exwm-input-set-key (kbd "M-<tab>") #'iflipb-next-buffer)
+    ;; (exwm-input-set-key (kbd "s-<tab>") #'iflipb-next-buffer)
+    ;; (exwm-input-set-key (kbd "s-<iso-lefttab>") #'iflipb-next-buffer)
    #+END_SRC

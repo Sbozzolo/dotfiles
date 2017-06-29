@@ -10,7 +10,7 @@
  '(font-latex-script-display (quote ((raise -0.2) raise 0.2)))
  '(package-selected-packages
    (quote
-    (rainbow-delimiters org-tree-slide paredit company-c-headers guess-language auto-package-update whole-line-or-region whitespace-cleanup-mode which-key use-package undo-tree systemd synonyms smex smart-mode-line-powerline-theme session pdf-tools org-bullets noflet multi-term magit ledger-mode iflipb htmlize guru-mode google-translate flycheck-pos-tip exwm expand-region engine-mode counsel company color-theme-sanityinc-solarized auctex)))
+    (theme-changer define-word company-auctex highlight-symbol rainbow-delimiters org-tree-slide paredit company-c-headers guess-language auto-package-update whole-line-or-region whitespace-cleanup-mode which-key use-package undo-tree systemd synonyms smex smart-mode-line-powerline-theme session pdf-tools org-bullets noflet multi-term magit ledger-mode iflipb htmlize guru-mode google-translate flycheck-pos-tip exwm expand-region engine-mode counsel company color-theme-sanityinc-solarized auctex)))
  '(safe-local-variable-values
    (quote
     ((eval ispell-change-dictionary "en_GB")

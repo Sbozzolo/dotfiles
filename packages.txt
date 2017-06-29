@@ -10,6 +10,7 @@ xorg-utils
 xorg-apps
 xorg-xfd
 xorg-xinit
+xorg-fonts-type1
 xbindkeys
 zsh
 zsh-syntax-highlighting
@@ -62,6 +63,8 @@ bluez (bluetooth)
 bluez-utils
 mu (AUR)
 offlineimpag
+w3m
+acpid
 ----- Einstein Toolkit ----
 svn
 openmpi

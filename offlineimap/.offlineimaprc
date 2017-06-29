@@ -37,8 +37,9 @@ remoteuser = sbozzolator@gmail.com
 remotepasseval = get_password_emacs("imap.gmail.com", "sbozzolator@gmail.com", "993")
 realdelete = no
 folderfilter = lambda folder: folder.startswith('[Gmail]/') and \
-    folder[8:] in ['All Mail', 'Trash', 'Drafts', 'Spam']
+    folder[8:] in ['All Mail', 'Trash', 'Drafts',  'Sent Mail']
 trashfolder = [Gmail]/Trash
+refilefolder = [Gmail]/Archive
 # holdconnectionopen = true
 # keepalive = 60
 sslcacertfile = /etc/ssl/certs/ca-certificates.crt

@@ -2,7 +2,8 @@
 export ZSH=/home/sbozzolo/.oh-my-zsh
 
 # Two lined theme
-ZSH_THEME="suvash"
+# ZSH_THEME="suvash"
+ZSH_THEME="Soliah"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -87,6 +88,9 @@ if [ -f "$HOME/.my_remote_aliases" ]; then
     source ~/.my_remote_aliases
 fi
 
+
+# Set mail dir
+export MAILDIR=~/.mail
 
 # Autocompletion for simfactory
 # autoload bashcompinit

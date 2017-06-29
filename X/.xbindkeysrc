@@ -35,3 +35,7 @@
 # Decrease master volume by 3%
 "if amixer get Master | grep -q "off" ; then amixer -q sset Master unmute; amixer -q sset Master 3%-; else amixer -q sset Master 3%-; fi"
    XF86AudioLowerVolume
+
+# Run killall -CONT emacs
+"killall -CONT emacs"
+   XF86AudioPlay
