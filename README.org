@@ -3,8 +3,8 @@
 #+EMAIL: sbozzolator@gmail.com
 
 * Config Info
-Latest Version: 1.2.1.5
-Latest Edit: [2017-06-29 Thu 11:11]
+Latest Version: 1.2.1.5.1
+Latest Edit: [2017-06-30 Fri 08:55]
 
 Set of configuration files for a Arch Linux + EXWM + zsh setup. Emacs plays the
 central role of the whole configuration as it is my window manager (through
@@ -14,6 +14,9 @@ An insteller (installer.sh) that uses GNU stow can be used to install the dotfil
 wherever I want.
 
 * Changelog
+** 1.2.1.5.1 ([2017-06-30 Fri])
+   *settings.org*
+   - Fixed theme-changer
 ** 1.2.1.5 ([2017-06-29 Thu])
    *settings.org*
    - Added theme-changer, now I have a light theme when the sun is

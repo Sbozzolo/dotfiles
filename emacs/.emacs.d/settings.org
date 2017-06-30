@@ -110,6 +110,7 @@
     (use-package theme-changer
       :ensure t
       :init
+      (require 'theme-changer)
       (change-theme 'sanityinc-solarized-light 'sanityinc-solarized-dark)
       (defvar after-load-theme-hook 'set-flat-modeline
       "Hook run after a color theme is loaded using `load-theme'.")
