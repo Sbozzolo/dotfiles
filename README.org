@@ -3,8 +3,8 @@
 #+EMAIL: sbozzolator@gmail.com
 
 * Config Info
-Latest Version: 1.2.1.5.1
-Latest Edit: [2017-06-30 Fri 08:55]
+Latest Version: 1.2.1.6
+Latest Edit: [2017-07-05 Wed 15:09]
 
 Set of configuration files for a Arch Linux + EXWM + zsh setup. Emacs plays the
 central role of the whole configuration as it is my window manager (through
@@ -14,6 +14,11 @@ An insteller (installer.sh) that uses GNU stow can be used to install the dotfil
 wherever I want.
 
 * Changelog
+** 1.2.1.6 ([2017-07-05 Wed])
+   *.zsh_aliases*, *.zshrc*
+   - Now aliases are in a separate file
+   *matplotlibrc*
+   - Added default figsize
 ** 1.2.1.5.1 ([2017-06-30 Fri])
    *settings.org*
    - Fixed theme-changer
@@ -175,6 +180,8 @@ wherever I want.
   - [ ] Bad behavior of term with C-r
   - [ ] If file already exist it is not possible to open buffer with similar name
   - [ ] Prettification not working anymore in AucTeX mode
+  - [ ] Battery indicator does not show properly in the first minute
+  - [ ] Rename-this-file-and-buffer should show the current name
 --------------------------------------------------------------------------
   - [X] Second screenshot function
     Fixed in version 1.0.1 ([2017-02-24 Fri])
@@ -186,7 +193,6 @@ wherever I want.
     Fixed in version 1.1.5 ([2017-05-31 Wed])
 * Wishlist
   - [ ] Make emacs update Arch
-  - [X] Use Controlmaster
   - [ ] Create a lab section
   - [ ] Develop a remote emacs config
   - [ ] Use fasd-emacs. Fasd in multiterm open a buffer.
@@ -195,7 +201,10 @@ wherever I want.
   - [ ] Imporve autoupdater. It shouldn't prevent me
         from using the terminal
   - [ ] Backup with rsnapshot
-  - [X] Find file tracks with multi term
   - [ ] Switch to a sourcebase usage of Arch via ABS
-  - [X] Function to save-as buffers
   - [ ] Launch redshift with systemd
+  - [ ] Write a small routine that send notifications upon completions of commands
+        (and use a notifications system)
+  - [X] Use Controlmaster
+  - [X] Find file tracks with multi term
+  - [X] Function to save-as buffers

@@ -107,17 +107,17 @@
       (load-theme 'sanityinc-solarized-light t)
       )
 
-    (use-package theme-changer
-      :ensure t
-      :init
-      (require 'theme-changer)
-      (change-theme 'sanityinc-solarized-light 'sanityinc-solarized-dark)
-      (defvar after-load-theme-hook 'set-flat-modeline
-      "Hook run after a color theme is loaded using `load-theme'.")
-      (defadvice load-theme (after run-after-load-theme-hook activate)
-      "Run `after-load-theme-hook'."
-      (run-hooks 'after-load-theme-hook))
-      )
+    ;; (use-package theme-changer
+    ;;   :ensure t
+    ;;   :init
+    ;;   (require 'theme-changer)
+    ;;   (change-theme 'sanityinc-solarized-light 'sanityinc-solarized-dark)
+    ;;   (defvar after-load-theme-hook 'set-flat-modeline
+    ;;   "Hook run after a color theme is loaded using `load-theme'.")
+    ;;   (defadvice load-theme (after run-after-load-theme-hook activate)
+    ;;   "Run `after-load-theme-hook'."
+    ;;   (run-hooks 'after-load-theme-hook))
+    ;;   )
 
     ;; Enable prettification everywhere
     (global-prettify-symbols-mode t)

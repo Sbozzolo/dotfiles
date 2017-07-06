@@ -1,0 +1,6 @@
+alias e='emacsclient'
+alias fe='a -e emacsclient'
+alias pg='ping 8.8.8.8'
+alias ctar='tar cvzf'
+alias xtar='tar xvzf'
+alias jp='jupyter notebook'

@@ -11,6 +11,8 @@ path.snap : True # When True, rectilinear axis-aligned paths will be snapped to
                   # the nearest pixel when certain criteria are met.  When False,
                   # paths will never be snapped.
 
+figure.figsize :    8, 8 #Huge pictures
+
 # Directions of ticks
 xtick.direction      : in     # direction: in or out
 ytick.direction      : in     # direction: in or out

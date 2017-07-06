@@ -76,16 +76,14 @@ else
     source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 
-alias e='emacsclient'
-alias fe='a -e emacsclient'
-alias pg='ping 8.8.8.8'
-alias ctar='tar cvzf'
-alias xtar='tar xvzf'
-
 alias sim='simfactory/bin/sim'
 
 if [ -f "$HOME/.my_remote_aliases" ]; then
     source ~/.my_remote_aliases
+fi
+
+if [ -f "$HOME/.zsh_aliases" ]; then
+    source ~/.zsh_aliases
 fi
 
 
