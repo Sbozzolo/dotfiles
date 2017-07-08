@@ -1041,7 +1041,7 @@
     ;;                                    "October" "November" "December"])
   #+END_SRC
 
-   Flat modeline
+  Flat modeline
    #+BEGIN_SRC emacs-lisp
    (defun set-flat-modeline ()
    "Make the modeline flatter"
@@ -1536,6 +1536,12 @@
     ;;        (kill-emacs)))
   #+END_SRC
 * Lab
+** EIN
+   #+BEGIN_SRC emacs-lisp
+   (use-package ein
+   :ensure t
+)
+   #+END_SRC
 ** mu4e
    https://notanumber.io/2016-10-03/better-email-with-mu4e/
    #+BEGIN_SRC emacs-lisp

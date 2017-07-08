@@ -7,10 +7,10 @@
    (quote
     ("4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" default)))
  '(flycheck-display-errors-function (function flycheck-pos-tip-error-messages))
- '(font-latex-script-display (quote ((raise -0.2) raise 0.2)) t)
+ '(font-latex-script-display (quote ((raise -0.2) raise 0.2)))
  '(package-selected-packages
    (quote
-    (theme-changer define-word company-auctex highlight-symbol rainbow-delimiters org-tree-slide paredit company-c-headers guess-language auto-package-update whole-line-or-region whitespace-cleanup-mode which-key use-package undo-tree systemd synonyms smex smart-mode-line-powerline-theme session pdf-tools org-bullets noflet multi-term magit ledger-mode iflipb htmlize guru-mode google-translate flycheck-pos-tip exwm expand-region engine-mode counsel company color-theme-sanityinc-solarized auctex)))
+    (ein theme-changer define-word company-auctex highlight-symbol rainbow-delimiters org-tree-slide paredit company-c-headers guess-language auto-package-update whole-line-or-region whitespace-cleanup-mode which-key use-package undo-tree systemd synonyms smex smart-mode-line-powerline-theme session pdf-tools org-bullets noflet multi-term magit ledger-mode iflipb htmlize guru-mode google-translate flycheck-pos-tip exwm expand-region engine-mode counsel company color-theme-sanityinc-solarized auctex)))
  '(safe-local-variable-values
    (quote
     ((eval ispell-change-dictionary "en_GB")

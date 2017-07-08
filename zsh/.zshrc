@@ -1,3 +1,11 @@
+# History options
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=20000
+SAVEHIST=20000
+setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history file.
+setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
+
+
 # Path to your oh-my-zsh installation.
 export ZSH=/home/sbozzolo/.oh-my-zsh
 
