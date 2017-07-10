@@ -3,8 +3,8 @@
 #+EMAIL: sbozzolator@gmail.com
 
 * Config Info
-Latest Version: 1.2.1.7
-Latest Edit: [2017-07-08 Sat 14:45]
+Latest Version: 1.2.1.7.1
+Latest Edit: [2017-07-10 Mon 12:00]
 
 Set of configuration files for a Arch Linux + EXWM + zsh setup. Emacs plays the
 central role of the whole configuration as it is my window manager (through
@@ -14,10 +14,15 @@ An insteller (installer.sh) that uses GNU stow can be used to install the dotfil
 wherever I want.
 
 * Changelog
+** 1.2.1.7.1 ([2017-07-10 Mon])
+   *settings.org*
+   - Fixed undo-tree
 ** 1.2.1.7 ([2017-07-08 Sat])
    *.zshrc*
    - Extended shell history
    - Duplicates are not saved in history
+   *settings.org*
+   - Started experimenting with EIT
 ** 1.2.1.6 ([2017-07-05 Wed])
    *.zsh_aliases*, *.zshrc*
    - Now aliases are in a separate file
