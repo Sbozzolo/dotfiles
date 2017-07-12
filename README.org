@@ -3,8 +3,8 @@
 #+EMAIL: sbozzolator@gmail.com
 
 * Config Info
-Latest Version: 1.2.1.7.2
-Latest Edit: [2017-07-12 Wed 14:00]
+Latest Version: 1.2.1.7.3
+Latest Edit: [2017-07-12 Wed 14:30]
 
 Set of configuration files for a Arch Linux + EXWM + zsh setup. Emacs plays the
 central role of the whole configuration as it is my window manager (through
@@ -14,6 +14,9 @@ An insteller (installer.sh) that uses GNU stow can be used to install the dotfil
 wherever I want.
 
 * Changelog
+** 1.2.1.7.3 ([2017-07-12 Wed])
+   *.profile*
+   - Added standard paths for local installations ($HOME/lib, $HOME/include)
 ** 1.2.1.7.2 ([2017-07-12 Wed])
    *settings.org*
    - Added conservative scrolling
