@@ -175,6 +175,14 @@
 
   #+END_SRC
 
+  Scrolling options
+   #+BEGIN_SRC emacs-lisp
+     (setq scroll-step 1)
+     (setq scroll-conservatively 10)
+     (setq scroll-margin 7)
+     (setq scroll-conservatively 5)
+   #+END_SRC
+
   Rainbow-delimiters to have colored parantheses depending on the depth level
   #+BEGIN_SRC emacs-lisp
     (use-package rainbow-delimiters
@@ -1109,6 +1117,7 @@
   #+BEGIN_SRC emacs-lisp
     (use-package undo-tree
       :ensure t
+      :diminish undo-tree-mode
       :init
       (global-undo-tree-mode)
       :bind (("\C-x u" . undo-tree-visualize))
