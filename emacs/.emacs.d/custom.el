@@ -13,7 +13,9 @@
     (ein theme-changer define-word company-auctex highlight-symbol rainbow-delimiters org-tree-slide paredit company-c-headers guess-language auto-package-update whole-line-or-region whitespace-cleanup-mode which-key use-package undo-tree systemd synonyms smex smart-mode-line-powerline-theme session pdf-tools org-bullets noflet multi-term magit ledger-mode iflipb htmlize guru-mode google-translate flycheck-pos-tip exwm expand-region engine-mode counsel company color-theme-sanityinc-solarized auctex)))
  '(safe-local-variable-values
    (quote
-    ((eval ispell-change-dictionary "en_GB")
+    ((TeX-command-extra-options . "-shell-escape")
+     (reftex-default-bibliography "/home/sbozzolo/documents/unimi/masters/master_thesis/thesis/biblio.bib")
+     (eval ispell-change-dictionary "en_GB")
      (reftex-default-bibliography "/home/sbozzolo/master_thesis/thesis/biblio.bib")
      (reftex-default-bibliography "biblio.bib")
      (eval ispell-change-dictionary "en_US"))))

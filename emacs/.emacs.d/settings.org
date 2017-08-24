@@ -124,12 +124,13 @@
 
     ;; C-w kill line if no region is active
     (use-package whole-line-or-region
-      :diminish whole-line-or-region-mode
+      :diminish whole-line-or-region-local-mode
       :ensure t
       :config
       (whole-line-or-region-mode t)
       (make-variable-buffer-local 'whole-line-or-region-mode)
       )
+
 
     ;; Start find file from ~
     (setq default-directory "~/")
@@ -757,7 +758,7 @@
   Org capture
   #+BEGIN_SRC emacs-lisp
 
-       (setq org-directory (expand-file-name "~/orgs"))
+       (setq org-directory (expand-file-name "~/documents/orgs"))
        (setq org-todo-file (concat org-directory "/todo.org")
              org-links-file (concat org-directory "/links.org")
              org-goals-file (concat org-directory "/goals.org")
@@ -945,21 +946,22 @@
   #+BEGIN_SRC emacs-lisp
     (use-package engine-mode
       :ensure t
+      :init
+      (engine-mode t)
       :config
       (defengine google
         "https://www.google.com/search?ie=utf-8&oe=utf-8&q=%s"
-        :keybinding "g"  )
+        :keybinding "g")
 
       (defengine merriam-webster
         "https://www.merriam-webster.com/dictionary/%s"
         :keybinding "m")
+
+      (defengine merriam-webster-thesaurus
+        "https://www.merriam-webster.com/thesaurus/%s"
+        :keybinding "t")
       )
-   (engine-mode t)
   #+END_SRC
-
-  #+RESULTS:
-  : t
-
 * Magit
   #+BEGIN_SRC emacs-lisp
   (use-package magit
@@ -1209,17 +1211,17 @@
     (global-set-key (kbd "C-c $") 'instant-save-word)
 
     ; Automatically detect language for Flyspell
-    (use-package guess-language
-      :ensure t
-      :defer t
-      :init (add-hook 'text-mode-hook #'guess-language-mode)
-      :config
-      (setq guess-language-langcodes '((en . ("en_US" "English"))
-                                       (it . ("it_IT" "Italian")))
-            guess-language-languages '(en it)
-            guess-language-min-paragraph-length 45)
-      :diminish guess-language-mode
-      )
+    ;; (use-package guess-language
+    ;;   :ensure t
+    ;;   :defer t
+    ;;   :init (add-hook 'text-mode-hook #'guess-language-mode)
+    ;;   :config
+    ;;   (setq guess-language-langcodes '((en . ("en_US" "English"))
+    ;;                                    (it . ("it_IT" "Italian")))
+    ;;         guess-language-languages '(en it)
+    ;;         guess-language-min-paragraph-length 45)
+    ;;   :diminish guess-language-mode
+    ;;   )
   #+END_SRC
 
   Checking spell in comments and string
@@ -1467,8 +1469,8 @@
     (exwm-input-set-key (kbd "<print>")
                         #'(lambda () (interactive)
                             (progn
-                              (shell-command "import -window root ~/screenshot/$(date +%Y-%m-%d:%H:%M:%S).png")
-                              (message "Screenshot taken! Saved in ~/screenshot")
+                              (shell-command "import -window root ~/screenshots/$(date +%Y-%m-%d:%H:%M:%S).png")
+                              (message "Screenshot taken! Saved in ~/screenshots")
                               )
                             )
                         )
@@ -1476,8 +1478,8 @@
     (exwm-input-set-key (kbd "<s-print>")
                         #'(lambda () (interactive)
                             (progn
-                              (shell-command "import ~/screenshot/$(date +%Y-%m-%d:%H:%M:%S).png")
-                              (message "Screenshot taken! Saved in ~/screenshot")
+                              (shell-command "import ~/screenshots/$(date +%Y-%m-%d:%H:%M:%S).png")
+                              (message "Screenshot taken! Saved in ~/screenshots")
                               )
                             )
                         )

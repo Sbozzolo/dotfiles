@@ -29,11 +29,17 @@ hash brew 2>/dev/null || {
 
 }
 
+echo >&2 "Installing git";
+brew install git
+
 # zsh
 hash zsh 2>/dev/null || {
     echo >&2 "Installing zsh";
     brew install zsh
 }
+
+# OMZ
+source ./install_omz.sh
 
 # stow
 hash stow 2>/dev/null || {

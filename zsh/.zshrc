@@ -7,7 +7,7 @@ setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording en
 
 
 # Path to your oh-my-zsh installation.
-export ZSH=/home/sbozzolo/.oh-my-zsh
+export ZSH="$HOME"/.oh-my-zsh
 
 # Two lined theme
 # ZSH_THEME="suvash"

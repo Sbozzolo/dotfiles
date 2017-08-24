@@ -1,7 +1,7 @@
 #!/bin/sh
 
 logfile="/tmp/$$.log"
-cd "/home/sbozzolo/orgs/"
+cd "/home/sbozzolo/documents/orgs/"
 git add * >> $logfile
 git commit -m "$(date +'%Y-%m-%d %H:%M')" >> $logfile
 git push origin master >> $logfile
@@ -14,7 +14,7 @@ git push origin master >> $logfile
 rm $logfile
 
 logfile="/tmp/$$.log"
-cd "/home/sbozzolo/master_thesis/thesis/"
+cd "/home/sbozzolo/documents/unimi/masters/master_thesis/thesis/"
 git add * >> $logfile
 git commit -m "$(date +'%Y-%m-%d %H:%M')" >> $logfile
 git push origin master >> $logfile
@@ -28,8 +28,24 @@ rm $logfile
 
 
 logfile="/tmp/$$.log"
-cd "/home/sbozzolo/my_papers/"
+cd "/home/sbozzolo/documents"
 git add * >> $logfile
+git commit -m "$(date +'%Y-%m-%d %H:%M')" >> $logfile
+git push origin master >> $logfile
+# /home/sbozzolo/tg/bin/telegram-cli -W -e  "msg Gabriele_Bozzola '*Ho committato gli orgs!*'"
+# while read -r line
+# do
+#     /home/sbozzolo/tg/bin/telegram-cli -W -e  "msg Gabriele_Bozzola $line"
+# done < $logfile
+# /home/sbozzolo/tg/bin/telegram-cli -W -e  "msg Gabriele_Bozzola 'Commit del giorno"
+rm $logfile
+
+logfile="/tmp/$$.log"
+cd "/home/sbozzolo/documents/working_papers/2017/rotation_law/"
+git add mnras* >> $logfile
+git add figures >> $logfile
+git add rotation_law.tex >> $logfile
+git add rotation_law.pdf >> $logfile
 git commit -m "$(date +'%Y-%m-%d %H:%M')" >> $logfile
 git push origin master >> $logfile
 # /home/sbozzolo/tg/bin/telegram-cli -W -e  "msg Gabriele_Bozzola '*Ho committato gli orgs!*'"
