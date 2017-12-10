@@ -3,8 +3,8 @@
 #+EMAIL: sbozzolator@gmail.com
 
 * Config Info
-Latest Version: 1.2.1.8.1
-Latest Edit: [2017-08-24 Thu 09:09]
+Latest Version: 1.2.2.2
+Latest Edit: [2017-09-29 Fri 10:33]
 
 Set of configuration files for a Arch Linux + EXWM + zsh setup. Emacs plays the
 central role of the whole configuration as it is my window manager (through
@@ -14,6 +14,46 @@ An insteller (installer.sh) that uses GNU stow can be used to install the dotfil
 wherever I want.
 
 * Changelog
+** 2.0 ()
+   *settings.org*
+   - Refactored configuration file with heavy usage of use-package
+   - Improved installation on new machines
+   - Added Languagetool
+   - Term with 256 colors!
+   - Tons of fixes and improvements
+   *dunstrc*
+   - Added support to desktop notifications with dunst
+   *autojump*
+   - Switched to autojump instead of fasd
+   *gpg*
+   - Two different pinentries for emacs and tty modes
+   *hwdb*
+   - Extra key bindigs now are with udev
+   *zshrc*
+   - Improved directory tracking
+   *_root*
+   - /etc configurations are under version control
+** 1.2.2.2 ([2017-09-29 Fri])
+   *settings.org*
+   - Added toggle-windows-split
+   - Added join-line keybinding M-j
+   - Added unfill-paragraph
+** 1.2.2.1 ([2017-09-24 Sun])
+   *.zsh_functions*
+   - Added ctar function to create compressed archive
+   *.zshrc*
+   - Source zsh_functions
+** 1.2.2 ([2017-09-21 Thu])
+   *settings.org*
+   - Add LaTeX teaks
+** 1.2.1.9 ([2017-09-03 Sun])
+   *.zshrc*
+   - If not running interactively don't do anything
+   - Remove $PATH setting from zshrc
+   *.profile*
+   - Add LINUXBREW/sbin
+   *settings.org*
+   - Added new kewbinding to winnermode
 ** 1.2.1.8.1 ([2017-08-24 Thu])
    *settings.org*
    - Added Merriam-Webster Thesaurus

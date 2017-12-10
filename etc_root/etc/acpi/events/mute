@@ -1,0 +1,3 @@
+# button/mute MUTE 00000080 00000000 K
+event=button/mute
+action=/etc/acpi/actions/mute.sh

@@ -1,4 +1,4 @@
-backend      : GTK3Agg
+backend      : WX
 
 ### SAVING FIGURES
 path.simplify : True   # When True, simplify paths by removing "invisible"

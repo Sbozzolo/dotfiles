@@ -10,6 +10,10 @@ xsetroot -cursor_name left_ptr
 # Set keyboard repeat rate
 xset r rate 200 60
 
+# Deactivate the screen after 5 minutes
+xset +dpms
+xset dpms 0 0 300
+
 # Xresources configurations
 if [ -f ~/.Xresources ]; then
     xrdb -merge  ~/.Xresources
@@ -30,11 +34,11 @@ fi
 export VISUAL=emacsclient
 export EDITOR="$VISUAL"
 
-# Bind brightness keys
-pgrep xbindkeys &> /dev/null || xbindkeys &> /dev/null &
+# Bind brightness keys, now with hwdb
+# pgrep xbindkeys &> /dev/null || xbindkeys &> /dev/null &
 
 # Redshift
 pgrep redshift &> /dev/null || redshift -c ~/.redshiftrc &> /dev/null &
 
 # Finally launch emacs
-exec dbus-launch --exit-with-session emacs --debug-init
+exec dbus-launch --exit-with-x11 emacs --debug-init #--exit-with-session emacs --debug-init

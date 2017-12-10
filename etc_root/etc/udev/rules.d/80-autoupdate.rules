@@ -1,0 +1,4 @@
+# Rule to control update system, so that it runs only on AC
+
+SUBSYSTEM=="power_supply", ATTR{online}=="1", RUN+="/sbin/start_update"
+SUBSYSTEM=="power_supply", ATTR{online}=="0", RUN+="/sbin/stop_update"

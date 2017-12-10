@@ -1,3 +1,6 @@
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
 # History options
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=20000
@@ -5,6 +8,10 @@ SAVEHIST=20000
 setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history file.
 setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
 
+# PATH
+# Add also sbin to use auto completion with sudo
+export PATH="/usr/sbin:/sbin":$PATH
+export PATH="$HOME/bin":$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME"/.oh-my-zsh
@@ -39,16 +46,8 @@ ZSH_THEME="Soliah"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-plugins=(common-aliases python sudo zsh-autosuggestions zsh-syntax-highlighting fasd)
+plugins=(common-aliases python sudo zsh-autosuggestions autojump)
 
-# gloablias expand aliases with 'space'
-# sudo add sudo to the current command with ESC-ESC
-# zsh-autosuggestions zsh-syntax-highlighting are autoexplicative
-
-# User configuration
-
-export PATH="/home/sbozzolo/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
-export PATH="/home/sbozzolo/master_thesis/bin:$PATH"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -79,9 +78,17 @@ export NO_AT_BRIDGE=1
 # Syntax highlight
 if [ -d "$HOME/.linuxbrew" ]; then
     export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=$HOME/.linuxbrew/share/zsh-syntax-highlighting/highlighters
-    source $HOME/.linuxbrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    if [ -f $HOME/.linuxbrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+        source $HOME/.linuxbrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    fi
 else
-    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    if [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+        source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    else
+        if [ -f  /usr/share/zsh/site-contrib/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+            source  /usr/share/zsh/site-contrib/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+        fi
+    fi
 fi
 
 alias sim='simfactory/bin/sim'
@@ -94,6 +101,10 @@ if [ -f "$HOME/.zsh_aliases" ]; then
     source ~/.zsh_aliases
 fi
 
+if [ -f "$HOME/.zsh_functions" ]; then
+    source ~/.zsh_functions
+fi
+
 
 # Set mail dir
 export MAILDIR=~/.mail
@@ -104,12 +115,31 @@ export MAILDIR=~/.mail
 # source /home/sbozzolo/master_thesis/einstein_toolkit/CaParma/simfactory/etc/bash_completion.d/sim
 
 # Snippet to make term mode track the directory
-chpwd() { print -P "\033AnSiTc %d" }
+sync_dir() {
+    print -P "\033AnSiTu %n"
+    print -P "\033AnSiTh" "$(hostname)"
+    print -P "\033AnSiTc %d"
+}
 
-print -P "\033AnSiTu %n"
-print -P "\033AnSiTc %d"
+# Call prmptcmd whenever prompt is redrawn
+[[ ! $(tty) =~ /dev/tty[0-9] ]] && precmd_functions=($precmd_functions sync_dir)
+
+# I don't want this command to be saved in history
+HISTORY_IGNORE="(ls|cd|pwd|l|..|...|la|lcm)"
 
 # If X is running run dailyupdater
-if [[ ! -z $DISPLAY ]] ; then source dailyupdater; fi
+# if [[ ! -z $DISPLAY ]] ; then source dailyupdater; fi
 
 if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then exec startx; fi
+
+
+# Gentoo completions
+
+autoload -U compinit promptinit
+compinit
+# promptinit; prompt gentoo
+
+zstyle ':completion::complete:*' use-cache 1
+
+# Temporary fix
+alias nmtui="nmtui && clear"

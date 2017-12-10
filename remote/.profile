@@ -24,6 +24,7 @@ fi
 if [ -d "$HOME/.linuxbrew" ]; then
     export HOMEBREW_PREFIX="$HOME/.linuxbrew"
     export PATH="$HOMEBREW_PREFIX/bin:$PATH"
+    export PATH="$HOMEBREW_PREFIX/sbin:$PATH"
     export LIBRARY_PATH="$HOMEBREW_PREFIX/lib:$LIBRARY_PATH"
     export LD_LIBRARY_PATH="$HOMEBREW_PREFIX/lib:$LD_LIBRARY_PATH"
     export CPATH="$HOMEBREW_PREFIX/include:$CPATH"

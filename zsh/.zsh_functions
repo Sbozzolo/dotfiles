@@ -1,0 +1,18 @@
+# ZSH functions
+
+# Create archive
+
+ctar () {
+     tar cvzf $1.tar.gz $1
+}
+
+# Create folder and enter that folder
+
+mkcd () {
+  mkdir -p "$1"
+  cd "$1"
+}
+
+# Local Variables:
+# mode: sh
+# End:
