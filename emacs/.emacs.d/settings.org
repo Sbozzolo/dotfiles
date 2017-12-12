@@ -1480,227 +1480,247 @@
   #+END_SRC
 * EXWM
   #+BEGIN_SRC emacs-lisp
-    (use-package exwm
-      :ensure t
-      :config
-      ;; Send C-q to escape keys
-      (push ?\C-q exwm-input-prefix-keys)
-      (define-key exwm-mode-map [?\C-q] #'exwm-input-send-next-key)
+       (use-package exwm
+         :ensure t
+         :config
+         ;; Send C-q to escape keys
+         (push ?\C-q exwm-input-prefix-keys)
+         (define-key exwm-mode-map [?\C-q] #'exwm-input-send-next-key)
 
-      ;; Movement keys
-      (exwm-input-set-simulation-keys
-       '(([?\C-b] . left)
-         ([?\C-f] . right)
-         ([?\C-p] . up)
-         ([?\C-n] . down)
-         ([?\C-a] . home)
-         ([?\C-e] . end)
-         ([?\M-v] . prior)
-         ([?\C-v] . next)
-         ([?\C-d] . delete)
-         ([?\C-k] . (S-end delete))))
+         ;; Movement keys
+         (exwm-input-set-simulation-keys
+          '(([?\C-b] . left)
+            ([?\C-f] . right)
+            ([?\C-p] . up)
+            ([?\C-n] . down)
+            ([?\C-a] . home)
+            ([?\C-e] . end)
+            ([?\M-v] . prior)
+            ([?\C-v] . next)
+            ([?\C-d] . delete)
+            ([?\C-k] . (S-end delete))))
 
-      ;; Hide modeline of floating X windows
-      (add-hook 'exwm-floating-setup-hook #'exwm-layout-hide-mode-line)
-      ;; Hide minibuffer when not used
-      (setq exwm-workspace-minibuffer-position 'bottom)
+         ;; Hide modeline of floating X windows
+         (add-hook 'exwm-floating-setup-hook #'exwm-layout-hide-mode-line)
+         ;; Hide minibuffer when not used
+         (setq exwm-workspace-minibuffer-position 'bottom)
 
-      ;; Rename buffer with title
-      (defun exwm-rename-buffer ()
-        (interactive)
-        (exwm-workspace-rename-buffer
-         (concat exwm-class-name ":"
-                 (if (<= (length exwm-title) 50) exwm-title
-                   (concat (substring exwm-title 0 49) "...")))))
+         ;; Rename buffer with title
+         (defun exwm-rename-buffer ()
+           (interactive)
+           (exwm-workspace-rename-buffer
+            (concat exwm-class-name ":"
+                    (if (<= (length exwm-title) 50) exwm-title
+                      (concat (substring exwm-title 0 49) "...")))))
 
-      ;; Add these hooks in a suitable place (e.g., as done in exwm-config-default)
-      (add-hook 'exwm-update-class-hook 'exwm-rename-buffer)
-      (add-hook 'exwm-update-title-hook 'exwm-rename-buffer)
+         ;; Add these hooks in a suitable place (e.g., as done in exwm-config-default)
+         (add-hook 'exwm-update-class-hook 'exwm-rename-buffer)
+         (add-hook 'exwm-update-title-hook 'exwm-rename-buffer)
 
-      ;; Bindings
+         ;; Bindings
 
-      ;; Launch multi-term
-      (exwm-input-set-key (kbd "s-t") 'get-term)
+         ;; Launch multi-term
+         (exwm-input-set-key (kbd "s-t") #'(lambda (arg) (interactive "p")
+                              (if (equal current-prefix-arg nil) (get-term)
+                                             (start-process-shell-command "xterm" nil "xterm")
+                                               )
+                                             )
+                             )
 
-      ;; + We always need a way to go back to line-mode from char-mode
-      (exwm-input-set-key (kbd "s-r") #'exwm-reset)
+         ;; + We always need a way to go back to line-mode from char-mode
+         (exwm-input-set-key (kbd "s-r") #'exwm-reset)
 
-      ;; + Bind a key to switch workspace interactively
-      (exwm-input-set-key (kbd "s-w") #'exwm-workspace-switch)
+         ;; + Bind a key to switch workspace interactively
+         (exwm-input-set-key (kbd "s-w") #'exwm-workspace-switch)
 
-      (exwm-input-set-key (kbd "s-c") #'(lambda () (interactive)
-      (start-process-shell-command "chromium" nil "chromium --enable-native-gpu-memory-buffers")
-                                          ))
+         (exwm-input-set-key (kbd "s-c") #'(lambda () (interactive)
+         (start-process-shell-command "chromium" nil "chromium --enable-native-gpu-memory-buffers")
+                                             ))
 
-      ;; + Bind "s-0" to "s-8" to switch to the corresponding workspace.
-      (dotimes (i 9)
-        (exwm-input-set-key (kbd (format "s-%d" i))
-                            `(lambda ()
-                               (interactive)
-                               (exwm-workspace-switch-create ,i))))
-      ;; + Application launcher ('M-&' also works if the output buffer does not
-      ;;   bother you). Note that there is no need for processes to be created by
-      ;;   Emacs.
-      (exwm-input-set-key (kbd "s-&")
-                          (lambda (command)
-                            (interactive (list (read-shell-command "$ ")))
-                            (start-process-shell-command command nil command)))
+         ;; + Bind "s-0" to "s-8" to switch to the corresponding workspace.
+         (dotimes (i 9)
+           (exwm-input-set-key (kbd (format "s-%d" i))
+                               `(lambda ()
+                                  (interactive)
+                                  (exwm-workspace-switch-create ,i))))
+         ;; + Application launcher ('M-&' also works if the output buffer does not
+         ;;   bother you). Note that there is no need for processes to be created by
+         ;;   Emacs.
+         (exwm-input-set-key (kbd "s-&")
+                             (lambda (command)
+                               (interactive (list (read-shell-command "$ ")))
+                               (start-process-shell-command command nil command)))
 
-      ;; + 'slock' is a simple X display locker provided by suckless tools.
-      (exwm-input-set-key (kbd "s-<f2>")
-                          (lambda () (interactive) (start-process "" nil "slock")))
+         ;; + 'slock' is a simple X display locker provided by suckless tools.
+         (exwm-input-set-key (kbd "s-<f2>")
+                             (lambda () (interactive) (start-process "" nil "slock")))
 
-      ;; Take a screenshot
-      (exwm-input-set-key (kbd "<print>")
-                          #'(lambda () (interactive)
-                              (progn
-                                (shell-command "import -window root ~/screenshots/$(date +%Y-%m-%d:%H:%M:%S).png")
-                                (message "Screenshot taken! Saved in ~/screenshots")
-                                )
-                              )
-                          )
+         ;; Take a screenshot
+         (exwm-input-set-key (kbd "<print>")
+                             #'(lambda () (interactive)
+                                 (progn
+                                   (shell-command "import -window root ~/screenshots/$(date +%Y-%m-%d:%H:%M:%S).png")
+                                   (alert "Screenshot taken! Saved in ~/screenshots" :title "Screenshot")
+                                   )
+                                 )
+                             )
 
-      ;; Take a screenshot of part of the screen
-      (exwm-input-set-key (kbd "<s-print>")
-                          #'(lambda () (interactive)
-                              (progn
-                                (shell-command "import ~/screenshots/$(date +%Y-%m-%d:%H:%M:%S).png")
-                                (message "Screenshot taken! Saved in ~/screenshots")
-                                )
-                              )
-                          )
+         ;; Take a screenshot of part of the screen
+         (exwm-input-set-key (kbd "<s-print>")
+                             #'(lambda () (interactive)
+                                 (progn
+                                   (shell-command "import ~/screenshots/$(date +%Y-%m-%d:%H:%M:%S).png")
+                                   (alert "Screenshot taken! Saved in ~/screenshots" :title "Screenshot")
+                                   )
+                                 )
+                             )
 
-    ;; Shutdown computer from inside emacs
-    (defun shutdown ()
-      "Kills gracefully emacs and the whole system appending
-    shutdown to kill-emacs-hook"
-      (interactive)
-      (if (y-or-n-p "Shutdown? ")
-          (progn
-            (add-hook 'kill-emacs-hook (lambda () (shell-command "systemctl poweroff")) t)
-            (if (internet-up-p)
-                (message (shell-command-to-string "commitorgs")) )
-            (unless (eq (get-process "mu4e-update") nil)
-              (delete-process "mu4e-update"))
-            (save-buffers-kill-terminal)
-            )
-        (progn
-          (message "Staying alive")
-          )
-        )
-      )
+       ;; Shutdown computer from inside emacs
+       (defun shutdown ()
+         "Kills gracefully emacs and the whole system appending
+       shutdown to kill-emacs-hook"
+         (interactive)
+         (if (y-or-n-p "Shutdown? ")
+             (progn
+               (add-hook 'kill-emacs-hook (lambda () (shell-command "systemctl poweroff")) t)
+               (if (internet-up-p)
+                   (message (shell-command-to-string "commitorgs")) )
+               (unless (eq (get-process "mu4e-update") nil)
+                 (delete-process "mu4e-update"))
+               (save-buffers-kill-terminal)
+               )
+           (progn
+             (message "Staying alive")
+             )
+           )
+         )
 
-    (exwm-input-set-key (kbd "s-x s-c") #'shutdown)
-
-
-      ;; EXWM RANDR (TO BE FIXED...)
-
-      (require 'exwm-randr)
-
-      (add-hook 'exwm-randr-screen-change-hook
-                (lambda ()
-                  (start-process-shell-command
-                   "xrandr" nil "xrandr --output VGA-1 --same-as LVDS-1 --auto")))
-      (setq exwm-randr-clone t)
+       (exwm-input-set-key (kbd "s-x s-c") #'shutdown)
 
 
-      (setq exwm-randr-workspace-output-plist '(0 "LVDS-1"))
-      (setq exwm-randr-workspace-output-plist '(1 "VGA-1"))
+         ;; EXWM RANDR (TO BE FIXED...)
+
+         (require 'exwm-randr)
+
+         (add-hook 'exwm-randr-screen-change-hook
+                   (lambda ()
+                     (start-process-shell-command
+                      "xrandr" nil "xrandr --output VGA-1 --same-as LVDS-1 --auto")))
+         (setq exwm-randr-clone t)
 
 
-      (defun toggle-exwm-randr ()
-        (interactive)
-        (if (eq exwm-randr-clone t)
-            (progn
-              (remove-hook 'exwm-randr-screen-change-hook
+         (setq exwm-randr-workspace-output-plist '(0 "LVDS-1"))
+         (setq exwm-randr-workspace-output-plist '(1 "VGA-1"))
+
+
+         (defun toggle-exwm-randr ()
+           (interactive)
+           (if (eq exwm-randr-clone t)
+               (progn
+                 (remove-hook 'exwm-randr-screen-change-hook
+                              (lambda ()
+                                (start-process-shell-command
+                                 "xrandr" nil "xrandr --output DP-2 --same-as eDP-1 --auto")))
+                 (add-hook 'exwm-randr-screen-change-hook
                            (lambda ()
                              (start-process-shell-command
-                              "xrandr" nil "xrandr --output DP-2 --same-as eDP-1 --auto")))
-              (add-hook 'exwm-randr-screen-change-hook
-                        (lambda ()
-                          (start-process-shell-command
-                           "xrandr" nil "xrandr --output DP-2 --right-of eDP-1 --auto")))
-              (setq exwm-randrp-clone nil)
-              (message "Output on the right")
-              (redraw-display)
-              )
-          (progn
-            (remove-hook 'exwm-randr-screen-change-hook
+                              "xrandr" nil "xrandr --output DP-2 --right-of eDP-1 --auto")))
+                 (setq exwm-randrp-clone nil)
+                 (alert "Output on the right" :title "Randr")
+                 (redraw-display)
+                 )
+             (progn
+               (remove-hook 'exwm-randr-screen-change-hook
+                            (lambda ()
+                              (start-process-shell-command
+                               "xrandr" nil "xrandr --output DP-2 --right-of eDP-1 --auto")))
+               (add-hook 'exwm-randr-screen-change-hook
                          (lambda ()
                            (start-process-shell-command
-                            "xrandr" nil "xrandr --output DP-2 --right-of eDP-1 --auto")))
-            (add-hook 'exwm-randr-screen-change-hook
-                      (lambda ()
-                        (start-process-shell-command
-                         "xrandr" nil "xrandr --output DP-2 --same-as eDP-1 --auto")))
-            (setq exwm-randr-clone t)
-            (message "Output cloning, remove VGA cable, wait 1 s, insert VGA cable")
-            (redraw-display)
-            )
-          )
-          )
+                            "xrandr" nil "xrandr --output DP-2 --same-as eDP-1 --auto")))
+               (setq exwm-randr-clone t)
+               (alert "Output cloning, remove VGA cable, wait 1 s, insert VGA cable" :title "Randr")
+               (redraw-display)
+               )
+             )
+             )
 
-      (exwm-randr-enable)
+         (exwm-randr-enable)
 
 
-      ;; XF86 keys
-     ;; Toggle clone and extend
-     (exwm-input-set-key (kbd "<XF86Display>") #'toggle-exwm-randr)
+         ;; XF86 keys
+        ;; Toggle clone and extend
+        (exwm-input-set-key (kbd "<XF86Display>") #'toggle-exwm-randr)
 
-     ;; Print volume and brightness
-     ;; Sleep is put so that the command is executed after the change
-     (exwm-input-set-key (kbd "<XF86MonBrightnessDown>")
-                         #'(lambda () (interactive)
-                             (message (concat "Brightness: "
-                                              (substring (shell-command-to-string "sleep 0.05; xbacklight -get") 0 -1)
-                                              " %%"
-                                              )
-                                      )))
+        ;; Print volume and brightness
+        ;; Sleep is put so that the command is executed after the change
+        (exwm-input-set-key (kbd "<XF86MonBrightnessDown>")
+                            #'(lambda () (interactive)
+                                (alert (concat "Brightness: "
+                                                 (substring (shell-command-to-string "sleep 0.05; xbacklight -get") 0 -1)
+                                                 " %"
+                                                 )
+                                 :title "Brightness")))
 
-     (exwm-input-set-key (kbd "<XF86MonBrightnessUp>")
-                         #'(lambda () (interactive)
-                             (message (concat "Brightness: "
-                                              (substring (shell-command-to-string "sleep 0.05; xbacklight -get") 0 -1)
-                                              " %%"
-                                              )
-                                      )))
+        (exwm-input-set-key (kbd "<XF86MonBrightnessUp>")
+                            #'(lambda () (interactive)
+                                (alert (concat "Brightness: "
+                                                 (substring (shell-command-to-string "sleep 0.05; xbacklight -get") 0 -1)
+                                                 " %"
+                                                 )
+                                 :title "Brightness")))
 
 
-     (exwm-input-set-key (kbd "<XF86AudioRaiseVolume>")
-                         #'(lambda () (interactive)
-                             (message (concat "Volume: "
-                                              (substring (shell-command-to-string "sleep 0.05; amixer get Master | grep '%'| cut -d'[' -f2 | cut -d '%' -f1") 0 -1)
-                                              " %%"
-                                              )
-                                      )))
+        (exwm-input-set-key (kbd "<XF86AudioRaiseVolume>")
+                            #'(lambda () (interactive)
+                                (alert (concat "Volume: "
+                                                 (substring (shell-command-to-string "sleep 0.05; amixer get Master | grep '%'| cut -d'[' -f2 | cut -d '%' -f1") 0 -1)
+                                                 " %"
+                                                 )
+                                 :title "Volume")))
 
-     (exwm-input-set-key (kbd "<XF86AudioLowerVolume>")
-                         #'(lambda () (interactive)
-                             (message (concat "Volume: "
-                                              (substring (shell-command-to-string "sleep 0.05; amixer get Master | grep '%'| cut -d'[' -f2 | cut -d '%' -f1") 0 -1)
-                                              " %%"
-                                              )
-                                      )))
- ;;Function-keys-binding
-  (exwm-input-set-key (kbd "<f1>") #'delete-other-windows)
-    (exwm-input-set-key (kbd "<f2>") #'kill-this-buffer)
-    (exwm-input-set-key (kbd "<f3>") #'split-window-right)
-    (exwm-input-set-key (kbd "<f4>") #'swap-buffers-in-windows)
-    ;; (exwm-input-set-key (kbd "<f5>") #'revert-buffer)
-    ;; I don't use exwm-input so I can use F5 in X apps
-    (global-set-key (kbd "<f5>") 'revert-buffer)
-    ;; (exwm-input-set-key (kbd "<f6>") #')
-    ;; (exwm-input-set-key (kbd "<f7>") #')
-    ;; (exwm-input-set-key (kbd "<f8>") #')
-    ;; (exwm-input-set-key (kbd "<f9>") #')
-    ;; (exwm-input-set-key (kbd "<f10>") #')
-    (exwm-input-set-key (kbd "<f11>") #'toggle-menu-bar-mode-from-frame)
-  (exwm-input-set-key (kbd "<f12>") #'org-capture)
+        (exwm-input-set-key (kbd "<XF86AudioLowerVolume>")
+                            #'(lambda () (interactive)
+                                (alert (concat "Volume: "
+                                                 (substring (shell-command-to-string "sleep 0.05; amixer get Master | grep '%'| cut -d'[' -f2 | cut -d '%' -f1") 0 -1)
+                                                 " %"
+                                                 )
+                                 :title "Volume")))
 
-      ;; Enable EXWM!
-      (exwm-enable)
+        (exwm-input-set-key (kbd "<XF86AudioMute>")
+                            #'(lambda () (interactive)
+                                (alert (concat "Master is "
+                                                 (substring (shell-command-to-string "sleep 0.05; amixer get Master | grep '%'| cut -d'[' -f4 | cut -d']' -f1") 0 -1)
+                                                 )
+                                 :title "Audio")))
 
-    )
+        (exwm-input-set-key (kbd "<XF86AudioMicMute>")
+                            #'(lambda () (interactive)
+                                (alert (concat "Microphone is "
+                                                 (substring (shell-command-to-string "sleep 0.05; amixer get Capture | grep '%'| cut -d'[' -f4 | cut -d']' -f1 | head -n 1") 0 -1)
+                                                 )
+                                 :title "Microphone")))
+
+    ;;Function-keys-binding
+     (exwm-input-set-key (kbd "<f1>") #'delete-other-windows)
+       (exwm-input-set-key (kbd "<f2>") #'kill-this-buffer)
+       (exwm-input-set-key (kbd "<f3>") #'split-window-right)
+       (exwm-input-set-key (kbd "<f4>") #'swap-buffers-in-windows)
+       ;; (exwm-input-set-key (kbd "<f5>") #'revert-buffer)
+       ;; I don't use exwm-input so I can use F5 in X apps
+       (global-set-key (kbd "<f5>") 'revert-buffer)
+       ;; (exwm-input-set-key (kbd "<f6>") #')
+       ;; (exwm-input-set-key (kbd "<f7>") #')
+       ;; (exwm-input-set-key (kbd "<f8>") #')
+       ;; (exwm-input-set-key (kbd "<f9>") #')
+       ;; (exwm-input-set-key (kbd "<f10>") #')
+       (exwm-input-set-key (kbd "<f11>") #'toggle-menu-bar-mode-from-frame)
+     (exwm-input-set-key (kbd "<f12>") #'org-capture)
+
+         ;; Enable EXWM!
+         (exwm-enable)
+
+       )
   #+END_SRC
 * Lab
   #+BEGIN_SRC emacs-lisp

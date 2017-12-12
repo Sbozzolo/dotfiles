@@ -121,9 +121,15 @@ dev-python/matplotlib2tikz ~amd64
 # required by app-text/languagetool (argument)
 =dev-java/jackson-databind-2.8.5 ~amd64
 
-
 # required by fwts (argument)
 =sys-apps/fwts-17.02.00 ~amd64
 
-
+# Latest version of dbus for EXWM
 =sys-apps/dbus-1.12.2 ~amd64
+
+# Browserpass
+=www-plugins/browserpass-2.0.7 ~amd64
+
+### Local Variables:
+### mode: conf
+### End:

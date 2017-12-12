@@ -3,8 +3,8 @@
 #+EMAIL: sbozzolator@gmail.com
 
 * Config Info
-Latest Version: 1.2.2.2
-Latest Edit: [2017-09-29 Fri 10:33]
+Latest Version: 2.0.1
+Latest Edit: [2017-12-12 Tue 22:05]
 
 Set of configuration files for a Arch Linux + EXWM + zsh setup. Emacs plays the
 central role of the whole configuration as it is my window manager (through
@@ -13,8 +13,16 @@ EXWM). Zsh is used with oh-my-zsh for simplicity.
 An insteller (installer.sh) that uses GNU stow can be used to install the dotfiles
 wherever I want.
 
-* Changelog
-** 2.0 ()
+* Chanbgelog
+** 2.0.1 ([2017-12-12 Tue])
+   *settings.org*
+   - C-u s-t now calls Xterm
+   - System messages (volume, brightness, ...) now use alert
+   *Xresources*
+   - Solarized theme for Xterm
+   *Linux*
+   - Added Linux config for ThinkPad T420
+** 2.0 ([2017-12-10 Sun])
    *settings.org*
    - Refactored configuration file with heavy usage of use-package
    - Improved installation on new machines

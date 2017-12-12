@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 # Swtiches git repo for GitHub or Bitbucket
 
