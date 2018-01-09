@@ -1,5 +1,5 @@
 # You may need to comment out the next line to disable access control
-#xhost +
+xhost +
 
 # Set themes, etc
 #/usr/lib/gnome-settings-daemon/gnome-settings-daemon &

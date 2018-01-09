@@ -2,5 +2,5 @@ sys-apps/systemd gnuefi xkb lzma policykit importd# required by x11-libs/fltk-1.
 # required by www-client/dillo-3.0.5::gentoo
 # required by @selected
 # required by @world (argument)
->=x11-libs/cairo-1.14.8 X
+x11-libs/cairo X xcb
 sys-apps/dbus X

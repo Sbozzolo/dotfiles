@@ -129,3 +129,5 @@ evolutions
 stationarity
 ansatz
 Paschalidis
+parametrization
+azimuthal

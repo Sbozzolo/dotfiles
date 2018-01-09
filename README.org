@@ -3,8 +3,8 @@
 #+EMAIL: sbozzolator@gmail.com
 
 * Config Info
-Latest Version: 2.0.1
-Latest Edit: [2017-12-12 Tue 22:05]
+Latest Version: 2.0.1.1
+Latest Edit: [2017-12-15 Fri 09:47]
 
 Set of configuration files for a Arch Linux + EXWM + zsh setup. Emacs plays the
 central role of the whole configuration as it is my window manager (through
@@ -13,7 +13,15 @@ EXWM). Zsh is used with oh-my-zsh for simplicity.
 An insteller (installer.sh) that uses GNU stow can be used to install the dotfiles
 wherever I want.
 
-* Chanbgelog
+* Changelog
+** 2.0.1.1 ([2017-12-15 Fri])
+   *settings.org*
+   - Added move-text to move lines with M-<up> and M-<down>
+   - Rebound text-font-increase and decrease to use C-- as negative
+     universal argumetn
+   *zshrc_function*
+   - Added .trash, now files are not deleted but moved to trash,
+     but they are deleted if rm is invoked in the .trash folder
 ** 2.0.1 ([2017-12-12 Tue])
    *settings.org*
    - C-u s-t now calls Xterm
