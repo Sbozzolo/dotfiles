@@ -1,4 +1,4 @@
-backend      : GTK3Cairo
+#backend      : GTK3Cairo
 
 ### SAVING FIGURES
 path.simplify : True   # When True, simplify paths by removing "invisible"
@@ -27,8 +27,6 @@ text.usetex         : True  # use latex for all text handling. The following fon
                               # If another font is desired which can loaded using the
                               # LaTeX \usepackage command, please inquire at the
                               # matplotlib mailing list
-text.latex.unicode : True # use "ucs" and "inputenc" LaTeX packages for handling
-                            # unicode strings.
 text.latex.preamble : \usepackage{siunitx}, \usepackage[protrusion=true,factor=900]{microtype}
                             # An example:
                             # text.latex.preamble : \usepackage{bm},\usepackage{euler}

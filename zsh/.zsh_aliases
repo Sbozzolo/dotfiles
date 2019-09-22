@@ -2,13 +2,15 @@
 
 alias e='emacsclient'
 alias z='j' #autojump
+alias o='less'
 alias pg='ping www.google.com'
-alias jp='jupyter notebook &'
 alias xtar='tar xvzf'
-alias deltemp='find . -maxdepth 1 -type f -name "\#*" | xargs rm'
+alias clean='find . -maxdepth 1 -type f -name "\#*" -exec /bin/rm {} +'
 alias rename='perl-rename'
 
-alias load_intel='source /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh -arch intel64 && source /opt/intel/vtune_amplifier/amplxe-vars.sh '
+alias update_system='sudo genup && emacs --batch --eval "(load-file \"~/dotfiles/emacs/.emacs.d/update_packages.el\")"'
+
+alias load_intel='source /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh -arch intel64 && source /opt/intel/vtune_amplifier/amplxe-vars.sh && PATH=/opt/miniconda3/bin:$PATH'
 
 # Local Variables:
 # mode: sh

@@ -12,7 +12,7 @@
     # <http://developer.gnome.org/pango/stable/PangoMarkupFormat.html>.
     # If markup is not allowed, those tags will be stripped out of the
     # message.
-    allow_markup = yes
+    markup = yes
 
     # The format of the message.  Possible variables are:
     #   %a  appname
@@ -23,7 +23,7 @@
     #   %p  progress value if set ([  0%] to [100%]) or nothing
     # Markup is allowed
     format = "<b>%s</b>\n%b"
-    #format = "%s\n%b"
+    #Format = "%s\n%b"
 
     # Sort messages by urgency.
     sort = yes
@@ -141,7 +141,7 @@
     dmenu = /usr/bin/dmenu -p dunst:
 
     # Browser for opening urls in context menu.
-    browser = /usr/bin/firefox -new-tab
+    browser = /usr/bin/chromium -new-tab
 
     # Align icons left/right/off
     icon_position = off
@@ -150,9 +150,6 @@
     #icon_folders = /usr/share/icons/gnome/16x16/status/:/usr/share/icons/gnome/16x16/devices/
     icon_folders = /usr/share/icons/Flattr/status/scalable/:/usr/share/icons/Flattr/devices/scalable/
 
-[frame]
-    #width = 3
-    #color = "#aaaaaa"
     width = 0
     color = "#111113"
 
@@ -185,8 +182,8 @@
     timeout = 5
 
 [urgency_normal]
-    #background = "#285577"
-    #foreground = "#CECFD1"
+    # background = "#285577"
+    # foreground = "#CECFD1"
     background = "#26282B"
     foreground = "#CECFD1"
     timeout = 5

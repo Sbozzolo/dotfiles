@@ -3,10 +3,10 @@
 #+EMAIL: sbozzolator@gmail.com
 
 * Config Info
-Latest Version: 2.0.1.1
-Latest Edit: [2017-12-15 Fri 09:47]
+Latest Version: 3.0
+Latest Edit: [2018-02-13 Tue 21:58]
 
-Set of configuration files for a Arch Linux + EXWM + zsh setup. Emacs plays the
+Set of configuration files for a Gentoo Linux + EXWM + zsh setup. Emacs plays the
 central role of the whole configuration as it is my window manager (through
 EXWM). Zsh is used with oh-my-zsh for simplicity.
 
@@ -14,12 +14,75 @@ An insteller (installer.sh) that uses GNU stow can be used to install the dotfil
 wherever I want.
 
 * Changelog
+** 3.0 ([2018-05-27 Sun])
+   *settings.org*
+   - hl-mode enabled only for GUI Emacs
+   - Switch to spaceline for the modeline
+   - System monitor with symon and s-h
+   - Beacon to find the point earlier
+   - Added Git time-machine
+   - Added julia-mode
+   - Added Dockerfile-mode
+   - Added yasnippet
+   - Magit doesn't split anymore the window
+   - Jedi autcompletion for python
+   - Refactor Company configuration
+   - Added aggressive-indent
+   - Added ADSABS engine mode
+   - s-C-t opens xterm
+   - C-u s-t opens last terminal
+   - Company disabled for LaTeX
+   - Add percent in prettification (LaTeX)
+   - Working EIN configuration
+   - Added wgrep
+   - Disable whitespace highlithing in EIN
+   - Sign Magit commits
+   - Improved rename-buffer inspired by save-as
+   - Gargage collector less often
+   - Org-table-comment
+   - Avoided org-tangle in init.el
+   - Wolfram mode
+   - Always run commands in emacs dir (so in localhost!)
+   - Fixed modeline not showing line and columb number
+   - Enabled mu4e with two accounts
+   - Fix org templates
+   - Print completion date on closing todo
+   - Pass doesn't ask anymore to quit
+   - Man now moves the cursor to the man buffer
+   - Defined new org states
+   - Rebound windmove to s-(ijkl)
+   - Rewrite using newest facilities of use-package
+   - Unfill-mode
+   - Undo-tree saves history in .emacs.d/undo
+   - Add counsel-apropos
+   - mu4e-conversation
+  *offlineimaprc*
+   - Send notification for new emails with notify
+   - Get emails in parallel
+  *snippets*
+   - Added txt latex snippet
+  *zshrc_functions*
+   - Improved empty_trash function
+  *scripts*
+   - Added merge_pdf
+   - Added extract_pages
+  *fetch_rates*
+   - Download latest rates for cryptocurrencies and currencies
+     to feed leger-cli
+  *zshrc*
+   - Improved folder tracking in remote severs
+** 2.0.1.2 ([2018-01-18 Thu])
+   *settings.org*
+   - Update org repo
+   - sh-mode for Cactus files
+   *zshrc_functions*
+   - Added empty_trash
 ** 2.0.1.1 ([2017-12-15 Fri])
    *settings.org*
    - Added move-text to move lines with M-<up> and M-<down>
    - Rebound text-font-increase and decrease to use C-- as negative
      universal argumetn
-   *zshrc_function*
+   *zshrc_functions*
    - Added .trash, now files are not deleted but moved to trash,
      but they are deleted if rm is invoked in the .trash folder
 ** 2.0.1 ([2017-12-12 Tue])

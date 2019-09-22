@@ -27,7 +27,7 @@ function rm () {
                 local dst=${path##*/}
                 # append the time if necessary
                 while [ -e ~/.trash/"$dst" ]; do
-                    dst="$dst "$(date +%H-%M-%S)
+                    dst="$dst "$(/bin/date +%H-%M-%S)
                 done
                 /bin/mv "$path" "$HOME"/.trash/"$dst"
             fi
@@ -35,6 +35,41 @@ function rm () {
     else
         /bin/rm -i "$@"
     fi
+}
+
+function empty_trash () {
+    local REPLY
+    echo "Trash contains:"
+    /bin/ls -a "$HOME"/.trash
+    echo "Are you sure you want to empty trash (y/n)?"
+    vared REPLY
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        /bin/rm -rf "$HOME"/.trash/*
+        echo "Done!"
+    fi
+}
+
+# Show all colors
+
+function clicolors() {
+    i=1
+    for color in {000..255}; do;
+        c=$c"$FG[$color]$color✔$reset_color  ";
+        if [ `expr $i % 8` -eq 0 ]; then
+            c=$c"\n"
+        fi
+        i=`expr $i + 1`
+    done;
+    echo $c | sed 's/%//g' | sed 's/{//g' | sed 's/}//g' | sed '$s/..$//';
+    c=''
+}
+
+
+# Search and play a song from youtube with mpv
+
+function yta() {
+    mpv --ytdl-format=bestaudio ytdl://ytsearch:"$*"
 }
 
 # Local Variables:

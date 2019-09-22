@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+prices_db="$HOME/.prices.db"
+
+# USD and EUR
+
+# Fetch today's currency exchange rates from openexchangerates.org
+date=$(date "+%Y/%m/%d %H:%M:%S")
+rate=$(curl -s https://openexchangerates.org/api/latest.json?app_id=c0407308935947b8bd0844ae521b73ae | jq .rates."EUR")
+echo "P $date USD EUR ${rate}" >> "$prices_db"
+
+# Crypto from Bittrex
+
+cryptolist="ADA ETH XMR OMG GNT NXT"
+
+for crypto in $cryptolist
+do
+    date=$(date "+%Y/%m/%d %H:%M:%S")
+    # Bittrex uses scientific notation, which is not well-handled by ledger
+    rate=$(curl -s https://bittrex.com/api/v1.1/public/getmarketsummary\?market\=BTC-$crypto | jq '.result[0] .Last' | awk '{print sprintf("%.6f", $1)}' )
+    echo "P $date $crypto BTC ${rate}" >> "$prices_db"
+done;
+
+# Bitcoin from Coinbase
+date=$(date "+%Y/%m/%d %H:%M:%S")
+rate=$(curl -s https://api.coinbase.com/v2/prices/BTC-USD/buy | jq ".data .amount" | sed 's=\"==g')
+echo "P $date BTC USD ${rate}" >> "$prices_db"
+
+
+# Crypto from Binance
+
+cryptolist="ONT ZEC BNB XLM ADA VEN XMR MANA LRC NEO GAS"
+
+for crypto in $cryptolist
+do
+    date=$(date "+%Y/%m/%d %H:%M:%S")
+    rate=$(curl -s https://api.binance.com/api/v3/ticker/price\?symbol\=$crypto"BTC" | jq '.price' | sed 's=\"==g')
+    echo "P $date $crypto BTC ${rate}" >> "$prices_db"
+done;
+
+
+# TKY on Kucoin
+
+date=$(date "+%Y/%m/%d %H:%M:%S")
+rate=$(curl -s https://api.kucoin.com/api/v1/market/orderbook/level1\?symbol\=TKY-BTC | jq '.data .price' | sed 's=\"==g')
+echo "P $date TKY BTC ${rate}" >> "$prices_db"
+
+
+# Stocks from financialmodelingprep
+
+stocklist="IVV AGG IAGG IEFA"
+
+for stock in $stocklist
+do
+    date=$(date "+%Y/%m/%d %H:%M:%S")
+    rate=$(curl -s https://financialmodelingprep.com/api/company/real-time-price/$stock | sed "s/<pre>//g" | jq '.price')
+    echo "P $date $stock USD ${rate}" >> "$prices_db"
+done;

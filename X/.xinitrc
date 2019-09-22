@@ -19,12 +19,12 @@ if [ -f ~/.Xresources ]; then
     xrdb -merge  ~/.Xresources
 fi
 
-# [[ -f ~/.Xresources ]] && xrdb -merge -I $HOME ~/.Xresources
-
 # Xmodmap to change CAPS LOCK to Return
-[[ -f ~/.Xmodmap ]] && xmodmap ~/.Xmodmap
+if [ -f ~/.Xresources ]; then
+    xmodmap ~/.Xmodmap
+fi
 
-# Hardware dependant
+# Hardware dependent
 if [ -f ~/.Xhardware ]; then
     source ~/.Xhardware
 fi
@@ -41,4 +41,15 @@ export EDITOR="$VISUAL"
 pgrep redshift &> /dev/null || redshift -c ~/.redshiftrc &> /dev/null &
 
 # Finally launch emacs
-exec dbus-launch --exit-with-x11 emacs --debug-init #--exit-with-session emacs --debug-init
+
+# exec dbus-launch emacs -Q -L /home/sbozzolo/.emacs.d/elpa/exwm-0.22.1/ -L /home/sbozzolo/.emacs.d/elpa/xelb-0.17/ -L /home/sbozzolo/.emacs.d/lisp/emacs-libvterm/ \
+#     --eval "(setq debug-on-error t)" \
+#     --eval "(setq debug-all-forms t)" \
+#     --eval "(require 'exwm)" \
+#     --eval "(require 'exwm-config)" \
+#     --eval "(require 'vterm)" \
+#     --eval "(exwm-config-default)" \
+#     --eval "(exwm-init)";
+
+
+exec dbus-launch --exit-with-session emacs --debug-init  #--exit-with-session emacs --debug-init
