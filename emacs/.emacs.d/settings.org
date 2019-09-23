@@ -2646,6 +2646,24 @@
                              )
                           )
 
+      ;; Toggle prevent screen from going to sleep (sleep time is almost 1 day)
+      (exwm-input-set-key (kbd "s-s")
+                          '(lambda () (interactive)
+                               (let ((status (sbozzolo/shell-command-to-string "xset q | grep 'Off' | awk '{print $6}'")))
+                                 (if (string-equal status "300\n")
+                                     (progn
+                                       (sbozzolo/shell-command-to-string "xset dpms 0 0 60000")
+                                       (alert "The monitor will not turn black with inactivity" :title "Not going to sleep")
+                                       )
+                                     (progn
+                                       (sbozzolo/shell-command-to-string "xset dpms 0 0 300")
+                                       (alert "The monitor will turn black after five minutes" :title "Going to sleep")
+                                       )
+                                   )
+                                 )
+                               )
+                             )
+
       ;; Shutdown computer from inside emacs
       (defun shutdown ()
         "Kills gracefully emacs and the whole system appending
