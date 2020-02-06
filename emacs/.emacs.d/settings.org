@@ -6,7 +6,7 @@
   I don't want the setting.el to be manually modified (hence read-only-mode). In
   addition, as all the emacs packages, I add a commentary section.
   #+BEGIN_SRC emacs-lisp
-    ;;; settings.el --- personal emacs config file  -*- lexical-binding: :configt ; eval: (read-only-mode 1)-*-
+    ;;; settings.el --- personal emacs config file  -*- lexical-binding: t ; eval: (read-only-mode 1)-*-
     ;;; Commentary:
 
     ;; THIS FILE HAS BEEN GENERATED.
@@ -81,18 +81,20 @@
     (unless (package-installed-p 'use-package)
       (package-refresh-contents)
       (package-install 'use-package))
-
-    (use-package use-package
-                                            ;:pin melpa
-      :config
-      (setq use-package-always-ensure t)
+    (eval-when-compile
+      (use-package use-package
+        :config
+        (setq use-package-always-ensure t)
+        )
       )
 
       (use-package benchmark-init
-  :ensure t
-  :config
-  ;; To disable collection of benchmark data after init is done.
-  (add-hook 'after-init-hook 'benchmark-init/deactivate))
+      :ensure t
+      :config
+      ;; To disable collection of benchmark data after init is done.
+      (add-hook 'after-init-hook 'benchmark-init/deactivate)
+      )
+
     ;; Paradox is a nicer interface for package managment
     ;; Most importantly, it offers a function to update all the packages
     (use-package paradox
@@ -206,6 +208,9 @@
   #+END_SRC
 * Look and feel
   #+BEGIN_SRC emacs-lisp
+    ;; Enable colored emoji
+    (set-fontset-font t 'symbol (font-spec :family "Noto Color Emoji") nil 'prepend)
+
     ;; Disable dialog boxes
     (setq use-file-dialog nil)
     (setq use-dialog-box nil)
@@ -246,6 +251,7 @@
 
     ;; Visually indicate matching pairs of parentheses
     (use-package paren
+      :defer 3
       :config
       (show-paren-mode t)
       (setq show-paren-delay 0.0)
@@ -253,6 +259,7 @@
 
     ;; Insert () [] {}
     (use-package elec-pair
+      :defer 3
       :config
       (electric-pair-mode 1)
       )
@@ -352,6 +359,7 @@
     ;; When something changes a file, automatically refresh the
     ;; buffer containing that file so they can't get out of sync.
     (use-package autorevert
+      :defer 6
       :config
       (global-auto-revert-mode t)
       (setq global-auto-revert-non-file-buffers t
@@ -558,34 +566,40 @@
   #+END_SRC
 ** Modeline customization
    #+BEGIN_SRC emacs-lisp
-    (defun internet-up-p (&optional host)
-      (interactive)
-      (= 0 (call-process "ping" nil nil nil "-c" "1" "-W" "1"
-                         (if host host "www.google.com"))))
+     (defun internet-up-p (&optional host)
+       (interactive)
+       (= 0 (call-process "ping" nil nil nil "-c" "1" "-W" "1"
+                          (if host host "www.google.com"))))
 
-    (use-package spaceline
-      :config
-      (require 'spaceline-config)
-      (spaceline-spacemacs-theme)
-      (setq spaceline-buffer-encoding-abbrev-p nil)
-                                            ;(setq spaceline-line-column-p nil)
-      (setq spaceline-line-p nil)
-      (setq powerline-default-separator (quote arrow))
-      (line-number-mode 1)
-      (column-number-mode 1)
-      (display-time-mode 1)
-      (setq display-time-24hr-format t)
-      ;; (setq display-time-format "%H:%M - %d %B %Y")
-      (setq display-time-default-load-average nil)
-      (use-package fancy-battery
-        :config
-        (setq fancy-battery-show-percentage t)
-        (setq battery-update-interval 15)
-        (if window-system
-            (fancy-battery-mode)
-          (display-battery-mode)))
-      (spaceline-spacemacs-theme)
-      )
+     (use-package time
+     :defer 10
+     :config
+       (setq display-time-24hr-format t)
+       ;; (setq display-time-format "%H:%M - %d %B %Y")
+       (setq display-time-load-average-threshold 0.9)
+     )
+
+     (use-package spaceline
+       :defer 4
+       :config
+       (require 'spaceline-config)
+       (spaceline-spacemacs-theme)
+       (setq spaceline-buffer-encoding-abbrev-p nil)
+                                             ;(setq spaceline-line-column-p nil)
+       (setq spaceline-line-p nil)
+       (setq powerline-default-separator (quote arrow))
+       (line-number-mode 1)
+       (column-number-mode 1)
+       (display-time-mode 1)
+       (use-package fancy-battery
+         :config
+         (setq fancy-battery-show-percentage t)
+         (setq battery-update-interval 15)
+         (if window-system
+             (fancy-battery-mode)
+           (display-battery-mode)))
+       (spaceline-spacemacs-theme)
+       )
    #+END_SRC
 * Minor-modes
   To not have the modeline full of minor modes I use globally diminish.
@@ -619,10 +633,11 @@
       (text-mode . whole-line-or-region-local-mode))
      )
   #+END_SRC
-(kill-emacs)
+
   Move lines with M-<up> and M-<down>
   #+BEGIN_SRC emacs-lisp
     (use-package move-text
+      :defer 2
       :config
       (move-text-default-bindings)
       )
@@ -632,6 +647,7 @@
   #+BEGIN_SRC emacs-lisp
       (use-package hl-line
         :if (window-system)
+        :defer 3
         :config
         (global-hl-line-mode t)
         :hook
@@ -641,6 +657,8 @@
       )
 
       (use-package beacon
+        :defer 3
+        :if (window-system)
         :config
         (beacon-mode t)
         :hook
@@ -653,6 +671,7 @@
   Winner mode for preserving my windows structure
   #+BEGIN_SRC emacs-lisp
      (use-package winner
+       :defer 4
        :config
        (winner-mode t)
        :bind
@@ -713,14 +732,6 @@
       )
   #+END_SRC
 
-  Rainbow-delimiters to have colored parantheses depending on the depth level.
-  The package impacts performances, though.
-  #+BEGIN_SRC emacs-lisp
-    ;; (use-package rainbow-delimiters
-    ;;   :hook (prog-mode . rainbow-delimiters-mode)
-    ;;   )
-  #+END_SRC
-
   Clickable addresses and web urls
   #+BEGIN_SRC emacs-lisp
       (use-package goto-addr
@@ -742,13 +753,13 @@
    #+BEGIN_SRC emacs-lisp
      (use-package whitespace-cleanup-mode
        :diminish whitespace-cleanup-mode
+       ;; Delete trailing whitespaces every time a buffer is saved
+       :hook (before-save . delete-trailing-whitespace)
        :config
        ;; Show whitespaces
        (setq-default show-trailing-whitespace t)
        ;; Clean thitespaces
        (global-whitespace-cleanup-mode t)
-       ;; Delete trailing whitespaces every time a buffer is saved
-       (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
        (defun sanityinc/no-trailing-whitespace ()
          "Turn off display of trailing whitespace in this buffer."
@@ -777,39 +788,43 @@
    Engine-mode is a convenient way to search online directly from Emacs.
    The default keybind is C-x /
    #+BEGIN_SRC emacs-lisp
-     (use-package engine-mode
-       :config
-       (engine-mode t)
+          (use-package engine-mode
+            :config
+            (engine-mode t)
 
-       ;; It seems that somewhere the value is overwritten
-       (setq engine/browser-function 'browse-url-chromium-app)
+            ;; It seems that somewhere the value is overwritten
+            (setq engine/browser-function 'browse-url-chromium-app)
 
-       (defengine ads-abs
-         "http://adsabs.harvard.edu/cgi-bin/basic_connect?qsearch=%s&version=1"
-         :keybinding "a")
+            (defengine ads-abs
+              "http://adsabs.harvard.edu/cgi-bin/basic_connect?qsearch=%s&version=1"
+              :keybinding "a")
 
-       (defengine duckduckgo
-         "https://duckduckgo.com/?q=%s"
-         :keybinding "d")
+            (defengine duckduckgo
+              "https://duckduckgo.com/?q=%s"
+              :keybinding "d")
 
-       (defengine google
-         "https://www.google.com/search?ie=utf-8&oe=utf-8&q=%s"
-         :keybinding "g")
+            (defengine google
+              "https://www.google.com/search?ie=utf-8&oe=utf-8&q=%s"
+              :keybinding "g")
 
-       (defengine merriam-webster
-         "https://www.merriam-webster.com/dictionary/%s"
-         :keybinding "m")
+            (defengine merriam-webster
+              "https://www.merriam-webster.com/dictionary/%s"
+              :keybinding "m")
 
-       (defengine merriam-webster-thesaurus
-         "https://www.merriam-webster.com/thesaurus/%s"
-         :keybinding "t")
+            (defengine merriam-webster-thesaurus
+              "https://www.merriam-webster.com/thesaurus/%s"
+              :keybinding "t")
 
-       )
+            (defengine synonym
+              "https://www.thesaurus.com/browse/%s"
+              :keybinding "s")
+            )
    #+END_SRC
 ** TRAMP
    Use controlmaster to use always the same ssh socket.
    #+BEGIN_SRC emacs-lisp
     (use-package tramp
+      :defer t
       :init
       (setq tramp-ssh-controlmaster-options
             (substitute-in-file-name (concat
@@ -825,8 +840,8 @@
 ** Sessions
    #+BEGIN_SRC emacs-lisp
     (use-package session
-      :init
-      (add-hook 'after-init-hook 'session-initialize)
+      :hook
+      (after-init . session-initialize)
       :config
       ;; save a list of open files in ~/.emacs.d/.emacs.desktop
       (setq desktop-path (list user-emacs-directory)
@@ -1021,7 +1036,6 @@
           ("C-j" . ivy-immediate-done)
           ("RET" . ivy-alt-done)
           )
-         :init
          :config
          (ivy-mode 1)
          (setq counsel-grep-swiper-limit (* 1024 100000))
@@ -1055,7 +1069,9 @@
          )
 
      (use-package counsel-tramp          ; Ivy interface for SSH via TRAMP
-       :bind ("C-c a t t" . counsel-tramp))
+       ;:bind ("C-c a t t" . counsel-tramp)
+       :defer t
+       )
    #+END_SRC
 ** Flyspell
    #+BEGIN_SRC emacs-lisp
@@ -1091,8 +1107,6 @@
    #+END_SRC
 * Major-modes
   In some cases I set mode explicitly even if it is not necessary.
-
-
 
   This is for Ledger for personal finances
   #+BEGIN_SRC emacs-lisp
@@ -1181,7 +1195,8 @@
   CMake files
   #+BEGIN_SRC emacs-lisp
     (use-package cmake-mode
-      )
+    :defer t
+    )
   #+END_SRC
 
 
@@ -1267,19 +1282,6 @@
       )
   #+END_SRC
 
-  Emacs iPython (Jupyter) Notebook
-  #+BEGIN_SRC emacs-lisp
-    ;; (use-package ein
-    ;;   :config
-    ;;   ;; [TODO] Figure out how to use a sensible auto-completion
-    ;;   (setq ein:use-auto-complete t)
-    ;;   (setq ein:completion-backend 'ein:use-ac-jedi-backend)
-    ;;   (setq ein:jupyter-default-server-command "/usr/bin/jupyter"
-    ;;                  ein:jupyter-server-args (list "--no-browser")
-    ;;                  )
-    ;;   )
-  #+END_SRC
-
   Some sh-like files
   #+BEGIN_SRC emacs-lisp
     (use-package sh-script
@@ -1291,8 +1293,11 @@
       )
   #+END_SRC
 
-  Dired (TODO Move the use-package!)
   #+BEGIN_SRC emacs-lisp
+  (use-package dired
+  :ensure nil
+  :defer t
+  :config
      (setq
       dired-listing-switches "-alh" ;; Human readable size in dired
       dired-dwim-target t ;; Dired do what I mean, to move files more easily
@@ -1300,6 +1305,7 @@
      ;; always delete and copy recursively
      (setq dired-recursive-deletes 'always
            dired-recursive-copies 'always
+           )
            )
   #+END_SRC
 
@@ -1492,170 +1498,168 @@
    #+END_SRC
 ** AucTeX
    #+BEGIN_SRC emacs-lisp
-     (use-package tex-site
-       :ensure auctex
-       :defines (latex-help-cmd-alist latex-help-file)
-       :mode (("\\.tikz\\'" . LaTeX-mode))
-       :config
-       (setq reftex-plug-into-AUCTeX t)
-       ;; Turn on RefTeX in AUCTeX
-       (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
-       ;; Enable always math mode
-       (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-       ;; Enable flyspell for spell checking
-       (add-hook 'LaTeX-mode-hook 'flyspell-mode)
-       ;; Electric $ $
-       (add-hook 'LaTeX-mode-hook
-                 (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
-                            (cons "$" "$"))))
-       ;; Don't insert braces after symbols in math mode
-       (setq TeX-insert-braces nil)
+        (use-package tex-site
+          :ensure auctex
+          :defines (latex-help-cmd-alist latex-help-file)
+          :mode (("\\.tikz\\'" . LaTeX-mode))
+          :config
+          (setq reftex-plug-into-AUCTeX t)
+          (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+          ;; Enable always math mode
+          (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+          ;; Enable flyspell for spell checking
+          (add-hook 'LaTeX-mode-hook 'flyspell-mode)
+          ;; Electric $ $
+          (add-hook 'LaTeX-mode-hook
+                    (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
+                               (cons "$" "$"))))
+          ;; Don't insert braces after symbols in math mode
+          (setq TeX-insert-braces nil)
+
+          (setq reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
+
+          ;; Use pdftools
+          (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
+          (setq TeX-view-program-list '(("PDF Tools" "TeX-pdf-tools-sync-view")))
+          (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
+
+          (setq font-latex-script-display (quote ((raise -0.2) raise 0.2)))
+
+          (add-hook 'LaTeX-mode-hook
+                    (lambda ()
+                      (push '("\\colon" . ?:) prettify-symbols-alist)))
+          (add-hook 'LaTeX-mode-hook
+                    (lambda ()
+                      (push '("\\percent" . ?%) prettify-symbols-alist)))
+          (add-hook 'LaTeX-mode-hook
+                    (lambda ()
+                      (push '("\\pm" . ?±) prettify-symbols-alist)))
+          (add-hook 'LaTeX-mode-hook
+                    (lambda ()
+                      (push '("\\dots" . ?…) prettify-symbols-alist)))
+          (add-hook 'LaTeX-mode-hook
+                    (lambda ()
+                      (push '("\\rrbracket" . 10215) prettify-symbols-alist))) ;;;⟧
+          (add-hook 'LaTeX-mode-hook
+                    (lambda ()
+                      (push '("\\llbracket" . 10214) prettify-symbols-alist))) ;;;⟦
+          (add-hook 'LaTeX-mode-hook
+                    (lambda ()
+                      (push '("\\incl" . ?↪) prettify-symbols-alist)))
+          (add-hook 'LaTeX-mode-hook
+                    (lambda ()
+                      (push '("\\slash" . ?/) prettify-symbols-alist)))
+          (add-hook 'LaTeX-mode-hook
+                    (lambda ()
+                      (push '("\\bigcup" . ?⋃) prettify-symbols-alist)))
+
+          ;; Personal bindings in math mode
+          (setq LaTeX-math-list '(
+                                  (?, "partial" "Misc Symbol" 8706)
+                                  (?% "percent" "Misc Symbol" 0025)
+                                  ;; Not using them anymore...
+                                  ;; (?o "circ" "Binary Operator" 9675)
+                                  ;; (?= "cong" "Binary Operator" 2265)
+                                  ))
+
+          (setq TeX-parse-self t)
+          (setq TeX-auto-save t)
+          (setq-default TeX-master nil)
+
+          ;; Disable prompt for reference format
+          (setq reftex-ref-macro-prompt nil)
+
+          ;;Enable SyncTex
+          (setq TeX-source-correlate-mode t)
+
+          ;; Nice stuff stolen from https://thenybble.de/projects/inhibit-auto-fill.html
+
+          ;; Whitelist some autofill envs
+          (defcustom LaTeX-inhibited-auto-fill-environments
+            '("tabular" "tikzpicture") "For which LaTeX environments not to run auto-fill.")
+
+          (defun LaTeX-limited-auto-fill ()
+            (let ((environment (LaTeX-current-environment)))
+              (when (not (member environment LaTeX-inhibited-auto-fill-environments))
+                (do-auto-fill))))
+
+          ;; (add-hook 'LaTeX-mode-hook
+          ;;           (lambda () (setq auto-fill-function #'LaTeX-limited-auto-fill)) t)
+
+          ;; Do not break the unbreakable space
+          (defun LaTeX-dont-break-on-nbsp ()
+            (and (eq major-mode 'latex-mode)
+                 (eq (char-before (- (point) 1)) ?\\)))
+          (add-to-list 'fill-nobreak-predicate #'LaTeX-dont-break-on-nbsp)
+
+          ;; Better align tables
+          (defun LaTeX-collapse-table ()
+            (interactive)
+            (save-excursion
+              (LaTeX-mark-environment)
+              (while (re-search-forward "[[:space:]]+\\(&\\|\\\\\\\\\\)" (region-end) t)
+                (replace-match " \\1"))))
+
+          (defun LaTeX-align-environment (arg)
+            (interactive "P")
+            (if arg
+                (LaTeX-collapse-table)
+              (save-excursion
+                (LaTeX-mark-environment)
+                (align (region-beginning) (region-end)))))
+
+          ;; (add-hook LaTeX-mode-hook
+          ;;           (lambda () (local-set-key (kbd "C-c f") #'LaTeX-align-environment)))
 
 
-       (setq reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
+          ;; Escape underscore
+          (defun LaTeX-underscore-maybe (arg)
+            (interactive "p")
+            (if (eq last-command 'LaTeX-underscore-maybe)
+                (progn
+                  (delete-backward-char 2)
+                  (self-insert-command 1))
+              (if (or (or (> 1 arg) (texmathp)))
+                  (self-insert-command 1)
+                (insert "\\_"))))
+          ;; (add-hook LaTeX-mode-hook (lambda () (local-set-key (kbd "_") #'LaTeX-underscore-maybe)))
 
-       ;; Use pdftools
-       (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
-       (setq TeX-view-program-list '(("PDF Tools" "TeX-pdf-tools-sync-view")))
-       (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
+          (add-to-list 'fill-nobreak-predicate #'LaTeX-dont-break-on-nbsp)
 
-       (setq font-latex-script-display (quote ((raise -0.2) raise 0.2)))
+          (defun LaTeX-init-tweaks ()
+            (local-set-key (kbd "_") #'LaTeX-underscore-maybe)
+            (local-set-key (kbd "C-c f") #'LaTeX-align-environment)
+            (setq auto-fill-function #'LaTeX-limited-auto-fill))
 
-       (add-hook 'LaTeX-mode-hook
-                 (lambda ()
-                   (push '("\\colon" . ?:) prettify-symbols-alist)))
-       (add-hook 'LaTeX-mode-hook
-                 (lambda ()
-                   (push '("\\percent" . ?%) prettify-symbols-alist)))
-       (add-hook 'LaTeX-mode-hook
-                 (lambda ()
-                   (push '("\\pm" . ?±) prettify-symbols-alist)))
-       (add-hook 'LaTeX-mode-hook
-                 (lambda ()
-                   (push '("\\dots" . ?…) prettify-symbols-alist)))
-       (add-hook 'LaTeX-mode-hook
-                 (lambda ()
-                   (push '("\\rrbracket" . 10215) prettify-symbols-alist))) ;;;⟧
-       (add-hook 'LaTeX-mode-hook
-                 (lambda ()
-                   (push '("\\llbracket" . 10214) prettify-symbols-alist))) ;;;⟦
-       (add-hook 'LaTeX-mode-hook
-                 (lambda ()
-                   (push '("\\incl" . ?↪) prettify-symbols-alist)))
-       (add-hook 'LaTeX-mode-hook
-                 (lambda ()
-                   (push '("\\slash" . ?/) prettify-symbols-alist)))
-       (add-hook 'LaTeX-mode-hook
-                 (lambda ()
-                   (push '("\\bigcup" . ?⋃) prettify-symbols-alist)))
+          (add-to-list 'LaTeX-mode-hook 'LaTeX-init-tweaks)
 
-       ;; Personal bindings in math mode
-       (setq LaTeX-math-list '(
-                               (?, "partial" "Misc Symbol" 8706)
-                               (?% "percent" "Misc Symbol" 0025)
-                               ;; Not using them anymore...
-                               ;; (?o "circ" "Binary Operator" 9675)
-                               ;; (?= "cong" "Binary Operator" 2265)
-                               ))
+          (add-hook 'LaTeX-mode-hook 'my-inhibit-global-company-mode)
 
-       (setq TeX-parse-self t)
-       (setq TeX-auto-save t)
-       (setq-default TeX-master nil)
-
-       ;; Disable prompt for reference format
-       (setq reftex-ref-macro-prompt nil)
-
-       ;;Enable SyncTex
-       (setq TeX-source-correlate-mode t)
-
-       ;; Nice stuff stolen from https://thenybble.de/projects/inhibit-auto-fill.html
-
-       ;; Whitelist some autofill envs
-       (defcustom LaTeX-inhibited-auto-fill-environments
-         '("tabular" "tikzpicture") "For which LaTeX environments not to run auto-fill.")
-
-       (defun LaTeX-limited-auto-fill ()
-         (let ((environment (LaTeX-current-environment)))
-           (when (not (member environment LaTeX-inhibited-auto-fill-environments))
-             (do-auto-fill))))
-
-       ;; (add-hook 'LaTeX-mode-hook
-       ;;           (lambda () (setq auto-fill-function #'LaTeX-limited-auto-fill)) t)
-
-       ;; Do not break the unbreakable space
-       (defun LaTeX-dont-break-on-nbsp ()
-         (and (eq major-mode 'latex-mode)
-              (eq (char-before (- (point) 1)) ?\\)))
-       (add-to-list 'fill-nobreak-predicate #'LaTeX-dont-break-on-nbsp)
-
-       ;; Better align tables
-       (defun LaTeX-collapse-table ()
-         (interactive)
-         (save-excursion
-           (LaTeX-mark-environment)
-           (while (re-search-forward "[[:space:]]+\\(&\\|\\\\\\\\\\)" (region-end) t)
-             (replace-match " \\1"))))
-
-       (defun LaTeX-align-environment (arg)
-         (interactive "P")
-         (if arg
-             (LaTeX-collapse-table)
-           (save-excursion
-             (LaTeX-mark-environment)
-             (align (region-beginning) (region-end)))))
-
-       ;; (add-hook LaTeX-mode-hook
-       ;;           (lambda () (local-set-key (kbd "C-c f") #'LaTeX-align-environment)))
+          (defun my-inhibit-global-company-mode ()
+            "Counter-act `global-company-mode'."
+            (add-hook 'after-change-major-mode-hook
+                      (lambda () (company-mode 0))
+                      :append :local))
 
 
-       ;; Escape underscore
-       (defun LaTeX-underscore-maybe (arg)
-         (interactive "p")
-         (if (eq last-command 'LaTeX-underscore-maybe)
-             (progn
-               (delete-backward-char 2)
-               (self-insert-command 1))
-           (if (or (or (> 1 arg) (texmathp)))
-               (self-insert-command 1)
-             (insert "\\_"))))
-       ;; (add-hook LaTeX-mode-hook (lambda () (local-set-key (kbd "_") #'LaTeX-underscore-maybe)))
-
-       (add-to-list 'fill-nobreak-predicate #'LaTeX-dont-break-on-nbsp)
-
-       (defun LaTeX-init-tweaks ()
-         (local-set-key (kbd "_") #'LaTeX-underscore-maybe)
-         (local-set-key (kbd "C-c f") #'LaTeX-align-environment)
-         (setq auto-fill-function #'LaTeX-limited-auto-fill))
-
-       (add-to-list 'LaTeX-mode-hook 'LaTeX-init-tweaks)
-
-       (add-hook 'LaTeX-mode-hook 'my-inhibit-global-company-mode)
-
-       (defun my-inhibit-global-company-mode ()
-         "Counter-act `global-company-mode'."
-         (add-hook 'after-change-major-mode-hook
-                   (lambda () (company-mode 0))
-                   :append :local))
+     (defun latex-help-get-cmd-alist ()    ;corrected version:
+       "Scoop up the commands in the index of the latex info manual.
+      The values are saved in `latex-help-cmd-alist' for speed."
+       ;; mm, does it contain any cached entries
+       (if (not (assoc "\\begin" latex-help-cmd-alist))
+           (save-window-excursion
+             (setq latex-help-cmd-alist nil)
+             (Info-goto-node (concat latex-help-file "Command Index"))
+             (goto-char (point-max))
+             (while (re-search-backward "^\\* \\(.+\\): *\\(.+\\)\\." nil t)
+               (let ((key (buffer-substring (match-beginning 1) (match-end 1)))
+                     (value (buffer-substring (match-beginning 2)
+                                              (match-end 2))))
+                 (add-to-list 'latex-help-cmd-alist (cons key value))))))
+       latex-help-cmd-alist)
 
 
-  (defun latex-help-get-cmd-alist ()    ;corrected version:
-    "Scoop up the commands in the index of the latex info manual.
-   The values are saved in `latex-help-cmd-alist' for speed."
-    ;; mm, does it contain any cached entries
-    (if (not (assoc "\\begin" latex-help-cmd-alist))
-        (save-window-excursion
-          (setq latex-help-cmd-alist nil)
-          (Info-goto-node (concat latex-help-file "Command Index"))
-          (goto-char (point-max))
-          (while (re-search-backward "^\\* \\(.+\\): *\\(.+\\)\\." nil t)
-            (let ((key (buffer-substring (match-beginning 1) (match-end 1)))
-                  (value (buffer-substring (match-beginning 2)
-                                           (match-end 2))))
-              (add-to-list 'latex-help-cmd-alist (cons key value))))))
-    latex-help-cmd-alist)
-
-
-       )
+          )
    #+END_SRC
 ** Org-mode
    Make sure org and org-archive are open with org-mode
@@ -1744,7 +1748,7 @@
             (setq org-log-done t)
 
             ;; Cuter bullets
-            (setq org-ellipsis "⤵")
+            (setq org-ellipsis "⬎")
 
             ;; Syntax highlighting in source blocks
             (setq org-src-fontify-natively t)
@@ -1856,7 +1860,9 @@
             ;;   (setq org-reveal-mathjax t)
             ;;   )
 
-            (use-package ox-hugo)
+            (use-package ox-hugo
+            :defer t
+            )
 
             ;; (use-package htmlize
             ;;   )
@@ -1961,7 +1967,7 @@
             )
 
      (use-package org-randomnote
-       :ensure t
+       :defer t
        :config
        (setq org-randomnote-candidates '("~/documents/orgs/learned.org"))
        (setq org-randomnote-open-behavior 'indirect-buffer)
@@ -2286,7 +2292,7 @@
    #+BEGIN_SRC emacs-lisp
      (use-package bibslurp
        :defer t
-       ;:load-path "~/.emacs.d/lisp/bibslurp"
+       :load-path "~/.emacs.d/lisp/bibslurp"
        :bind (("C-c b s" . bibslurp-query-ads)
               ("C-c b a" . sbozzolo/arxiv-get-pdf-from-bib-entry)
               :map bibslurp-mode-map
@@ -2512,9 +2518,6 @@
       ;; Hide minibuffer when not used
       (setq exwm-workspace-minibuffer-position 'bottom)
 
-      ;; Allow to read from minibuffer while in minibuffer.
-      (setq enable-recursive-minibuffers t)
-
       ;; Rename buffer with title
       (defun exwm-rename-buffer ()
         (interactive)
@@ -2695,7 +2698,10 @@
       ;;           (lambda ()
       ;;             (start-process-shell-command
       ;;              "xrandr" nil "xrandr --output VGA-1 --same-as LVDS-1 --auto")))
-           (setq exwm-randr-workspace-output-plist '(0 "eDP-1" 1 "DP-2-2" 2 "DP-2-3"))
+           (setq exwm-randr-workspace-monitor-plist '(0 "DP-2-2" 1 "eDP-1" 2 "DP-2-3"
+                                            ;; Hacky trick to use DP-2-2 as default monitor
+                                                        3 "DP-2-2" 4 "DP-2-2" 5 "DP-2-2"))
+           ;(setq exwm-randr-workspace-monitor-plist '(0 "LVDS-1" 1 "VGA-1"))
 
       (setq exwm-randr-clone nil)
 
@@ -2864,7 +2870,15 @@
       ;;                                    '(request-message-level 'blather))
   #+END_SRC
 
+
+** ivy-emoji
+#+BEGIN_SRC emacs-lisp
+   (use-package ivy-emoji
+       :load-path  "~/documents/projects/2020/ivy-emoji"
+       :commands (ivy-emoji)
+       )
 #+END_SRC
+
 
   #+BEGIN_SRC emacs-lisp
       (exwm-input-set-key (kbd "<XF86Tools>")
@@ -2951,164 +2965,163 @@
    #+END_SRC
 ** vterm
    #+BEGIN_SRC emacs-lisp
-          (use-package vterm
-            :load-path  "~/.emacs.d/lisp/emacs-libvterm/"
-            :defer t
-            :commands (vterm)
-            :bind     (("C-c C-k" . vterm-copy-mode))
-            :config
-            (add-hook 'vterm-exit-functions #'(lambda (buf)
-                                                (when buf (kill-buffer buf))))
-            ;; Remove binding of <f#>, and move it to S-<f#>
-            (cl-loop for number from 1 to 12 do
-                     (progn
-                       (define-key vterm-mode-map (kbd (format "<f%i>" number)) nil)
-                       )
-                     )
-
-            (defun starts-with-p (line prompt)
-              "Check if LINE starts with PROMPT"
-              (string= (substring line 0 (length prompt)) prompt)
-              )
-
-            (defun is-a-prompt-p (line)
-              "Check if the LINE is the input line of some interactive process."
-              (or
-               (starts-with-p line "$")
-               (starts-with-p line "gnuplot>")
-               (starts-with-p line ">>>")
-               (starts-with-p line "In ")
-               )
-              )
-
-            (defun send-command-input (command &optional args)
-              "Check if the point is in the input line, if it is, send the
-               command with vterm. This works only if the first characters
-               of the line are in the database of is-a-prompt-p."
-              (if (is-a-prompt-p (thing-at-point 'line))
-                  (vterm--self-insert)            ; Prompt line
-                (funcall command args)
+     (use-package vterm
+       :load-path  "~/documents/projects/2019/emacs-libvterm"
+       :commands (vterm)
+       :bind     (:map vterm-mode-map ("C-c C-k" . vterm-copy-mode)
+                  :map vterm-copy-mode-map ("C-c C-k" . vterm-copy-mode))
+       :custom   ((vterm-term-environment-variable "eterm-color")
+                  (vterm-kill-buffer-on-exit t))
+       :config
+       ;; Remove binding of <f#>, and move it to S-<f#>
+       (cl-loop for number from 1 to 12 do
+                (progn
+                  (define-key vterm-mode-map (kbd (format "<f%i>" number)) nil)
+                  )
                 )
-              )
 
-            (defun vterm-yank-primary ()
-              "Implementation of `mouse-yank-primary' (paste) in vterm."
-              (interactive)
-              (let ((inhibit-read-only t)
-                    (primary (gui-get-primary-selection)))
-                (cl-letf (((symbol-function 'insert-for-yank)
-                           #'(lambda(str) (vterm-send-string str t))))
-                    (insert-for-yank primary))))
+       (defun starts-with-p (line prompt)
+         "Check if LINE starts with PROMPT"
+         (string= (substring line 0 (length prompt)) prompt)
+         )
 
+       (defun is-a-prompt-p (line)
+         "Check if the LINE is the input line of some interactive process."
+         (or
+          (starts-with-p line "$")
+          (starts-with-p line "gnuplot>")
+          (starts-with-p line ">>>")
+          (starts-with-p line "In ")
+          )
+         )
 
-            (define-key vterm-mode-map (kbd "C-f") '(lambda () (interactive) (send-command-input 'forward-char)))
-            (define-key vterm-mode-map (kbd "C-b") '(lambda () (interactive) (send-command-input 'backward-char)))
-            (define-key vterm-mode-map (kbd "C-n") nil)
-            (define-key vterm-mode-map (kbd "C-p") nil)
-            (define-key vterm-mode-map (kbd "C-y") 'vterm-yank)
-            (define-key vterm-mode-map (kbd "<mouse-2>") 'vterm-yank-primary)
-            (define-key vterm-mode-map (kbd "C-s") '(lambda () (interactive) (send-command-input 'counsel-grep-or-swiper)))
-            (define-key vterm-mode-map (kbd "C-r") '(lambda () (interactive) (send-command-input 'counsel-grep-or-swiper)))
-            (define-key vterm-mode-map (kbd "M-f") '(lambda () (interactive) (send-command-input 'forward-word)))
-            (define-key vterm-mode-map (kbd "M-b") '(lambda () (interactive) (send-command-input 'backward-word)))
-            (define-key vterm-mode-map (kbd "C-e") '(lambda () (interactive) (send-command-input 'move-end-of-line)))
-            (define-key vterm-mode-map (kbd "C-a") '(lambda () (interactive) (send-command-input 'move-beginning-of-line)))
-            (define-key vterm-mode-map (kbd "M-w") '(lambda () (interactive) (send-command-input
-                                                                         '(lambda (interactive)
-                                                                            (kill-ring-save (point) (mark t))
-                                                                            ))))
+       (defun send-command-input (command &optional args)
+         "Check if the point is in the input line, if it is, send the
+          command with vterm. This works only if the first characters
+          of the line are in the database of is-a-prompt-p."
+         (if (is-a-prompt-p (thing-at-point 'line))
+             (vterm--self-insert)            ; Prompt line
+           (funcall command args)
+           )
+         )
 
-            (define-key vterm-mode-map (kbd "C-SPC") '(lambda () (interactive) (send-command-input 'set-mark-command)))
+       (define-key vterm-mode-map (kbd "C-f") '(lambda () (interactive) (send-command-input 'forward-char)))
+       (define-key vterm-mode-map (kbd "C-b") '(lambda () (interactive) (send-command-input 'backward-char)))
+       (define-key vterm-mode-map (kbd "C-n") nil)
+       (define-key vterm-mode-map (kbd "C-p") nil)
+       (define-key vterm-mode-map (kbd "C-y") 'vterm-yank)
+       (define-key vterm-mode-map (kbd "<mouse-2>") 'vterm-yank-primary)
+       (define-key vterm-mode-map (kbd "C-s") '(lambda () (interactive) (send-command-input 'counsel-grep-or-swiper)))
+       (define-key vterm-mode-map (kbd "C-r") '(lambda () (interactive) (send-command-input 'counsel-grep-or-swiper)))
+       (define-key vterm-mode-map (kbd "M-f") '(lambda () (interactive) (send-command-input 'forward-word)))
+       (define-key vterm-mode-map (kbd "M-b") '(lambda () (interactive) (send-command-input 'backward-word)))
+       (define-key vterm-mode-map (kbd "C-e") '(lambda () (interactive) (send-command-input 'move-end-of-line)))
+       (define-key vterm-mode-map (kbd "C-a") '(lambda () (interactive) (send-command-input 'move-beginning-of-line)))
+       (define-key vterm-mode-map (kbd "M-w") '(lambda () (interactive) (send-command-input
+                                                                    '(lambda (interactive)
+                                                                       (kill-ring-save (point) (mark t))
+                                                                       ))))
 
-            ;; Kill-word backwords
-            (define-key vterm-mode-map (kbd "<C-backspace>") '(lambda () (interactive) (vterm-send-key (kbd "C-w"))))
-            (define-key vterm-mode-map (kbd "C-m") '(lambda () (interactive) (vterm-send-key (kbd "RET"))))
+       (define-key vterm-mode-map (kbd "C-SPC") '(lambda () (interactive) (send-command-input 'set-mark-command)))
 
-            ;; I cannot get the loop to work...
-            (define-key vterm-mode-map (kbd "C-<f0>") '(lambda () (interactive) (vterm-send-key "<f0>")))
-            (define-key vterm-mode-map (kbd "C-<f1>") '(lambda () (interactive) (vterm-send-key "<f1>")))
-            (define-key vterm-mode-map (kbd "C-<f2>") '(lambda () (interactive) (vterm-send-key "<f2>")))
-            (define-key vterm-mode-map (kbd "C-<f3>") '(lambda () (interactive) (vterm-send-key "<f3>")))
-            (define-key vterm-mode-map (kbd "C-<f4>") '(lambda () (interactive) (vterm-send-key "<f4>")))
-            (define-key vterm-mode-map (kbd "C-<f5>") '(lambda () (interactive) (vterm-send-key "<f5>")))
-            (define-key vterm-mode-map (kbd "C-<f6>") '(lambda () (interactive) (vterm-send-key "<f6>")))
-            (define-key vterm-mode-map (kbd "C-<f7>") '(lambda () (interactive) (vterm-send-key "<f7>")))
-            (define-key vterm-mode-map (kbd "C-<f8>") '(lambda () (interactive) (vterm-send-key "<f8>")))
-            (define-key vterm-mode-map (kbd "C-<f9>") '(lambda () (interactive) (vterm-send-key "<f9>")))
-            (define-key vterm-mode-map (kbd "C-<f10>") '(lambda () (interactive) (vterm-send-key "<f10>")))
-            (define-key vterm-mode-map (kbd "C-<f11>") '(lambda () (interactive) (vterm-send-key "<f11>")))
-            (define-key vterm-mode-map (kbd "C-<f12>") '(lambda () (interactive) (vterm-send-key "<f12>")))
+       ;; Kill-word backwords
+       (define-key vterm-mode-map (kbd "<C-backspace>") '(lambda () (interactive) (vterm-send-key (kbd "C-w"))))
+       (define-key vterm-mode-map (kbd "C-m") '(lambda () (interactive) (vterm-send-key (kbd "RET"))))
 
-            ;; (defvar vterm-user "")
-            ;; (make-variable-buffer-local 'vterm-user)
-            ;; (defvar vterm-host "")
-            ;; (make-variable-buffer-local 'vterm-host)
-            ;; (defvar vterm-pwd "")
-            ;; (make-variable-buffer-local 'vterm-pwd)
-            ;; (defvar vterm-cmd "")
-            ;; (make-variable-buffer-local 'vterm-cmd)
+       ;; I cannot get the loop to work...
+       (define-key vterm-mode-map (kbd "C-<f0>") '(lambda () (interactive) (vterm-send-key "<f0>")))
+       (define-key vterm-mode-map (kbd "C-<f1>") '(lambda () (interactive) (vterm-send-key "<f1>")))
+       (define-key vterm-mode-map (kbd "C-<f2>") '(lambda () (interactive) (vterm-send-key "<f2>")))
+       (define-key vterm-mode-map (kbd "C-<f3>") '(lambda () (interactive) (vterm-send-key "<f3>")))
+       (define-key vterm-mode-map (kbd "C-<f4>") '(lambda () (interactive) (vterm-send-key "<f4>")))
+       (define-key vterm-mode-map (kbd "C-<f5>") '(lambda () (interactive) (vterm-send-key "<f5>")))
+       (define-key vterm-mode-map (kbd "C-<f6>") '(lambda () (interactive) (vterm-send-key "<f6>")))
+       (define-key vterm-mode-map (kbd "C-<f7>") '(lambda () (interactive) (vterm-send-key "<f7>")))
+       (define-key vterm-mode-map (kbd "C-<f8>") '(lambda () (interactive) (vterm-send-key "<f8>")))
+       (define-key vterm-mode-map (kbd "C-<f9>") '(lambda () (interactive) (vterm-send-key "<f9>")))
+       (define-key vterm-mode-map (kbd "C-<f10>") '(lambda () (interactive) (vterm-send-key "<f10>")))
+       (define-key vterm-mode-map (kbd "C-<f11>") '(lambda () (interactive) (vterm-send-key "<f11>")))
+       (define-key vterm-mode-map (kbd "C-<f12>") '(lambda () (interactive) (vterm-send-key "<f12>")))
+       )
 
-            ;; (defun vterm-set-title-hook (title) ;title = user@host@lastcmd:path  or user@host:path
-            ;;   (let* ((tokens (split-string title ":" ))
-            ;;          dir)
-            ;;     (when (equal 2 (length tokens))
-            ;;       (setq vterm-pwd (string-trim-left (nth 1 tokens)))
-            ;;       (setq tokens (split-string (nth 0 tokens) "@" ))
-            ;;       (when (>  (length tokens) 1)
-            ;;         (setq vterm-user (nth 0 tokens))
-            ;;         (setq vterm-host (nth 1 tokens))
-            ;;         (when (and (nth 2 tokens)
-            ;;                    (not (string-empty-p (or (nth 2 tokens) ""))))
-            ;;           (setq vterm-cmd (nth 2 tokens))))
-            ;;       (setq dir
-            ;;             (file-name-as-directory
-            ;;              (if (and (string= vterm-host (system-name))
-            ;;                       (string= vterm-user (user-real-login-name)))
-            ;;                  (expand-file-name vterm-pwd)
-            ;;                (concat "/-:" vterm-user "@" vterm-host ":"
-            ;;                        vterm-pwd))))
-            ;;       (when (ignore-errors (file-directory-p dir))
-            ;;         (cd-absolute dir))
-            ;;       (message title)
-            ;;       ;; (message "pwd=%s,user=%s,host=%s,cmd=%s d=%s"
-            ;;       ;;          vterm-pwd vterm-user vterm-host vterm-cmd dir)
-            ;;       (rename-buffer (format "term %s %s@%s:%s" vterm-cmd vterm-user vterm-host vterm-pwd ) t)
-
-     ;       (add-hook 'vterm-set-title-functions 'vterm-set-title-hook)
-            )
-
-          (use-package vterm-toggle
-            :load-path  "~/.emacs.d/lisp/vterm-toggle/"
-            :defer t
-            :commands (vterm-toggle-cd)
-            )
+     (use-package vterm-toggle
+       :load-path  "~/.emacs.d/lisp/vterm-toggle/"
+       :defer t
+       :commands (vterm-toggle-cd)
+       )
 
    #+END_SRC
 ** telega
    #+BEGIN_SRC emacs-lisp
      (use-package telega
        :load-path  "~/.emacs.d/lisp/telega.el/"
-       :bind ("s-q" . telega)
+                                             ;:bind ("s-q" . telega)
+       :bind (("s-q" . call-telega)
+              :map telega-root-mode-map
+              ("q" . quit-telega)
+              )
+       :init
+       (setq telega-time-budget-seconds (* 30 60))
+       (setq telega-time-used-seconds 0)
+       (setq telega-last-reset-seconds (float-time))
        :config
-       (use-package visual-fill-column)
-       )
+       (defun call-telega ()
+         (interactive)
+         (setq telega-started-float-time (float-time))
+         (if (< telega-time-used-seconds telega-time-budget-seconds)
+             (call-interactively 'telega)
+           (message "You run out of Telegram time!"))
+         )
+       (defun quit-telega ()
+         (interactive)
+         (if (> (- (float-time) telega-last-reset-seconds) (* 24 60 60))
+             ;; If more than one day has passed, then reset the counter
+             (progn
+               (setq telega-time-used-seconds 0)
+               (setq telega-last-reset-seconds (float-time))
+               )
+           (setq telega-time-used-seconds (+ telega-time-used-seconds (+ (- (float-time) telega-started-float-time))))
+           )
+         (message
+          (format "Available Telegram time: %d minutes" (/
+                                                         (- telega-time-budget-seconds telega-time-used-seconds)
+                                                         60)))
+         (bury-buffer)
+         )
+
+         (add-hook 'telega-chat-mode-hook
+                   (lambda ()
+                     (set (make-local-variable 'company-backends)
+                          (append '(telega-company-emoji
+                                    telega-company-username
+                                    telega-company-hashtag)
+                                  (when (telega-chat-bot-p telega-chatbuf--chat)
+                                    '(telega-company-botcmd))))
+                     (company-mode 1)))
+         (use-package visual-fill-column)
+         (setq telega-chat-title-emoji-use-images nil)
+         (setq telega-emoji-use-images nil)
+         )
    #+END_SRC
 ** Yasnippet
    #+BEGIN_SRC emacs-lisp
      (use-package yasnippet
        :defer t
        :hook
-      ((prog-mode . yas-minor-mode)
-      (LaTeX-mode . yas-minor-mode))
+       ((prog-mode . yas-minor-mode)
+        (LaTeX-mode . yas-minor-mode))
+       )
+
+     (use-package yasnippet-snippets
+       :after yasnippet
        :config
-       (use-package yasnippet-snippets
-       :config
-       (yas-reload-all))
+       (yas-reload-all)
        )
    #+END_SRC
 ** ielm
    #+BEGIN_SRC emacs-lisp
     (use-package ielm
+    :defer t
       )
    #+END_SRC
 ** Start emacs server
@@ -3116,7 +3129,7 @@
   I actually never use it, but it seems to be needed for pdf-tools
   #+BEGIN_SRC emacs-lisp
     (use-package server
-       :defer 180
+       :defer 5
        :config (unless (server-running-p) (server-start))
     )
   #+END_SRC
@@ -3125,6 +3138,7 @@
    I don't use it very often...
   #+BEGIN_SRC emacs-lisp
     (use-package which-key
+      :defer 10
       :diminish which-key-mode
       :config
       (which-key-mode)
@@ -3134,7 +3148,7 @@
 
 ** exwm-edit
   #+BEGIN_SRC emacs-lisp
-    (use-package exwm-edit)
+    (use-package exwm-edit :defer t)
   #+END_SRC
 * Old unused code
 ** GNUs
