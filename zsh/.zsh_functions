@@ -72,6 +72,12 @@ function yta() {
     mpv --ytdl-format=bestaudio ytdl://ytsearch:"$*"
 }
 
+# Download an entire website with wget
+
+function wget_all_website() {
+    wget --recursive --no-clobber --page-requisites --html-extension --convert-links --no-parent "$1"
+}
+
 # Local Variables:
 # mode: sh
 # End:
