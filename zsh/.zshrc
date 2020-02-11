@@ -12,6 +12,7 @@ setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording en
 # Add also sbin to use auto completion with sudo
 export PATH="/usr/sbin:/sbin":$PATH
 export PATH="$HOME/bin":$PATH
+export PATH="$HOME/.local/bin":$PATH
 
 export LD_LIBRARY_PATH="/usr/local/lib":$LD_LIBRARY_PATH
 
@@ -93,6 +94,10 @@ else
     else
         if [ -f  /usr/share/zsh/site-contrib/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
             source  /usr/share/zsh/site-contrib/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+        else
+            if [ -f  /usr/share/zsh/site-functions/zsh-syntax-highlighting.zsh ]; then
+                source  /usr/share/zsh/site-functions/zsh-syntax-highlighting.zsh
+            fi
         fi
     fi
 fi
@@ -141,7 +146,8 @@ HOSTNAME=$(uname -n)
 USER=$(whoami)
 
 function chpwd() {
-    print -Pn "\e]51;A$(pwd)\e\\";
+    print -Pn "\e]51;A$(whoami)@$(hostname):$(pwd)\e\\";
+    # print -Pn "\e]51;A$(pwd)\e\\";
 }
 
 # case $TERM in
@@ -175,7 +181,7 @@ then
 fi
 
 # # Workaround for redshift
-# pgrep redshift &> /dev/null || nohup redshift -c ~/.redshiftrc &> /dev/null &
+pgrep redshift &> /dev/null || nohup redshift -c ~/.redshiftrc &> /dev/null &
 
 # Gentoo completions
 
@@ -184,3 +190,9 @@ compinit
 # promptinit; prompt gentoo
 
 zstyle ':completion::complete:*' use-cache 1
+
+if [[ "$INSIDE_EMACS" = 'vterm' ]]; then
+    function find-file(){
+        echo -n  "\e]51;E(find-file \"$@\")\e\\"
+    }
+fi
