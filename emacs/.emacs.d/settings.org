@@ -71,8 +71,8 @@
           ("org"          . 10)
           ("GNU ELPA"     . 5))
     )
-    ;; Activate package-system
-    (package-initialize)
+    ;; Activate package-system, needed only before Emacs 27
+    (when (version< emacs-version "27.0") (package-initialize))
   #+END_SRC
 * Setup use-package
   I config everything with use-package, hence if it is not installed, I want
