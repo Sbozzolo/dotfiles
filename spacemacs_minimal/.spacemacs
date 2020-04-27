@@ -39,7 +39,7 @@ This function should only modify configuration layer settings."
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      ;; auto-completion
-     ;; better-defaults
+     better-defaults
      ;; emacs-lisp
      ;; git
      ;; helm
@@ -55,6 +55,7 @@ This function should only modify configuration layer settings."
      ;; version-control
      ;; treemacs
      exwm
+     shell
      )
 
    ;; List of additional packages that will be installed without being
@@ -74,6 +75,16 @@ This function should only modify configuration layer settings."
                                     ; In layer EXWM
                                     desktop-environment
                                     framemove
+                                    ; In layer shell
+                                    esh-help
+                                    eshell-prompt-extras
+                                    eshell-z
+                                    helm
+                                    multi-term
+                                    projectile
+                                    shell-pop
+                                    terminal-here
+                                    vi-tilde-fringe
                                     )
 
    ;; Defines the behaviour of Spacemacs when installing packages.
@@ -485,7 +496,44 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
-  )
+
+  ;; Vterm
+
+  (use-package vterm
+    :bind
+    (:map vterm-mode-map
+          (("C-c C-k" . vterm-copy-mode)
+           ;; Go to the top (bottom) of the buffer instead of sending M-> (M-<)
+           ("M->" . nil)
+           ("M-<" . nil)
+           ;; Kill word with C-backspace
+           ("<C-backspace>" . (lambda () (interactive) (vterm-send-key (kbd "C-w"))))
+           )
+          :map vterm-copy-mode-map ("C-c C-k" . vterm-copy-mode))
+    :custom
+    ((vterm-buffer-name-string "%s")     ;; Rename vterm buffers with the shell TITLE
+     (vterm-kill-buffer-on-exit t)))     ;; Don't leave vterm buffers around
+
+)
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(magit-section magit gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger popup git-commit with-editor transient xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help dash unfill mwim which-key use-package pcre2el hydra hybrid-mode exwm dotenv-mode diminish bind-map async)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+)

@@ -3,17 +3,31 @@
 #+EMAIL: sbozzolator@gmail.com
 
 * Config Info
-Latest Version: 3.0
-Latest Edit: [2018-02-13 Tue 21:58]
+Latest Version: 4.0b1
+Latest Edit: [2020-04-27 Mon 11:12]
 
-Set of configuration files for a Gentoo Linux + EXWM + zsh setup. Emacs plays the
-central role of the whole configuration as it is my window manager (through
+Set of configuration files for a Gentoo Linux + EXWM + zsh setup. Emacs plays
+the central role of the whole configuration as it is my window manager (through
 EXWM). Zsh is used with oh-my-zsh for simplicity.
 
 An insteller (installer.sh) that uses GNU stow can be used to install the dotfiles
 wherever I want.
 
 * Changelog
+** 4.0b1 ([2020-04-27 Mon])
+   Emacs bankruptcy again!
+
+   Now trying with Spacemacs. Relevant configuration in =spacemacs_minimal=.
+   Strategy: start with =spacemacs-base= and build up from there.
+
+   All the packages configurations are in the =user-config= section.
+
+   *.spacemacs*
+   - Add exwm layer
+   - Set default font to DejaVu, size 14
+   - Add shell layer
+   - Add vterm configuration
+
 ** 3.0 ([2018-05-27 Sun])
    *settings.org*
    - hl-mode enabled only for GUI Emacs
