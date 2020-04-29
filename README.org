@@ -31,6 +31,10 @@ wherever I want.
    - Make sure not to import DISPLAY and TERM env variables
    - Add spacemacs-modeline layer
    - Add spaceline configuration
+   - Add backup configuration
+   - Add stimulation keys to EXWM configuration
+   - Change name of EXWM buffers
+   - Hide modeline
 
 ** 3.0 ([2018-05-27 Sun])
    *settings.org*

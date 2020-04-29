@@ -516,9 +516,45 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+  ;; EXWM
+
+  ;; Movement keys
+  (setq exwm-input-simulation-keys
+        '(
+          ;; movement
+          ([?\C-b] . [left])
+          ([?\M-b] . [C-left])
+          ([?\C-f] . [right])
+          ([?\M-f] . [C-right])
+          ([?\C-p] . [up])
+          ([?\C-n] . [down])
+          ([?\C-a] . [home])
+          ([?\C-e] . [end])
+          ([?\M-v] . [prior])
+          ([?\C-v] . [next])
+          ([?\C-d] . [delete])
+          ([?\C-k] . [S-end delete])
+          ([?\C-m] . [return])
+          ;; cut/paste.
+          ([?\C-w] . [?\C-x])
+          ([?\M-w] . [?\C-c])
+          ([?\C-y] . [?\C-v])
+          ;; search
+          ([?\C-s] . [?\C-f])))
+
+  ;; Hide minibuffer when not used
+  (setq exwm-workspace-minibuffer-position 'bottom)
+
+  ;; Rename EXWM buffers with the name of the application
+  (defun exwm/rename-buffer ()
+    (interactive)
+    (exwm-workspace-rename-buffer
+     ; Get first word of the name
+     (concat "(" (car (split-string exwm-class-name "[ \f\t\n\r\v-]+")) ") "
+             (if (<= (length exwm-title) 30) exwm-title
+               (concat (substring exwm-title 0 29) "...")))))
 
   ;; Vterm
-
   (use-package vterm
     :bind
     (:map vterm-mode-map
