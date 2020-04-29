@@ -29,6 +29,8 @@ wherever I want.
    - Add vterm configuration
    - Add git layer
    - Make sure not to import DISPLAY and TERM env variables
+   - Add spacemacs-modeline layer
+   - Add spaceline configuration
 
 ** 3.0 ([2018-05-27 Sun])
    *settings.org*

@@ -56,6 +56,7 @@ This function should only modify configuration layer settings."
      ;; treemacs
      exwm
      shell
+     spacemacs-modeline
      )
 
    ;; List of additional packages that will be installed without being
@@ -94,6 +95,14 @@ This function should only modify configuration layer settings."
                                     shell-pop
                                     terminal-here
                                     vi-tilde-fringe
+                                    ; In layer spacemacs-modeline
+                                    anzu
+                                    doom-modeline
+                                    neotree
+                                    spaceline-all-the-icons
+                                    symon
+                                    vim-powerline
+
                                     )
 
    ;; Defines the behaviour of Spacemacs when installing packages.
@@ -228,7 +237,7 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.5)
+   dotspacemacs-mode-line-theme '(spacemacs :separator bar :separator-scale 0.5)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
@@ -525,6 +534,24 @@ before packages are loaded."
     ((vterm-buffer-name-string "%s")     ;; Rename vterm buffers with the shell TITLE
      (vterm-kill-buffer-on-exit t)))     ;; Don't leave vterm buffers around
 
+  ;; Spaceline
+  (use-package spaceline
+    :config
+    (fancy-battery-mode)
+    (spaceline-toggle-battery-on)
+    ;; Deactivate most segments
+    (spaceline-toggle-buffer-size-off)
+    (spaceline-toggle-persp-name-off)
+    (spaceline-toggle-window-number-off)
+    (spaceline-toggle-purpose-off)
+    (spaceline-toggle-evil-state-off)
+    (spaceline-toggle-hud-off)
+    (spaceline-toggle-minor-modes-off)
+    (spaceline-toggle-buffer-position-off)
+    (spaceline-toggle-buffer-encoding-abbrev-off)
+    )
+
+
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -540,7 +567,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(magit-section magit gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger popup git-commit with-editor transient xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help dash unfill mwim which-key use-package pcre2el hydra hybrid-mode exwm dotenv-mode diminish bind-map async)))
+   '(spaceline s powerline fancy-battery font-lock+ magit-section magit gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger popup git-commit with-editor transient xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help dash unfill mwim which-key use-package pcre2el hydra hybrid-mode exwm dotenv-mode diminish bind-map async)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
