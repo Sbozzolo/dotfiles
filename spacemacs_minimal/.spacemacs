@@ -41,7 +41,7 @@ This function should only modify configuration layer settings."
      ;; auto-completion
      better-defaults
      ;; emacs-lisp
-     ;; git
+     git
      ;; helm
      ;; lsp
      ;; markdown
@@ -75,6 +75,15 @@ This function should only modify configuration layer settings."
                                     ; In layer EXWM
                                     desktop-environment
                                     framemove
+                                    ; In layer git
+                                    evil-magit
+                                    git-link
+                                    helm-git-grep
+                                    helm-gitignore
+                                    magit-gitflow
+                                    magit-svn
+                                    orgit
+                                    smeargle
                                     ; In layer shell
                                     esh-help
                                     eshell-prompt-extras
