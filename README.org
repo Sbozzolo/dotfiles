@@ -27,6 +27,8 @@ wherever I want.
    - Set default font to DejaVu, size 14
    - Add shell layer
    - Add vterm configuration
+   - Add git layer
+   - Make sure not to import DISPLAY and TERM env variables
 
 ** 3.0 ([2018-05-27 Sun])
    *settings.org*
