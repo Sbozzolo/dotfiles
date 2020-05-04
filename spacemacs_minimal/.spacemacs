@@ -55,6 +55,7 @@ This function should only modify configuration layer settings."
      ;; version-control
      ;; treemacs
      exwm
+     finance
      shell
      spacemacs-modeline
      )
@@ -76,6 +77,8 @@ This function should only modify configuration layer settings."
                                     ; In layer EXWM
                                     desktop-environment
                                     framemove
+                                    ; In layer finance
+                                    evil-ledger
                                     ; In layer git
                                     evil-magit
                                     git-link
@@ -554,6 +557,8 @@ before packages are loaded."
              (if (<= (length exwm-title) 30) exwm-title
                (concat (substring exwm-title 0 29) "...")))))
 
+  (exwm/bind-command "s-c" "chromium")
+
   ;; Vterm
   (use-package vterm
     :bind
@@ -568,7 +573,20 @@ before packages are loaded."
           :map vterm-copy-mode-map ("C-c C-k" . vterm-copy-mode))
     :custom
     ((vterm-buffer-name-string "%s")     ;; Rename vterm buffers with the shell TITLE
-     (vterm-kill-buffer-on-exit t)))     ;; Don't leave vterm buffers around
+     (vterm-kill-buffer-on-exit t))      ;; Don't leave vterm buffers around
+    :config
+    ;; I don't keep minor mode information in the mode-line, but I want to know
+    ;; if VTermCopy is enabled or not.
+
+    ;; TODO: Define spaceline segment
+
+    ;; (spaceline-define-segment vterm-copy-mode
+    ;;   "Docstring"
+    ;;   "VTermCopy"
+
+    ;;   :when  (bound-and-true-p vterm-copy-mode))
+    ;; (spaceline-spacemacs-theme 'vterm-copy-mode)
+    )
 
   ;; Spaceline
   (use-package spaceline
@@ -603,7 +621,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(spaceline s powerline fancy-battery font-lock+ magit-section magit gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger popup git-commit with-editor transient xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help dash unfill mwim which-key use-package pcre2el hydra hybrid-mode exwm dotenv-mode diminish bind-map async)))
+   '(ledger-mode delight spaceline s powerline fancy-battery font-lock+ magit-section magit gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger popup git-commit with-editor transient xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help dash unfill mwim which-key use-package pcre2el hydra hybrid-mode exwm dotenv-mode diminish bind-map async)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

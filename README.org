@@ -4,17 +4,19 @@
 
 * Config Info
 Latest Version: 4.0b1
-Latest Edit: [2020-04-27 Mon 11:12]
+Latest Edit: [2020-04-29 Wed 11:49]
 
 Set of configuration files for a Gentoo Linux + EXWM + zsh setup. Emacs plays
 the central role of the whole configuration as it is my window manager (through
-EXWM). Zsh is used with oh-my-zsh for simplicity.
+EXWM). Zsh is used with oh-my-zsh for its ease of use.
 
 An insteller (installer.sh) that uses GNU stow can be used to install the dotfiles
-wherever I want.
+wherever I want. 
+
+These dotfiles are intended for personal use.
 
 * Changelog
-** 4.0b1 ([2020-04-27 Mon])
+** 4.0b1 ([2020-05-03 Sun])
    Emacs bankruptcy again!
 
    Now trying with Spacemacs. Relevant configuration in =spacemacs_minimal=.
@@ -35,6 +37,7 @@ wherever I want.
    - Add stimulation keys to EXWM configuration
    - Change name of EXWM buffers
    - Hide modeline
+   - Add finance layer
 
 ** 3.0 ([2018-05-27 Sun])
    *settings.org*
