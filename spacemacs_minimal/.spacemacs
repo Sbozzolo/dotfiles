@@ -58,6 +58,8 @@ This function should only modify configuration layer settings."
      finance
      pass
      shell
+     spacemacs-completion
+     spacemacs-defaults
      spacemacs-modeline
      )
 
@@ -102,6 +104,8 @@ This function should only modify configuration layer settings."
                                     shell-pop
                                     terminal-here
                                     vi-tilde-fringe
+                                    ; In layer spacemacs-completion
+                                    flx-ido
                                     ; In layer spacemacs-modeline
                                     anzu
                                     doom-modeline
