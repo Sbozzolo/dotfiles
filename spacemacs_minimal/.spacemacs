@@ -56,6 +56,7 @@ This function should only modify configuration layer settings."
      ;; treemacs
      exwm
      finance
+     pass
      shell
      spacemacs-modeline
      )
@@ -67,7 +68,10 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(
+                                      ; For password-store
+                                      pinentry
+                                      )
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -105,7 +109,8 @@ This function should only modify configuration layer settings."
                                     spaceline-all-the-icons
                                     symon
                                     vim-powerline
-
+                                    ; In layer pass
+                                    helm-pass
                                     )
 
    ;; Defines the behaviour of Spacemacs when installing packages.
@@ -573,7 +578,8 @@ before packages are loaded."
           :map vterm-copy-mode-map ("C-c C-k" . vterm-copy-mode))
     :custom
     ((vterm-buffer-name-string "%s")     ;; Rename vterm buffers with the shell TITLE
-     (vterm-kill-buffer-on-exit t))      ;; Don't leave vterm buffers around
+     (vterm-kill-buffer-on-exit t)       ;; Don't leave vterm buffers around
+     (vterm-always-compile-module t))      ;; Compile vterm-module without asking
     :config
     ;; I don't keep minor mode information in the mode-line, but I want to know
     ;; if VTermCopy is enabled or not.
@@ -586,6 +592,16 @@ before packages are loaded."
 
     ;;   :when  (bound-and-true-p vterm-copy-mode))
     ;; (spaceline-spacemacs-theme 'vterm-copy-mode)
+    )
+
+  ;; Pinentry
+  (use-package pinentry
+    :config
+    (setq epa-pinentry-mode 'loopback)
+    ;; Disable external pin managers
+    ;; [[https://www.masteringemacs.org/article/keeping-secrets-in-emacs-gnupg-auth-sources][Taken from here]]
+    (setenv "GPG_AGENT_INFO" nil)
+    (pinentry-start)
     )
 
   ;; Spaceline
@@ -621,7 +637,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(ledger-mode delight spaceline s powerline fancy-battery font-lock+ magit-section magit gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger popup git-commit with-editor transient xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help dash unfill mwim which-key use-package pcre2el hydra hybrid-mode exwm dotenv-mode diminish bind-map async)))
+   '(pinentry password-store ledger-mode delight spaceline s powerline fancy-battery font-lock+ magit-section magit gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger popup git-commit with-editor transient xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help dash unfill mwim which-key use-package pcre2el hydra hybrid-mode exwm dotenv-mode diminish bind-map async)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
