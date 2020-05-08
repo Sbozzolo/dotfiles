@@ -1,4 +1,0 @@
-#!/bin/sh
-
-megacopy --disable-previews --local /home/sbozzolo/orgs --remote /Root/archT430/orgs
-megacopy --disable-previews --local /home/sbozzolo/dotfiles --remote /Root/archT430/dotfiles

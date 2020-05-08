@@ -1,3 +1,0 @@
-# button/f20 F20 00000080 00000000 K
-event=button/f20
-action=/etc/acpi/actions/mic.sh

@@ -1,3 +1,0 @@
-#video/brightnessdown BRTDN 00000087 00000000 K
-event=video/brightnessdown
-action=/etc/acpi/actions/brightdown.sh

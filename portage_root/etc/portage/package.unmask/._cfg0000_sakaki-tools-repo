@@ -1,4 +1,0 @@
-app-portage/genup::sakaki-tools
-# required by net-misc/netifrc-0.5.1::gentoo
-# /etc/portage/package.mask/openrc:
-=sys-apps/openrc-0.34.8

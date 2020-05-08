@@ -3,359 +3,54 @@
 #+EMAIL: sbozzolator@gmail.com
 
 * Config Info
-Latest Version: 3.0
-Latest Edit: [2018-02-13 Tue 21:58]
+Latest Version: 4.0b1
+Latest Edit: [2020-05-07 Thu 22:09]
 
-Set of configuration files for a Gentoo Linux + EXWM + zsh setup. Emacs plays the
-central role of the whole configuration as it is my window manager (through
-EXWM). Zsh is used with oh-my-zsh for simplicity.
+This configuration revolves around Emacs dressed with the Spacemacs
+distribution. Emacs is the window manager (with EXWM). 
 
-An insteller (installer.sh) that uses GNU stow can be used to install the dotfiles
-wherever I want.
+All the packages configurations are in the =user-config= section.
+
+An ususual feature of this configuration is that caps lock is used as the leader
+key. To enable this, Xmodmap is set to bind Caps Lock to ∇. Then, the leader key
+for Spacemacs is set to ∇. At the moment, EXWM has a bug and it is not possible
+to directly use =exwm-input-set-key= with ∇. The workaround is in a function
+=activate-leader-key-in-exwm= which performs this binding. For some reason,
+Emacs crashes if this is done during startup, so the user has to manually call
+the function during each session.
+
+∇ ∇ (Caps Lock Caps Lock) is equivalent to =M-x=.
+
+Features of Emacs:
+- EXWM
+- ivy
+- vterm
 
 * Changelog
-** 3.0 ([2018-05-27 Sun])
-   *settings.org*
-   - hl-mode enabled only for GUI Emacs
-   - Switch to spaceline for the modeline
-   - System monitor with symon and s-h
-   - Beacon to find the point earlier
-   - Added Git time-machine
-   - Added julia-mode
-   - Added Dockerfile-mode
-   - Added yasnippet
-   - Magit doesn't split anymore the window
-   - Jedi autcompletion for python
-   - Refactor Company configuration
-   - Added aggressive-indent
-   - Added ADSABS engine mode
-   - s-C-t opens xterm
-   - C-u s-t opens last terminal
-   - Company disabled for LaTeX
-   - Add percent in prettification (LaTeX)
-   - Working EIN configuration
-   - Added wgrep
-   - Disable whitespace highlithing in EIN
-   - Sign Magit commits
-   - Improved rename-buffer inspired by save-as
-   - Gargage collector less often
-   - Org-table-comment
-   - Avoided org-tangle in init.el
-   - Wolfram mode
-   - Always run commands in emacs dir (so in localhost!)
-   - Fixed modeline not showing line and columb number
-   - Enabled mu4e with two accounts
-   - Fix org templates
-   - Print completion date on closing todo
-   - Pass doesn't ask anymore to quit
-   - Man now moves the cursor to the man buffer
-   - Defined new org states
-   - Rebound windmove to s-(ijkl)
-   - Rewrite using newest facilities of use-package
-   - Unfill-mode
-   - Undo-tree saves history in .emacs.d/undo
-   - Add counsel-apropos
-   - mu4e-conversation
-  *offlineimaprc*
-   - Send notification for new emails with notify
-   - Get emails in parallel
-  *snippets*
-   - Added txt latex snippet
-  *zshrc_functions*
-   - Improved empty_trash function
-  *scripts*
-   - Added merge_pdf
-   - Added extract_pages
-  *fetch_rates*
-   - Download latest rates for cryptocurrencies and currencies
-     to feed leger-cli
-  *zshrc*
-   - Improved folder tracking in remote severs
-** 2.0.1.2 ([2018-01-18 Thu])
-   *settings.org*
-   - Update org repo
-   - sh-mode for Cactus files
-   *zshrc_functions*
-   - Added empty_trash
-** 2.0.1.1 ([2017-12-15 Fri])
-   *settings.org*
-   - Added move-text to move lines with M-<up> and M-<down>
-   - Rebound text-font-increase and decrease to use C-- as negative
-     universal argumetn
-   *zshrc_functions*
-   - Added .trash, now files are not deleted but moved to trash,
-     but they are deleted if rm is invoked in the .trash folder
-** 2.0.1 ([2017-12-12 Tue])
-   *settings.org*
-   - C-u s-t now calls Xterm
-   - System messages (volume, brightness, ...) now use alert
-   *Xresources*
-   - Solarized theme for Xterm
-   *Linux*
-   - Added Linux config for ThinkPad T420
-** 2.0 ([2017-12-10 Sun])
-   *settings.org*
-   - Refactored configuration file with heavy usage of use-package
-   - Improved installation on new machines
-   - Added Languagetool
-   - Term with 256 colors!
-   - Tons of fixes and improvements
-   *dunstrc*
-   - Added support to desktop notifications with dunst
-   *autojump*
-   - Switched to autojump instead of fasd
-   *gpg*
-   - Two different pinentries for emacs and tty modes
-   *hwdb*
-   - Extra key bindigs now are with udev
-   *zshrc*
-   - Improved directory tracking
-   *_root*
-   - /etc configurations are under version control
-** 1.2.2.2 ([2017-09-29 Fri])
-   *settings.org*
-   - Added toggle-windows-split
-   - Added join-line keybinding M-j
-   - Added unfill-paragraph
-** 1.2.2.1 ([2017-09-24 Sun])
-   *.zsh_functions*
-   - Added ctar function to create compressed archive
-   *.zshrc*
-   - Source zsh_functions
-** 1.2.2 ([2017-09-21 Thu])
-   *settings.org*
-   - Add LaTeX teaks
-** 1.2.1.9 ([2017-09-03 Sun])
-   *.zshrc*
-   - If not running interactively don't do anything
-   - Remove $PATH setting from zshrc
-   *.profile*
-   - Add LINUXBREW/sbin
-   *settings.org*
-   - Added new kewbinding to winnermode
-** 1.2.1.8.1 ([2017-08-24 Thu])
-   *settings.org*
-   - Added Merriam-Webster Thesaurus
-   - Fixed minor mistake with engine-mode
-** 1.2.1.8 ([2017-08-23 Wed])
-   *settings.org*
-   - Disabled guess-language
-   - Update whole-line-or-region diminishing
-   *zsh_aliases*
-   - Added "deltemp" to delete temporary files starting with \# in the folder
-** 1.2.1.7.4 ([2017-07-13 Thu])
-   *.zshrc*
-   - Fixed path in $ZSH
-   - Fixed location of install omz
-   - Prepare env now runs install omz
-   - Fixed permission issue
-** 1.2.1.7.3 ([2017-07-12 Wed])
-   *.profile*
-   - Added standard paths for local installations ($HOME/lib, $HOME/include)
-** 1.2.1.7.2 ([2017-07-12 Wed])
-   *settings.org*
-   - Added conservative scrolling
-** 1.2.1.7.1 ([2017-07-10 Mon])
-   *settings.org*
-   - Fixed undo-tree
-** 1.2.1.7 ([2017-07-08 Sat])
-   *.zshrc*
-   - Extended shell history
-   - Duplicates are not saved in history
-   *settings.org*
-   - Started experimenting with EIT
-** 1.2.1.6 ([2017-07-05 Wed])
-   *.zsh_aliases*, *.zshrc*
-   - Now aliases are in a separate file
-   *matplotlibrc*
-   - Added default figsize
-** 1.2.1.5.1 ([2017-06-30 Fri])
-   *settings.org*
-   - Fixed theme-changer
-** 1.2.1.5 ([2017-06-29 Thu])
-   *settings.org*
-   - Added theme-changer, now I have a light theme when the sun is
-     up and a dark one when it is below the horizon
-   *xbindkeys.rc*
-   - Added a key to send the killall -CONT emacs command
-** 1.2.1.4 ([2017-06-26 Mon])
-   *settings.org*
-   - Fixed language in calendar
-** 1.2.1.3 ([2017-06-17 sab])
-   *settings.org*
-   - Eliminated wikipedia from search engines
-   - Added Merriam Webster to search engines
-   - Now enigine-mode search on HTTPS google
-** 1.2.1.2 ([2017-06-15 Thu])
-   *.Xhardware*
-   - Fix minor bug with pointer speed
-   *find_xinput_thinkpad.sh*
-   - New script to find the value of the property to increase the speed
-   *settings.org*
-   - Start fixing mu4e
-** 1.2.1.1 ([2017-06-13 Tue])
-   *settings.org*
-   - Add company-auctex
-   - Deprecated synonms
-   - Deprecated iflipb
-** 1.2.1 ([2017-06-09 Fri])
-   *settings.org*
-   - New section: OLD UNUSED CODE
-   - Reactivated which-key in lab section
-   - Now et-par mode is tanlged and loaded
-   - Removed cancer
-   *.zshrc*
-   - Setting maildir
-** 1.2 ([2017-06-08 Thu])
-   *settings.org*
-   - Add /lab/ section
-   - Remove GNUs support
-   - Add experimental mu4e support
-   - Add basic framework for a new mode for einstein-toolkit
-   - Add cancer function to run windows
-   - Start calendar on Monday
-   - Warning when opening files bigger than 50MB
-   - Flat modeline
-   - Improved support for utf8
-   - Spell checking in comments and strings
-   - Introduced highlight words with C-c h
-   *offlineimap.rc*
-   - Add public account sbozzolator@gmail.com
-   *offlineimap.py*
-   - Add function to read gpg passphrases
-** 1.1.5 ([2017-05-31 Wed])
-   *.zshrc*
-   - Fix emacsterminal not opening file in existing frame
-   *.gnupg-agent*
-   - Switch to pinentry-emacs
-** 1.1.4.1 ([2017-05-29 Mon])
-   *settings.org*
-   - Add rainbow delimiter for coloring parentheses
-   - Improved save-buffer-as, now it finds the new file
-   - Binded winner mode to C-<left>, C-<right>
-** 1.1.4 ([2017-05-25 Thu])
-   *settings.org*
-   - The generated tangle file is now read only
-   - Load only updated code
-   - Save-as function
-** 1.1.3 ([2017-05-17 Wed])
-   *.zshrc*
-   - Introduce fix for some GTK errors (like no permission)
-   - Generalize the settings for the syntax highlighting
-   - Improve compatibility with linuxbrew
-   *.profile*
-   - Check if linuxbrew is there and add relevant paths
-   *prepare_env.sh*
-   - Install a linuxbrew and a minimum working environment to
-     set up dotfiles in a remote server
-   *install_omz.sh*
-   - Install oh-my-zsh
-   *hunspell_dict.txt*
-   - Start tracking personal dictionary
-** 1.1.2 ([2017-05-04 Thu])
-   *settings.org*
-   - Enable winner-mode
-   - Enable windmove
-   - Disable gurumode
-** 1.1.1 ([2017-05-04 Thu])
-   *settings.org*
-   - Do not print redefinition warnings
-   - Disable reftex prompt for reference format
-   - Fix instant-save-word binding in a LaTeX mode
-** 1.1 ([2017-04-27 Thu])
-   *GLOBAL*
-   - Now the configuration in less emacs-centric: the README.org
-     will track every change in the whole set of dotfiles
-   *settings.org*
-   - Hunspell personal dictionary is now under version control
-   *switcher.sh*
-   - Calling switcher.sh now shows which is the current git repo
-** 1.0.6 ([2017-04-26 Wed])
-   *settings.org*
-   - Fixed a bug with org-capture Thesis BibTex, now
-     it copies from the clipboard
-   - Fixed part of the term graphics glitches due to killing,
-     yanking and so on
-   - Now .tikz files are opened with AucTeX
-   - Added org-tree-slide for presentation inside emacs
-   *.xinitrc*
-   - Now redshift and xbindkeys are executed only
-     if they are not running
-   *.profile*
-   - Added a .profile so that now it is possible to use
-     TRAMP with controlmaster with zsh on remote servers
-     without any problem
-** 1.0.5.2 ([2017-03-23 Thu])
-   - Made TRAMP use controlmaster
-** 1.0.5.1 ([2017-03-16 Thu])
-   - Added split screen (f3)
-   - Enabled disabled commands
-** 1.0.5 ([2017-03-14 Tue])
-   - Added swap buffer in windows (f4)
-   - Added instant save word for ispell
-** 1.0.4.2 ([2017-03-10 Fri])
-   - Edited .zshrc to make term mode
-     track the pwd ([[http://stackoverflow.com/questions/3508387/how-can-i-have-term-el-ansi-term-track-directories-if-using-anyhting-other-tha][StackExchange]])
-   - Fixed path in org-capture
-   - Decreased sub/superscript raise
-** 1.0.4.1 ([2017-03-04 Sat])
-   - Added Ledger to org-babel
-** 1.0.4 ([2017-03-02 Thu])
-   - Reduced fringe to 1
-   - Dired size human readable
-   - Tabs stops
-** 1.0.3.2 ([2017-03-02 Thu])
-   - Added Pass package (Password-store interface)
-** 1.0.3.1 ([2017-02-27 Mon])
-   - Bind kill-this-buffer to <f2>
-** 1.0.3 ([2017-02-26 Sun])
-   - Fixed xrandr hook
-   - Added visual bell
-** 1.0.2 ([2017-02-25 Sat])
-   - Disabled keyfreq due to its incompatibility with EXWM
-     (kill-emacs hangs if keyfreq is enabled)
-** 1.0.1 ([2017-02-24 Fri])
-   - Fixed <f5> in X apps
-   - Fixed Screenshot functions
-** 1.0 ([2017-02-19 Sun])
-   - Almost stable release with EXWM
-   - Started to track the development
-* Fixme
-  - [ ] Fontification error (seems related to the version of org-mode)
-  - [ ] Terminal won't open if there is no internet (not related to emacs)
-  - [ ] Keyfreq doesn't work well with EXWM (If it is enabled Emacs won't close properly)
-  - [ ] Pdftools flickering
-  - [ ] RefTex is not working always
-  - [ ] Counsel-yank-pop point goes above the screen
-  - [ ] Bad behavior of term with C-r
-  - [ ] If file already exist it is not possible to open buffer with similar name
-  - [ ] Prettification not working anymore in AucTeX mode
-  - [ ] Battery indicator does not show properly in the first minute
-  - [ ] Rename-this-file-and-buffer should show the current name
---------------------------------------------------------------------------
-  - [X] Second screenshot function
-    Fixed in version 1.0.1 ([2017-02-24 Fri])
-  - [X] Projector doesn't seem to work (seems related to X)
-    Fixed in version 1.0.3 ([2017-02-26 Sun])
-  - [X] Org babel does not work
-    Fixed with org-update
-  - [X] When a terminal requires $EDITOR open a new buffer
-    Fixed in version 1.1.5 ([2017-05-31 Wed])
-* Wishlist
-  - [ ] Make emacs update Arch
-  - [ ] Create a lab section
-  - [ ] Develop a remote emacs config
-  - [ ] Use fasd-emacs. Fasd in multiterm open a buffer.
-  - [ ] Polish config
-  - [ ] Migrate /etc confs in dotfiles folder
-  - [ ] Imporve autoupdater. It shouldn't prevent me
-        from using the terminal
-  - [ ] Backup with rsnapshot
-  - [ ] Switch to a sourcebase usage of Arch via ABS
-  - [ ] Launch redshift with systemd
-  - [ ] Utility to sync ssh config con zsh alias (like lcm -> lcm)
-  - [ ] Write a small routine that send notifications upon completions of commands
-        (and use a notifications system)
-  - [X] Use Controlmaster
-  - [X] Find file tracks with multi term
-  - [X] Function to save-as buffers
+** 4.0b1 ([2020-05-07 Thu])
+
+   *.spacemacs*
+   - Add exwm layer
+   - Set default font to DejaVu, size 14
+   - Add shell layer
+   - Add vterm configuration
+   - Add git layer
+   - Make sure not to import DISPLAY and TERM env variables
+   - Add spacemacs-modeline layer
+   - Add spaceline configuration
+   - Add backup configuration
+   - Add stimulation keys to EXWM configuration
+   - Change name of EXWM buffers
+   - Hide modeline
+   - Add finance layer
+   - Add pass layer
+   - Always compile vterm-module without asking
+   - Add ivy layer
+   - Add spacemacs-completion layer
+   - Add spacemacs-defaults layer
+   
+
+   *.xmodmap*
+   - Bind ∇ to Caps Lock (∇ is used as leader key)
+
+

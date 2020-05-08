@@ -1,6 +1,0 @@
-
-# TrackPoint and TrackPad speed
-# To find the correct number (here 11,12 and 141) use xinput list, xinput list-props 11
-xinput set-prop 12 141 2.400000, 0.000000, 0.000000, 0.000000, 2.400000, 0.000000, 0.000000, 0.000000, 1.000000
-
-xinput set-prop 11 141 2.400000, 0.000000, 0.000000, 0.000000, 2.400000, 0.000000, 0.000000, 0.000000, 1.000000

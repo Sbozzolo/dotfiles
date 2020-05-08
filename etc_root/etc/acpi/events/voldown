@@ -1,3 +1,0 @@
-# button/volumedown VOLDN 00000080 00000000 K
-event=button/volumedown
-action=/etc/acpi/actions/voldown.sh

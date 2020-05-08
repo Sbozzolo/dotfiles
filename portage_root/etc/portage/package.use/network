@@ -1,2 +1,0 @@
-net-misc/networkmanager bluetooth wifi -wext
-www-client/chromium cpus hangouts proprietary-codes -suid system-ffmpeg system-icu system-libvpx

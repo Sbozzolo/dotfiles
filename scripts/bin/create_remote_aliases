@@ -1,4 +1,0 @@
-#!/bin/sh
-
-# Create ssh aliases based on ssh config
-awk '/Host /{print "alias", $2, "= \"ssh", $2"\""}' ~/.ssh/config

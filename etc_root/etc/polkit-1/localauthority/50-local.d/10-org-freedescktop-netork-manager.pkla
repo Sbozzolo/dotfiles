@@ -1,6 +1,0 @@
-]Allow user belonging to wheel to modify connections]
-Identity=unix-group:wheel
-Action=org.freedesktop.network-manager-*
-ResultAny=no
-ResultInactive=no
-ResultActive=yes
