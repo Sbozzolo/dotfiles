@@ -4,7 +4,7 @@
 
 * Config Info
 Latest Version: 4.0b1
-Latest Edit: [2020-05-07 Thu 22:09]
+Latest Edit: [2020-05-10 Sun 19:39]
 
 This configuration revolves around Emacs dressed with the Spacemacs
 distribution. Emacs is the window manager (with EXWM). 
@@ -12,12 +12,14 @@ distribution. Emacs is the window manager (with EXWM).
 All the packages configurations are in the =user-config= section.
 
 An ususual feature of this configuration is that caps lock is used as the leader
-key. To enable this, Xmodmap is set to bind Caps Lock to ∇. Then, the leader key
-for Spacemacs is set to ∇. At the moment, EXWM has a bug and it is not possible
-to directly use =exwm-input-set-key= with ∇. The workaround is in a function
-=activate-leader-key-in-exwm= which performs this binding. For some reason,
-Emacs crashes if this is done during startup, so the user has to manually call
-the function during each session.
+key. This is very convenient: all the standard Emacs keybindings are available,
+as well as Spacemacs' ones in the way they are intended to be used (not as key
+chords, but as key sequences). To enable this, Xmodmap is set to bind Caps Lock
+to ∇. Then, the leader key for Spacemacs is set to ∇. At the moment, EXWM has a
+bug and it is not possible to directly use =exwm-input-set-key= with ∇. The
+workaround is in a function =activate-leader-key-in-exwm= which performs this
+binding. For some reason, Emacs crashes if this is done during startup, so the
+user has to manually call the function during each session.
 
 ∇ ∇ (Caps Lock Caps Lock) is equivalent to =M-x=.
 
@@ -27,7 +29,7 @@ Features of Emacs:
 - vterm
 
 * Changelog
-** 4.0b1 ([2020-05-07 Thu])
+** 4.0b1 ([2020-05-10 Sun])
 
    *.spacemacs*
    - Add exwm layer
@@ -48,7 +50,7 @@ Features of Emacs:
    - Add ivy layer
    - Add spacemacs-completion layer
    - Add spacemacs-defaults layer
-   
+   - Add ivy configuration
 
    *.xmodmap*
    - Bind ∇ to Caps Lock (∇ is used as leader key)
