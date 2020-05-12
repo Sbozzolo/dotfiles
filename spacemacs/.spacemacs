@@ -62,6 +62,7 @@ This function should only modify configuration layer settings."
      spacemacs-completion
      spacemacs-defaults
      spacemacs-modeline
+     spacemacs-editing
      )
 
    ;; List of additional packages that will be installed without being
@@ -120,6 +121,18 @@ This function should only modify configuration layer settings."
                                     spaceline-all-the-icons
                                     symon
                                     vim-powerline
+                                    ; In layer spacemacs-editing
+                                    aggressive-indent
+                                    editor-config
+                                    hungry-delete
+                                    link-hint
+                                    lorem-ipsum
+                                    origami
+                                    password-generator
+                                    pcre2el
+                                    smartparens
+                                    undo-tree
+                                    uuidgen
                                     ; In layer pass
                                     helm-pass
                                     )
@@ -535,7 +548,31 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
-  ;; EXWM
+
+  ;;; GENERAL SETTINGS
+
+  ;; Backup settings -- life savers
+  (setq backup-directory-alist    '(("." . "~/.emacs.d/backup"))
+        tramp-backup-directory-alist   backup-directory-alist
+        temporary-directory    '(("." . "~/.emacs.d/tmp"))
+        undo-tree-directory    "~/.emacs.d/undo"
+        vc-make-backup-files t ;; Use version control for backups
+        version-control t     ;; Use version numbers for backups.
+        kept-new-versions 10 ;; Number of newest versions to keep.
+        kept-old-versions 5 ;; Number of oldest versions to keep.
+        delete-old-versions t ;; Don't ask to delete excess backup versions.
+        backup-by-copying t) ;; Copy all files, don't rename them.
+
+  ;; Yank at point not where cursor is
+  (when window-system (setq mouse-yank-at-point t))
+
+  ;; Overwrite highlithed text
+  (delete-selection-mode t)
+
+  ;; When opening a file, always follow symlinks.
+  (setq vc-follow-symlinks t)
+
+  ;;; EXWM
 
   ;; Movement keys
   (setq exwm-input-simulation-keys
@@ -573,7 +610,24 @@ before packages are loaded."
              (if (<= (length exwm-title) 30) exwm-title
                (concat (substring exwm-title 0 29) "...")))))
 
+  ;; Bind Lock screen
+  (setq exwm-locking-command "slock")
+
+  ;; Bind X application
   (exwm/bind-command "s-c" "chromium")
+  (exwm/bind-command "s-<f2>" exwm-locking-command)
+
+  ;; Bind "s-0" to "s-8" to switch to the corresponding workspace.
+  (dotimes (i 9)
+    (exwm-input-set-key (kbd (format "s-%d" i))
+                        `(lambda ()
+                           (interactive)
+                           (exwm-workspace-switch-create ,i))))
+
+  (use-package vterm-extra
+    :defer t
+    :load-path "~/documents/projects/2020/vterm-extra"
+    :bind ("s-t" . vterm-extra-dispatcher))
 
   (defun activate-leader-in-exwm ()
     "Activate the leader key in EXWM.
@@ -584,7 +638,7 @@ we need to manually activate the leader key while Emacs is running."
     (exwm-input-set-key (kbd "∇") spacemacs-default-map)
     (ignore-errors (exwm-input--update-global-prefix-keys)))
 
-  ;; Vterm
+  ;;; Vterm
   (use-package vterm
     :bind
     (:map vterm-mode-map
@@ -614,17 +668,16 @@ we need to manually activate the leader key while Emacs is running."
     ;; (spaceline-spacemacs-theme 'vterm-copy-mode)
     )
 
-  ;; Pinentry
+  ;;; Pinentry
   (use-package pinentry
     :config
     (setq epa-pinentry-mode 'loopback)
     ;; Disable external pin managers
     ;; [[https://www.masteringemacs.org/article/keeping-secrets-in-emacs-gnupg-auth-sources][Taken from here]]
     (setenv "GPG_AGENT_INFO" nil)
-    (pinentry-start)
-    )
+    (pinentry-start))
 
-  ;; Spaceline
+  ;;; Spaceline
   (use-package spaceline
     :config
     (fancy-battery-mode)
@@ -640,6 +693,7 @@ we need to manually activate the leader key while Emacs is running."
     (spaceline-toggle-buffer-position-off)
     (spaceline-toggle-buffer-encoding-abbrev-off))
 
+  ;;; Ivy
   (use-package ivy
     :diminish ivy-mode
     :bind
@@ -649,6 +703,9 @@ we need to manually activate the leader key while Emacs is running."
      :map ivy-minibuffer-map
      ("C-j" . ivy-immediate-done)
      ("RET" . ivy-alt-done)))
+
+  (use-package expand-region
+    :bind ("C-=" . er/expand-region))
 
 )
 
@@ -665,7 +722,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(wgrep smex ivy-pass ivy-hydra helm-make counsel swiper ivy pinentry password-store ledger-mode delight spaceline s powerline fancy-battery font-lock+ magit-section magit gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger popup git-commit with-editor transient xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help dash unfill mwim which-key use-package pcre2el hydra hybrid-mode exwm dotenv-mode diminish bind-map async)))
+   '(ws-butler string-inflection move-text expand-region eval-sexp-fu editorconfig clean-aindent-mode avy wgrep smex ivy-pass ivy-hydra helm-make counsel swiper ivy pinentry password-store ledger-mode delight spaceline s powerline fancy-battery font-lock+ magit-section magit gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger popup git-commit with-editor transient xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help dash unfill mwim which-key use-package pcre2el hydra hybrid-mode exwm dotenv-mode diminish bind-map async)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

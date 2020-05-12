@@ -4,7 +4,7 @@
 
 * Config Info
 Latest Version: 4.0b1
-Latest Edit: [2020-05-10 Sun 19:39]
+Latest Edit: [2020-05-12 Tue 10:26]
 
 This configuration revolves around Emacs dressed with the Spacemacs
 distribution. Emacs is the window manager (with EXWM). 
@@ -27,9 +27,10 @@ Features of Emacs:
 - EXWM
 - ivy
 - vterm
+- Backups
 
 * Changelog
-** 4.0b1 ([2020-05-10 Sun])
+** 4.0b1 ([2020-05-12 Tue])
 
    *.spacemacs*
    - Add exwm layer
@@ -51,6 +52,7 @@ Features of Emacs:
    - Add spacemacs-completion layer
    - Add spacemacs-defaults layer
    - Add ivy configuration
+   - Add spacemacs-editing layer
 
    *.xmodmap*
    - Bind ∇ to Caps Lock (∇ is used as leader key)
