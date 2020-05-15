@@ -4,7 +4,7 @@
 
 * Config Info
 Latest Version: 4.0b1
-Latest Edit: [2020-05-12 Tue 10:26]
+Latest Edit: [2020-05-15 Fri 06:18]
 
 This configuration revolves around Emacs dressed with the Spacemacs
 distribution. Emacs is the window manager (with EXWM). 
@@ -26,11 +26,12 @@ user has to manually call the function during each session.
 Features of Emacs:
 - EXWM
 - ivy
+- magit
 - vterm
 - Backups
 
 * Changelog
-** 4.0b1 ([2020-05-12 Tue])
+** 4.0b1 ([2020-05-15 Fri])
 
    *.spacemacs*
    - Add exwm layer

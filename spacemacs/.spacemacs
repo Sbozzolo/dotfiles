@@ -572,6 +572,20 @@ before packages are loaded."
   ;; When opening a file, always follow symlinks.
   (setq vc-follow-symlinks t)
 
+  ;; Tramp
+  (use-package tramp
+    :init
+    ;; Use ssh controlmaster
+    (setq tramp-default-method "ssh")
+    (setq tramp-ssh-controlmaster-options
+          (substitute-in-file-name (concat
+                                    "-o ControlPath=$HOME/.ssh/ssh-%%r@%%h:%%p "
+                                    "-o ControlMaster=auto -o ControlPersist=yes")))
+    :config
+    ;; Use $PATH of the remote machine
+    (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+    (setq tramp-shell-prompt-pattern "\\(?:^\\|\r\\)[^]#$%>\n]*#?[]#$%>].* *\\(^[\\[[0-9;]*[a-zA-Z] *\\)*"))
+
   ;;; EXWM
 
   ;; Movement keys
