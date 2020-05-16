@@ -4,7 +4,7 @@
 
 * Config Info
 Latest Version: 4.0b1
-Latest Edit: [2020-05-15 Fri 06:18]
+Latest Edit: [2020-05-15 Fri 21:47]
 
 This configuration revolves around Emacs dressed with the Spacemacs
 distribution. Emacs is the window manager (with EXWM). 
@@ -54,6 +54,8 @@ Features of Emacs:
    - Add spacemacs-defaults layer
    - Add ivy configuration
    - Add spacemacs-editing layer
+   - Add engine-mode
+   - Add browse-url-chromium-app, to open chromium in fullscreen
 
    *.xmodmap*
    - Bind ∇ to Caps Lock (∇ is used as leader key)

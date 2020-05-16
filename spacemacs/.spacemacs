@@ -32,7 +32,7 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
+   '(html
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -63,6 +63,7 @@ This function should only modify configuration layer settings."
      spacemacs-defaults
      spacemacs-modeline
      spacemacs-editing
+     search-engine
      )
 
    ;; List of additional packages that will be installed without being
@@ -75,6 +76,9 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages '(
                                       ; For password-store
                                       pinentry
+                                      ; Spacemacs has a "search-engine" layer
+                                        ; which is an overkill for what I need
+                                      engine-mode
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -721,6 +725,54 @@ we need to manually activate the leader key while Emacs is running."
   (use-package expand-region
     :bind ("C-=" . er/expand-region))
 
+  (use-package browse-url
+    :config
+    ;; This is to have a full screen chromium using the "-app="
+    ;; trick. Apparently it works only if the protocol is specified
+    (defun browse-url-chromium-app (url &optional _new-window)
+      "Ask the Chromium WWW browser to load URL.
+    Default to the URL around or before point.  The strings in
+    variable `browse-url-chromium-arguments' are also passed to
+    Chromium.
+    The optional argument NEW-WINDOW is not used."
+      (interactive (browse-url-interactive-arg "URL: "))
+      (setq url (browse-url-encode-url url))
+      ;; Check if url starts with http:// or https://, if not add it
+      (unless
+          (or (equal (substring url 0 7) "file://")
+              (equal (substring url 0 7) "http://")
+              (equal (substring url 0 8) "https://"))
+        (setq url (concat "http://" url))
+        )
+      (let* ((process-environment (browse-url-process-environment)))
+        (apply 'start-process
+               url nil
+               browse-url-chromium-program
+               (append
+                browse-url-chromium-arguments
+                (list (concat "--app=" url)))))))
+
+  ;; Engine-mode
+  (use-package engine-mode
+    :config
+    (engine-mode t)
+
+    ;; It seems that somewhere the value is overwritten
+    (setq engine/browser-function 'browse-url-chromium-app)
+
+    (defengine ads-abs
+      "http://adsabs.harvard.edu/cgi-bin/basic_connect?qsearch=%s&version=1"
+      :keybinding "a")
+
+    (defengine google
+      "https://www.google.com/search?ie=utf-8&oe=utf-8&q=%s"
+      :keybinding "g")
+
+    (defengine synonym
+      "https://www.thesaurus.com/browse/%s"
+      :keybinding "s")
+    )
+
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -736,7 +788,10 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(ws-butler string-inflection move-text expand-region eval-sexp-fu editorconfig clean-aindent-mode avy wgrep smex ivy-pass ivy-hydra helm-make counsel swiper ivy pinentry password-store ledger-mode delight spaceline s powerline fancy-battery font-lock+ magit-section magit gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger popup git-commit with-editor transient xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help dash unfill mwim which-key use-package pcre2el hydra hybrid-mode exwm dotenv-mode diminish bind-map async)))
+   '(web-mode web-beautify tagedit slim-mode scss-mode sass-mode pug-mode prettier-js impatient-mode htmlize simple-httpd haml-mode engine-mode emmet-mode counsel-css web-completion-data company add-node-modules-path ws-butler string-inflection move-text expand-region eval-sexp-fu editorconfig clean-aindent-mode avy wgrep smex ivy-pass ivy-hydra helm-make counsel swiper ivy pinentry password-store ledger-mode delight spaceline s powerline fancy-battery font-lock+ magit-section magit gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger popup git-commit with-editor transient xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help dash unfill mwim which-key use-package pcre2el hydra hybrid-mode exwm dotenv-mode diminish bind-map async))
+ '(safe-local-variable-values
+   '((projectile-project-run-cmd . "mkdir -p build; cd build; cmake ..; make run")
+     (projectile-project-compilation-cmd . "mkdir -p build; cd build; cmake ..; make"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
