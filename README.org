@@ -4,7 +4,7 @@
 
 * Config Info
 Latest Version: 4.0b1
-Latest Edit: [2020-05-15 Fri 21:47]
+Latest Edit: [2020-05-16 Sat 15:12]
 
 This configuration revolves around Emacs dressed with the Spacemacs
 distribution. Emacs is the window manager (with EXWM). 
@@ -29,9 +29,10 @@ Features of Emacs:
 - magit
 - vterm
 - Backups
+- telega
 
 * Changelog
-** 4.0b1 ([2020-05-15 Fri])
+** 4.0b1 ([2020-05-16 Sat])
 
    *.spacemacs*
    - Add exwm layer
@@ -56,6 +57,7 @@ Features of Emacs:
    - Add spacemacs-editing layer
    - Add engine-mode
    - Add browse-url-chromium-app, to open chromium in fullscreen
+   - Add telega
 
    *.xmodmap*
    - Bind ∇ to Caps Lock (∇ is used as leader key)
