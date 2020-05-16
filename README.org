@@ -30,6 +30,9 @@ Features of Emacs:
 - vterm
 - Backups
 - telega
+- Solarized theme
+
+Font: DejaVu Mono
 
 * Changelog
 ** 4.0b1 ([2020-05-16 Sat])
@@ -58,6 +61,7 @@ Features of Emacs:
    - Add engine-mode
    - Add browse-url-chromium-app, to open chromium in fullscreen
    - Add telega
+   - Add solarized-theme
 
    *.xmodmap*
    - Bind ∇ to Caps Lock (∇ is used as leader key)

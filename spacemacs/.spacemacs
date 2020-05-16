@@ -265,8 +265,8 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
-                         spacemacs-light)
+   dotspacemacs-themes '(solarized-dark
+                         solarized-light)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -796,15 +796,22 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("2809bcb77ad21312897b541134981282dc455ccd7c14d74cc333b6e549b824f3" "7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" default))
  '(package-selected-packages
-   '(telega rainbow-identifiers visual-fill-column web-mode web-beautify tagedit slim-mode scss-mode sass-mode pug-mode prettier-js impatient-mode htmlize simple-httpd haml-mode engine-mode emmet-mode counsel-css web-completion-data company add-node-modules-path ws-butler string-inflection move-text expand-region eval-sexp-fu editorconfig clean-aindent-mode avy wgrep smex ivy-pass ivy-hydra helm-make counsel swiper ivy pinentry password-store ledger-mode delight spaceline s powerline fancy-battery font-lock+ magit-section magit gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger popup git-commit with-editor transient xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help dash unfill mwim which-key use-package pcre2el hydra hybrid-mode exwm dotenv-mode diminish bind-map async))
+   '(solarized-theme telega rainbow-identifiers visual-fill-column web-mode web-beautify tagedit slim-mode scss-mode sass-mode pug-mode prettier-js impatient-mode htmlize simple-httpd haml-mode engine-mode emmet-mode counsel-css web-completion-data company add-node-modules-path ws-butler string-inflection move-text expand-region eval-sexp-fu editorconfig clean-aindent-mode avy wgrep smex ivy-pass ivy-hydra helm-make counsel swiper ivy pinentry password-store ledger-mode delight spaceline s powerline fancy-battery font-lock+ magit-section magit gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger popup git-commit with-editor transient xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help dash unfill mwim which-key use-package pcre2el hydra hybrid-mode exwm dotenv-mode diminish bind-map async))
  '(safe-local-variable-values
    '((projectile-project-run-cmd . "mkdir -p build; cd build; cmake ..; make run")
-     (projectile-project-compilation-cmd . "mkdir -p build; cd build; cmake ..; make"))))
+     (projectile-project-compilation-cmd . "mkdir -p build; cd build; cmake ..; make")))
+ '(telega-chat-title-emoji-use-images nil)
+ '(telega-emoji-use-images nil)
+ '(vterm-always-compile-module t t)
+ '(vterm-buffer-name-string "%s" t)
+ '(vterm-kill-buffer-on-exit t t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(default ((t (:family "DejaVu Sans Mono" :foundry "PfEd" :slant normal :weight normal :height 143 :width normal)))))
 )
