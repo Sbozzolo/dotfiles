@@ -673,7 +673,13 @@ MESSAGE-PRE command output MESSAGE-POST"
   (setq exwm-locking-command "slock")
 
   ;; Bind X application
-  (exwm/bind-command "s-c" "chromium")
+  (exwm/bind-command "s-c" "chromium --app=https://www.google.com")
+  ;; What is this "--app" business?
+  ;; Well, I believe that browser tabs are tremendously useless and distracting.
+  ;; Hence, my chromium is not allowed to have tabs. Why should I keep the tabbar, then?
+  ;; It turns out that it is quite difficult to remove the tabbar. A trick is to use
+  ;; chromium in kiosk mode, which is what is being achieved here.
+
   (exwm/bind-command "s-<f2>" exwm-locking-command)
 
   (exwm/bind-command-in-home-and-alert "<print>"
