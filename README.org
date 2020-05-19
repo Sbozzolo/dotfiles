@@ -64,6 +64,7 @@ Font: DejaVu Mono
    - Add solarized-theme
    - Add alert
    - Bind volume/brightness keys
+   - Add pdf layer
 
    *.xmodmap*
    - Bind ∇ to Caps Lock (∇ is used as leader key)

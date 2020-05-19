@@ -32,8 +32,7 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(html
-     ;; ----------------------------------------------------------------
+   '(;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
@@ -58,6 +57,7 @@ This function should only modify configuration layer settings."
      exwm
      finance
      pass
+     pdf
      shell
      spacemacs-completion
      spacemacs-defaults
@@ -893,15 +893,15 @@ This function is called at the very end of Spacemacs initialization."
  '(custom-safe-themes
    '("2809bcb77ad21312897b541134981282dc455ccd7c14d74cc333b6e549b824f3" "7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" default))
  '(package-selected-packages
-   '(alert log4e gntp solarized-theme telega rainbow-identifiers visual-fill-column web-mode web-beautify tagedit slim-mode scss-mode sass-mode pug-mode prettier-js impatient-mode htmlize simple-httpd haml-mode engine-mode emmet-mode counsel-css web-completion-data company add-node-modules-path ws-butler string-inflection move-text expand-region eval-sexp-fu editorconfig clean-aindent-mode avy wgrep smex ivy-pass ivy-hydra helm-make counsel swiper ivy pinentry password-store ledger-mode delight spaceline s powerline fancy-battery font-lock+ magit-section magit gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger popup git-commit with-editor transient xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help dash unfill mwim which-key use-package pcre2el hydra hybrid-mode exwm dotenv-mode diminish bind-map async))
+   '(pdf-tools tablist alert log4e gntp solarized-theme telega rainbow-identifiers visual-fill-column web-mode web-beautify tagedit slim-mode scss-mode sass-mode pug-mode prettier-js impatient-mode htmlize simple-httpd haml-mode engine-mode emmet-mode counsel-css web-completion-data company add-node-modules-path ws-butler string-inflection move-text expand-region eval-sexp-fu editorconfig clean-aindent-mode avy wgrep smex ivy-pass ivy-hydra helm-make counsel swiper ivy pinentry password-store ledger-mode delight spaceline s powerline fancy-battery font-lock+ magit-section magit gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger popup git-commit with-editor transient xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help dash unfill mwim which-key use-package pcre2el hydra hybrid-mode exwm dotenv-mode diminish bind-map async))
  '(safe-local-variable-values
    '((projectile-project-run-cmd . "mkdir -p build; cd build; cmake ..; make run")
      (projectile-project-compilation-cmd . "mkdir -p build; cd build; cmake ..; make")))
  '(telega-chat-title-emoji-use-images nil)
  '(telega-emoji-use-images nil)
- '(vterm-always-compile-module t t)
- '(vterm-buffer-name-string "%s" t)
- '(vterm-kill-buffer-on-exit t t))
+ '(vterm-always-compile-module t)
+ '(vterm-buffer-name-string "%s")
+ '(vterm-kill-buffer-on-exit t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
