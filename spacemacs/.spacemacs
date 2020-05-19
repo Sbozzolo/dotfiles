@@ -81,6 +81,8 @@ This function should only modify configuration layer settings."
                                       engine-mode
                                       ; Telegram
                                       telega
+                                      ; Notifications
+                                      alert
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -592,6 +594,12 @@ before packages are loaded."
     (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
     (setq tramp-shell-prompt-pattern "\\(?:^\\|\r\\)[^]#$%>\n]*#?[]#$%>].* *\\(^[\\[[0-9;]*[a-zA-Z] *\\)*"))
 
+
+  ;;; Alert
+  (use-package alert
+    :defer t
+    :custom (alert-default-style 'libnotify))
+
   ;;; EXWM
 
   ;; Movement keys
@@ -630,12 +638,92 @@ before packages are loaded."
              (if (<= (length exwm-title) 30) exwm-title
                (concat (substring exwm-title 0 29) "...")))))
 
+  (defun exwm/shell-command-in-home-to-string (command)
+    (let ((default-directory user-home-directory))
+      (shell-command-to-string command)))
+
+  ;; This function is used to bind keys for desktop env features, like
+  ;; taking screenshot, changing brightness, and so on.
+  ;; Running the command in the home is needed to avoid running the
+  ;; command over TRAMP.
+  ;; Also, alert notifications provide useful feedback.
+  (defun exwm/bind-command-in-home-and-alert (key command title message)
+    "Bind COMMAND to KEY, send an alert with TITLE and MESSAGE"
+    (exwm-input-set-key (kbd key)
+                        (lambda ()
+                          (interactive)
+                          (progn
+                            (exwm/run-program-in-home command)
+                            (alert message :title title)))))
+
+  (defun exwm/bind-command-in-home-and-alert-with-output (key command title message-pre message-post)
+    "Bind COMMAND to KEY, send an alert with TITLE and
+MESSAGE-PRE command output MESSAGE-POST"
+    (exwm-input-set-key (kbd key)
+                        (lambda ()
+                          (interactive)
+                            (alert
+                             (concat
+                              message-pre
+                              (substring (exwm/shell-command-in-home-to-string command) 0 -1)
+                              message-post)
+                             :title title))))
+
   ;; Bind Lock screen
   (setq exwm-locking-command "slock")
 
   ;; Bind X application
   (exwm/bind-command "s-c" "chromium")
   (exwm/bind-command "s-<f2>" exwm-locking-command)
+
+  (exwm/bind-command-in-home-and-alert "<print>"
+                                       "import -window root ~/screenshots/$(date +%Y-%m-%d:%H:%M:%S).png"
+                                       "Screenshot"
+                                       "Screenshot taken! Saved in ~/screenshots")
+
+  ;; Take a screenshot of part of the screen
+  (exwm/bind-command-in-home-and-alert "<s-print>"
+                                       "import ~/screenshots/$(date +%Y-%m-%d:%H:%M:%S).png"
+                                       "Screenshot"
+                                       "Screenshot taken! Saved in ~/screenshots")
+
+  ;; Brightness
+  (exwm/bind-command-in-home-and-alert-with-output "<XF86MonBrightnessDown>"
+                                                   "sleep 0.05; xbacklight -get"
+                                                   "Brightness"
+                                                   "Brightness: "
+                                                   " %")
+
+  (exwm/bind-command-in-home-and-alert-with-output "<XF86MonBrightnessUp>"
+                                                   "sleep 0.05; xbacklight -get"
+                                                   "Brightness"
+                                                   "Brightness: "
+                                                   " %")
+
+  ;; Volume
+  (exwm/bind-command-in-home-and-alert-with-output "<XF86AudioRaiseVolume>"
+                                                   "sleep 0.05; amixer get Master | grep '%'| cut -d'[' -f2 | cut -d '%' -f1"
+                                                   "Volume"
+                                                   "Volume: "
+                                                   " %")
+
+  (exwm/bind-command-in-home-and-alert-with-output "<XF86AudioLowerVolume>"
+                                                   "sleep 0.05; amixer get Master | grep '%'| cut -d'[' -f2 | cut -d '%' -f1"
+                                                   "Volume"
+                                                   "Volume: "
+                                                   " %")
+
+  (exwm/bind-command-in-home-and-alert-with-output "<XF86AudioMute>"
+                                                   "sleep 0.05; amixer get Master | grep '%'| cut -d'[' -f4 | cut -d']' -f1"
+                                                   "Audio"
+                                                   "Master is "
+                                                   "")
+
+  (exwm/bind-command-in-home-and-alert-with-output "<XF86AudioMicMute>"
+                                                   "sleep 0.05; amixer get Capture | grep '%'| cut -d'[' -f4 | cut -d']' -f1 | head -n 1"
+                                                   "Microphone"
+                                                   "Microphone is "
+                                                   "")
 
   ;; Bind "s-0" to "s-8" to switch to the corresponding workspace.
   (dotimes (i 9)
@@ -799,7 +887,7 @@ This function is called at the very end of Spacemacs initialization."
  '(custom-safe-themes
    '("2809bcb77ad21312897b541134981282dc455ccd7c14d74cc333b6e549b824f3" "7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" default))
  '(package-selected-packages
-   '(solarized-theme telega rainbow-identifiers visual-fill-column web-mode web-beautify tagedit slim-mode scss-mode sass-mode pug-mode prettier-js impatient-mode htmlize simple-httpd haml-mode engine-mode emmet-mode counsel-css web-completion-data company add-node-modules-path ws-butler string-inflection move-text expand-region eval-sexp-fu editorconfig clean-aindent-mode avy wgrep smex ivy-pass ivy-hydra helm-make counsel swiper ivy pinentry password-store ledger-mode delight spaceline s powerline fancy-battery font-lock+ magit-section magit gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger popup git-commit with-editor transient xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help dash unfill mwim which-key use-package pcre2el hydra hybrid-mode exwm dotenv-mode diminish bind-map async))
+   '(alert log4e gntp solarized-theme telega rainbow-identifiers visual-fill-column web-mode web-beautify tagedit slim-mode scss-mode sass-mode pug-mode prettier-js impatient-mode htmlize simple-httpd haml-mode engine-mode emmet-mode counsel-css web-completion-data company add-node-modules-path ws-butler string-inflection move-text expand-region eval-sexp-fu editorconfig clean-aindent-mode avy wgrep smex ivy-pass ivy-hydra helm-make counsel swiper ivy pinentry password-store ledger-mode delight spaceline s powerline fancy-battery font-lock+ magit-section magit gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger popup git-commit with-editor transient xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help dash unfill mwim which-key use-package pcre2el hydra hybrid-mode exwm dotenv-mode diminish bind-map async))
  '(safe-local-variable-values
    '((projectile-project-run-cmd . "mkdir -p build; cd build; cmake ..; make run")
      (projectile-project-compilation-cmd . "mkdir -p build; cd build; cmake ..; make")))
@@ -813,5 +901,5 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "DejaVu Sans Mono" :foundry "PfEd" :slant normal :weight normal :height 143 :width normal)))))
+ '(default ((((class color) (min-colors 89)) (:foreground "#839496" :background "#002b36")))))
 )

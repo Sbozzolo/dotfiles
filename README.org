@@ -4,7 +4,7 @@
 
 * Config Info
 Latest Version: 4.0b1
-Latest Edit: [2020-05-16 Sat 15:12]
+Latest Edit: [2020-05-19 Tue 15:10]
 
 This configuration revolves around Emacs dressed with the Spacemacs
 distribution. Emacs is the window manager (with EXWM). 
@@ -35,7 +35,7 @@ Features of Emacs:
 Font: DejaVu Mono
 
 * Changelog
-** 4.0b1 ([2020-05-16 Sat])
+** 4.0b1 ([2020-05-19 Tue])
 
    *.spacemacs*
    - Add exwm layer
@@ -62,6 +62,8 @@ Font: DejaVu Mono
    - Add browse-url-chromium-app, to open chromium in fullscreen
    - Add telega
    - Add solarized-theme
+   - Add alert
+   - Bind volume/brightness keys
 
    *.xmodmap*
    - Bind ∇ to Caps Lock (∇ is used as leader key)
