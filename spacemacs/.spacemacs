@@ -42,6 +42,7 @@ This function should only modify configuration layer settings."
      ;; emacs-lisp
      ivy
      git
+     latex
      ;; helm
      ;; lsp
      ;; markdown
@@ -110,6 +111,14 @@ This function should only modify configuration layer settings."
                                     magit-svn
                                     orgit
                                     smeargle
+                                    ; In layer latex
+                                    evil-matchit
+                                    ggtags
+                                    counsel-gtags
+                                    helm-gitags
+                                    magic-latex-buffer
+                                    typo
+                                    yasnippet
                                     ; In layer shell
                                     esh-help
                                     eshell-prompt-extras
@@ -821,6 +830,14 @@ we need to manually activate the leader key while Emacs is running."
   (use-package expand-region
     :bind ("C-=" . er/expand-region))
 
+  (use-package elec-pair
+    :config
+    (electric-pair-mode 1)
+    ;; Electric $ $ in LaTeX
+    :hook (LaTeX-mode . (lambda ()
+                          (set (make-variable-buffer-local 'TeX-electric-math)
+                                        (cons "$" "$")))))
+
   (use-package browse-url
     :config
     ;; This is to have a full screen chromium using the "-app="
@@ -832,7 +849,7 @@ we need to manually activate the leader key while Emacs is running."
     Chromium.
     The optional argument NEW-WINDOW is not used."
       (interactive (browse-url-interactive-arg "URL: "))
-      (setq url (browse-url-encode-url url))
+ nn     (setq url (browse-url-encode-url url))
       ;; Check if url starts with http:// or https://, if not add it
       (unless
           (or (equal (substring url 0 7) "file://")
@@ -893,15 +910,17 @@ This function is called at the very end of Spacemacs initialization."
  '(custom-safe-themes
    '("2809bcb77ad21312897b541134981282dc455ccd7c14d74cc333b6e549b824f3" "7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" default))
  '(package-selected-packages
-   '(pdf-tools tablist alert log4e gntp solarized-theme telega rainbow-identifiers visual-fill-column web-mode web-beautify tagedit slim-mode scss-mode sass-mode pug-mode prettier-js impatient-mode htmlize simple-httpd haml-mode engine-mode emmet-mode counsel-css web-completion-data company add-node-modules-path ws-butler string-inflection move-text expand-region eval-sexp-fu editorconfig clean-aindent-mode avy wgrep smex ivy-pass ivy-hydra helm-make counsel swiper ivy pinentry password-store ledger-mode delight spaceline s powerline fancy-battery font-lock+ magit-section magit gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger popup git-commit with-editor transient xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help dash unfill mwim which-key use-package pcre2el hydra hybrid-mode exwm dotenv-mode diminish bind-map async))
+   '(auctex-latexmk auctex pdf-tools tablist alert log4e gntp solarized-theme telega rainbow-identifiers visual-fill-column web-mode web-beautify tagedit slim-mode scss-mode sass-mode pug-mode prettier-js impatient-mode htmlize simple-httpd haml-mode engine-mode emmet-mode counsel-css web-completion-data company add-node-modules-path ws-butler string-inflection move-text expand-region eval-sexp-fu editorconfig clean-aindent-mode avy wgrep smex ivy-pass ivy-hydra helm-make counsel swiper ivy pinentry password-store ledger-mode delight spaceline s powerline fancy-battery font-lock+ magit-section magit gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger popup git-commit with-editor transient xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help dash unfill mwim which-key use-package pcre2el hydra hybrid-mode exwm dotenv-mode diminish bind-map async))
  '(safe-local-variable-values
-   '((projectile-project-run-cmd . "mkdir -p build; cd build; cmake ..; make run")
+   '((reftex-default-bibliography "bibliography.bib" "einsteintoolkit.bib")
+     (TeX-command-extra-options . "-shell-escape")
+     (projectile-project-run-cmd . "mkdir -p build; cd build; cmake ..; make run")
      (projectile-project-compilation-cmd . "mkdir -p build; cd build; cmake ..; make")))
  '(telega-chat-title-emoji-use-images nil)
  '(telega-emoji-use-images nil)
- '(vterm-always-compile-module t)
- '(vterm-buffer-name-string "%s")
- '(vterm-kill-buffer-on-exit t))
+ '(vterm-always-compile-module t t)
+ '(vterm-buffer-name-string "%s" t)
+ '(vterm-kill-buffer-on-exit t t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
