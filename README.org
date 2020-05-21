@@ -4,7 +4,7 @@
 
 * Config Info
 Latest Version: 4.0b1
-Latest Edit: [2020-05-20 Wed 16:42]
+Latest Edit: [2020-05-21 Thu 14:47]
 
 This configuration revolves around Emacs dressed with the Spacemacs
 distribution. Emacs is the window manager (with EXWM). 
@@ -36,7 +36,7 @@ Features of Emacs:
 Font: DejaVu Mono
 
 * Changelog
-** 4.0b1 ([2020-05-19 Tue])
+** 4.0b1 ([2020-05-21 Thu])
 
    *.spacemacs*
    - Add exwm layer
@@ -69,6 +69,7 @@ Font: DejaVu Mono
    - Add LaTeX layer
    - Add electric-pair
    - Add prettify-symbols
+   - Use auctex to edit .tikz files
 
    *.xmodmap*
    - Bind ∇ to Caps Lock (∇ is used as leader key)

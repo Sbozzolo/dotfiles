@@ -592,6 +592,12 @@ before packages are loaded."
   ;; Enable prettification everywhere
   (when window-system (global-prettify-symbols-mode t))
 
+  ;;; LaTeX
+
+  (use-package tex-site
+    :ensure auctex
+    :mode (("\\.tikz\\'" . LaTeX-mode)))
+
   ;; Tramp
   (use-package tramp
     :init
@@ -852,7 +858,7 @@ we need to manually activate the leader key while Emacs is running."
     Chromium.
     The optional argument NEW-WINDOW is not used."
       (interactive (browse-url-interactive-arg "URL: "))
- nn     (setq url (browse-url-encode-url url))
+      (setq url (browse-url-encode-url url))
       ;; Check if url starts with http:// or https://, if not add it
       (unless
           (or (equal (substring url 0 7) "file://")
