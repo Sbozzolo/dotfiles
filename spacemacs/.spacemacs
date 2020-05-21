@@ -589,6 +589,9 @@ before packages are loaded."
   ;; When opening a file, always follow symlinks.
   (setq vc-follow-symlinks t)
 
+  ;; Enable prettification everywhere
+  (when window-system (global-prettify-symbols-mode t))
+
   ;; Tramp
   (use-package tramp
     :init

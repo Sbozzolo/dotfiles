@@ -68,6 +68,7 @@ Font: DejaVu Mono
    - Add pdf layer
    - Add LaTeX layer
    - Add electric-pair
+   - Add prettify-symbols
 
    *.xmodmap*
    - Bind ∇ to Caps Lock (∇ is used as leader key)
