@@ -51,10 +51,7 @@ This function should only modify configuration layer settings."
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
-     ;; spell-checking
      ;; syntax-checking
-     ;; version-control
-     ;; treemacs
      exwm
      finance
      pass
@@ -64,6 +61,7 @@ This function should only modify configuration layer settings."
      spacemacs-defaults
      spacemacs-modeline
      spacemacs-editing
+     spell-checking
      search-engine
      )
 
@@ -150,6 +148,11 @@ This function should only modify configuration layer settings."
                                     smartparens
                                     undo-tree
                                     uuidgen
+                                    ; In layer spell-checking
+                                    auto-dictionary
+                                    flyspell-correct-helm
+                                    flyspell-correct-popup
+                                    flyspell-popup
                                     ; In layer pass
                                     helm-pass
                                     )
@@ -902,6 +905,13 @@ we need to manually activate the leader key while Emacs is running."
     :config
     (spacemacs/set-leader-keys "AT" 'telega))
 
+
+  ;;; Spell checking
+  (use-package flyspell
+    :custom
+    ((ispell-program-name "hunspell")
+     (ispell-personal-dictionary (substitute-in-file-name "$HOME/.emacs.d/hunspell_dict.txt"))))
+  
 )
 
 ;; Do not write anything past this comment. This is where Emacs will

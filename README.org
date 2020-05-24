@@ -4,7 +4,7 @@
 
 * Config Info
 Latest Version: 4.0b1
-Latest Edit: [2020-05-21 Thu 14:47]
+Latest Edit: [2020-05-24 Sun 12:01]
 
 This configuration revolves around Emacs dressed with the Spacemacs
 distribution. Emacs is the window manager (with EXWM). 
@@ -32,11 +32,12 @@ Features of Emacs:
 - telega
 - Solarized theme
 - LaTeX
+- Spell checker
 
 Font: DejaVu Mono
 
 * Changelog
-** 4.0b1 ([2020-05-21 Thu])
+** 4.0b1 ([2020-05-24 Sun])
 
    *.spacemacs*
    - Add exwm layer
@@ -70,6 +71,7 @@ Font: DejaVu Mono
    - Add electric-pair
    - Add prettify-symbols
    - Use auctex to edit .tikz files
+   - Add spell checker
 
    *.xmodmap*
    - Bind ∇ to Caps Lock (∇ is used as leader key)
