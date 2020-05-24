@@ -39,10 +39,16 @@ This function should only modify configuration layer settings."
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      ;; auto-completion
+<<<<<<< HEAD
      better-defaults
      ;; emacs-lisp
      ivy
      git
+=======
+     ;; better-defaults
+     ;; emacs-lisp
+     ;; git
+>>>>>>> e5bf4090a740a2d0178c18107ef5195deea874cd
      ;; helm
      ;; lsp
      ;; markdown
@@ -56,12 +62,15 @@ This function should only modify configuration layer settings."
      ;; version-control
      ;; treemacs
      exwm
+<<<<<<< HEAD
      finance
      pass
      shell
      spacemacs-completion
      spacemacs-defaults
      spacemacs-modeline
+=======
+>>>>>>> e5bf4090a740a2d0178c18107ef5195deea874cd
      )
 
    ;; List of additional packages that will be installed without being
@@ -71,15 +80,20 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
+<<<<<<< HEAD
    dotspacemacs-additional-packages '(
                                       ; For password-store
                                       pinentry
                                       )
+=======
+   dotspacemacs-additional-packages '()
+>>>>>>> e5bf4090a740a2d0178c18107ef5195deea874cd
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
 
    ;; A list of packages that will not be installed and loaded.
+<<<<<<< HEAD
    dotspacemacs-excluded-packages '(
                                     ; In layer ivy
                                     evil
@@ -123,6 +137,9 @@ This function should only modify configuration layer settings."
                                     ; In layer pass
                                     helm-pass
                                     )
+=======
+   dotspacemacs-excluded-packages '()
+>>>>>>> e5bf4090a740a2d0178c18107ef5195deea874cd
 
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
@@ -256,15 +273,24 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
+<<<<<<< HEAD
    dotspacemacs-mode-line-theme '(spacemacs :separator bar :separator-scale 0.5)
+=======
+   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.5)
+>>>>>>> e5bf4090a740a2d0178c18107ef5195deea874cd
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
 
    ;; Default font or prioritized list of fonts.
+<<<<<<< HEAD
    dotspacemacs-default-font '("DejaVu Sans Mono"
                                :size 14.0
+=======
+   dotspacemacs-default-font '("Source Code Pro"
+                               :size 16.0
+>>>>>>> e5bf4090a740a2d0178c18107ef5195deea874cd
                                :weight normal
                                :width normal)
 
@@ -510,8 +536,11 @@ This function defines the environment variables for your Emacs session. By
 default it calls `spacemacs/load-spacemacs-env' which loads the environment
 variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
+<<<<<<< HEAD
   (cl-pushnew "DISPLAY" spacemacs-ignored-environment-variables)
   (cl-pushnew "TERM" spacemacs-ignored-environment-variables)
+=======
+>>>>>>> e5bf4090a740a2d0178c18107ef5195deea874cd
   (spacemacs/load-spacemacs-env))
 
 (defun dotspacemacs/user-init ()
@@ -535,6 +564,7 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+<<<<<<< HEAD
   ;; EXWM
 
   ;; Movement keys
@@ -656,3 +686,9 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  )
 )
+=======
+  )
+
+;; Do not write anything past this comment. This is where Emacs will
+;; auto-generate custom variable definitions.
+>>>>>>> e5bf4090a740a2d0178c18107ef5195deea874cd
