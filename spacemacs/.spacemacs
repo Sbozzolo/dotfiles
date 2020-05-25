@@ -45,8 +45,7 @@ This function should only modify configuration layer settings."
      latex
      ;; helm
      ;; lsp
-     ;; markdown
-     ;; multiple-cursors
+     markdown
      ;; org
      ;; (shell :variables
      ;;        shell-default-height 30
@@ -98,6 +97,13 @@ This function should only modify configuration layer settings."
                                     ; In layer EXWM
                                     desktop-environment
                                     framemove
+                                    ; In layer markdown
+                                    company-emoji
+                                    emoji-cheat-sheet-plus
+                                    markdown-toc
+                                    mmm-mode
+                                    smartparens
+                                    vmd-mode
                                     ; In layer finance
                                     evil-ledger
                                     ; In layer git
@@ -937,9 +943,9 @@ This function is called at the very end of Spacemacs initialization."
      (projectile-project-compilation-cmd . "mkdir -p build; cd build; cmake ..; make")))
  '(telega-chat-title-emoji-use-images nil)
  '(telega-emoji-use-images nil)
- '(vterm-always-compile-module t t)
- '(vterm-buffer-name-string "%s" t)
- '(vterm-kill-buffer-on-exit t t))
+ '(vterm-always-compile-module t)
+ '(vterm-buffer-name-string "%s")
+ '(vterm-kill-buffer-on-exit t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
