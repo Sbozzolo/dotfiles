@@ -4,7 +4,7 @@
 
 * Config Info
 Latest Version: 4.0b1
-Latest Edit: [2020-05-24 Sun 22:17]
+Latest Edit: [2020-06-01 Mon 23:43]
 
 This configuration revolves around Emacs dressed with the Spacemacs
 distribution. Emacs is the window manager (with EXWM). 
@@ -37,7 +37,7 @@ Features of Emacs:
 Font: DejaVu Mono
 
 * Changelog
-** 4.0b1 ([2020-05-24 Sun])
+** 4.0b1 ([2020-06-02 Tue])
 
    *.spacemacs*
    - Add exwm layer
@@ -73,8 +73,20 @@ Font: DejaVu Mono
    - Use auctex to edit .tikz files
    - Add spell checker
    - Add markdown layer
+   - Update blacklisted packages
 
    *.xmodmap*
    - Bind ∇ to Caps Lock (∇ is used as leader key)
 
+   *config.fish*
+   - Add fisher
+   - Use solarized color scheme
+   - Add vterm functions
 
+   *fishfile*
+   - Add pure prompt
+   - Add z (instead of autojump)
+
+   *.bashrc*
+   - Start automatically the graphical environment from TTY1
+   - Start fish
