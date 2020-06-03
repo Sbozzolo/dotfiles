@@ -90,3 +90,7 @@ Font: DejaVu Mono
    *.bashrc*
    - Start automatically the graphical environment from TTY1
    - Start fish
+
+   *.Xresources*
+   - Add large font (DejaVu Sans Mono) 
+   - Add solarized theme
