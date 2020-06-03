@@ -82,6 +82,7 @@ Font: DejaVu Mono
    - Add fisher
    - Use solarized color scheme
    - Add vterm functions
+   - Generate aliases for remote servers automatically
 
    *fishfile*
    - Add pure prompt

@@ -8,7 +8,15 @@ end
 
 ## Aliases
 
-alias l='ll'
+alias l 'll'
+
+# Generate aliases for remote servers from the .ssh/config
+set remote_aliases_file "$HOME/.config/fish/conf.d/remote_aliases.fish"
+if not test -f "$remote_aliases_file"
+    awk '/Host / {print "alias", $2, "\" ssh", $2"\""}' "$HOME/.ssh/config" > "$remote_aliases_file"
+    echo "$remote_aliases_file generated"
+    source "$remote_aliases_file"
+end
 
 ## Vterm
 
