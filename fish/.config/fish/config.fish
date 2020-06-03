@@ -66,7 +66,7 @@ set -U fish_color_match --background=brblue
 set -U fish_color_normal normal
 set -U fish_color_operator 00a6b2
 set -U fish_color_param 839496
-set -U fish_color_quote 657b83
+set -U fish_color_quote 87d7ff
 set -U fish_color_redirection 6c71c4
 set -U fish_color_search_match 'bryellow'  '--background=black'
 set -U fish_color_selection 'white'  '--bold'  '--background=brblack'
