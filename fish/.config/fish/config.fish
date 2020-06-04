@@ -1,7 +1,7 @@
 # Install fisher
+set -q XDG_CONFIG_HOME; or set XDG_CONFIG_HOME ~/.config
 
 if not functions -q fisher
-    set -q XDG_CONFIG_HOME; or set XDG_CONFIG_HOME ~/.config
     curl https://git.io/fisher --create-dirs -sLo $XDG_CONFIG_HOME/fish/functions/fisher.fish
     fish -c fisher
 end
@@ -9,11 +9,12 @@ end
 ## Aliases
 
 alias l 'll'
+alias md 'mkdir -p'
 
 # Generate aliases for remote servers from the .ssh/config
-set remote_aliases_file "$HOME/.config/fish/conf.d/remote_aliases.fish"
+set remote_aliases_file "$XDG_CONFIG_HOME//fish/conf.d/remote_aliases.fish"
 if not test -f "$remote_aliases_file"
-    awk '/Host / {print "alias", $2, "\" ssh", $2"\""}' "$HOME/.ssh/config" > "$remote_aliases_file"
+    awk '/Host / {print "alias", $2, "\"ssh", $2"\""}' "$HOME/.ssh/config" > "$remote_aliases_file"
     echo "$remote_aliases_file generated"
     source "$remote_aliases_file"
 end
@@ -81,4 +82,3 @@ set -U fish_color_selection 'white'  '--bold'  '--background=brblack'
 set -U fish_color_status red
 set -U fish_color_user brgreen
 set -U fish_color_valid_path --underline
-

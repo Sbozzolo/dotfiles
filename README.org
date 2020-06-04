@@ -7,7 +7,7 @@ Latest Version: 4.0b1
 Latest Edit: [2020-06-01 Mon 23:43]
 
 This configuration revolves around Emacs dressed with the Spacemacs
-distribution. Emacs is the window manager (with EXWM). 
+distribution. Emacs is the window manager (with EXWM).
 
 All the packages configurations are in the =user-config= section.
 
@@ -83,6 +83,8 @@ Font: DejaVu Mono
    - Use solarized color scheme
    - Add vterm functions
    - Generate aliases for remote servers automatically
+   - Add alias md
+   - Use XDG_CONFIG_HOME
 
    *fishfile*
    - Add pure prompt
@@ -93,5 +95,5 @@ Font: DejaVu Mono
    - Start fish
 
    *.Xresources*
-   - Add large font (DejaVu Sans Mono) 
+   - Add large font (DejaVu Sans Mono)
    - Add solarized theme
