@@ -85,6 +85,8 @@ Font: DejaVu Mono
    - Generate aliases for remote servers automatically
    - Add alias md
    - Use XDG_CONFIG_HOME
+   - Add alias ..
+   - Add alias ...
 
    *fishfile*
    - Add pure prompt
