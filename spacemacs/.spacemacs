@@ -50,18 +50,19 @@ This function should only modify configuration layer settings."
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
-     ;; syntax-checking
      exwm
      finance
      pass
      pdf
      shell
+     shell-scripts
      spacemacs-completion
      spacemacs-defaults
      spacemacs-modeline
      spacemacs-editing
      spell-checking
      search-engine
+     syntax-checking
      )
 
    ;; List of additional packages that will be installed without being
@@ -134,6 +135,12 @@ This function should only modify configuration layer settings."
                                     shell-pop
                                     terminal-here
                                     vi-tilde-fringe
+                                    ; In layer shell-script
+                                    insert-shebang
+                                    flycheck-bashate
+                                    ggtags
+                                    counsel-gtags
+                                    helm-gtags
                                     ; In layer spacemacs-completion
                                     flx-ido
                                     ; In layer spacemacs-modeline
@@ -162,6 +169,8 @@ This function should only modify configuration layer settings."
                                     flyspell-correct-helm
                                     flyspell-correct-popup
                                     flyspell-popup
+                                    ; In layer syntax-checking
+                                    flycheck-pop-tip
                                     ; In layer pass
                                     helm-pass
                                     )
