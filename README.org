@@ -4,7 +4,7 @@
 
 * Config Info
 Latest Version: 4.0b1
-Latest Edit: [2020-06-15 Mon 18:09]
+Latest Edit: [2020-06-15 Mon 19:27]
 
 This configuration revolves around Emacs dressed with the Spacemacs
 distribution. Emacs is the window manager (with EXWM).
@@ -75,6 +75,7 @@ Font: DejaVu Mono
    - Add markdown layer
    - Update blacklisted packages
    - Add syntax-checking
+   - Silence warning for ∇ not recognized
 
    *.xmodmap*
    - Bind ∇ to Caps Lock (∇ is used as leader key)
