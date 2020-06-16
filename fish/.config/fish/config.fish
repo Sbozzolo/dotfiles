@@ -12,7 +12,7 @@ alias l 'll'
 alias md 'mkdir -p'
 alias .. 'cd ..'
 alias ... 'cd ../..'
-
+alias p 'cd -'
 
 # Generate aliases for remote servers from the .ssh/config
 set remote_aliases_file "$XDG_CONFIG_HOME//fish/conf.d/remote_aliases.fish"

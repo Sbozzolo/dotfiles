@@ -4,7 +4,7 @@
 
 * Config Info
 Latest Version: 4.0b1
-Latest Edit: [2020-06-13 Sat 17:22]
+Latest Edit: [2020-06-15 Mon 18:09]
 
 This configuration revolves around Emacs dressed with the Spacemacs
 distribution. Emacs is the window manager (with EXWM).
@@ -37,7 +37,7 @@ Features of Emacs:
 Font: DejaVu Mono
 
 * Changelog
-** 4.0b1 ([2020-06-13 Sat])
+** 4.0b1 ([2020-06-15 Mon])
 
    *.spacemacs*
    - Add exwm layer
@@ -88,6 +88,7 @@ Font: DejaVu Mono
    - Use XDG_CONFIG_HOME
    - Add alias ..
    - Add alias ...
+   - Add alias p
 
    *fishfile*
    - Add pure prompt
