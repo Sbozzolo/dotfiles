@@ -2,6 +2,8 @@
 #+AUTHOR: Gabriele Bozzola (sbozzolo)
 #+EMAIL: sbozzolator@gmail.com
 
+*THESE DOTFILES ARE OUTDATED*
+
 * Config Info
 Latest Version: 4.0b1
 Latest Edit: [2020-04-29 Wed 11:49]
@@ -16,7 +18,7 @@ wherever I want.
 These dotfiles are intended for personal use.
 
 * Changelog
-** 4.0b1 ([2020-05-03 Sun])
+** 4.0b1 ([2020-05-03 Sun 22:15])
    Emacs bankruptcy again!
 
    Now trying with Spacemacs. Relevant configuration in =spacemacs_minimal=.
@@ -38,6 +40,12 @@ These dotfiles are intended for personal use.
    - Change name of EXWM buffers
    - Hide modeline
    - Add finance layer
+   - Add pass layer
+   - Always compile vterm-module without asking
+   - Add ivy layer
+   - Add spacemacs-completion layer
+   - Add spacemacs-defaults layer
+   - Add spacemacs-editing layer
 
 ** 3.0 ([2018-05-27 Sun])
    *settings.org*
